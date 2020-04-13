@@ -31,7 +31,7 @@
 
 
 
-  <meta name="keywords" content="RE（正则表达式）," />
+  <meta name="keywords" content="Xpath,TIOBE指数," />
 
 
 
@@ -42,20 +42,21 @@
   <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
 
 
-<meta name="description" content="网络爬虫——猫眼电影数据抓取——RE（正则表达式）猫眼电影榜单网址：https:&#x2F;&#x2F;maoyan.com&#x2F;board&#x2F;4 目标数据描述：（1）排名 （2）电影名称 （3）主演 （4）上映时间  （5）评分任务要求 （1）使用requests库实现该网站网页源代码的获取； （2）使用正则表达式对获取的源代码进行解析，并成功找到目标数据所在的特定标签，进行网页结构的解析； （3）定义函数，将获取的目标">
+<meta name="description" content="网络爬虫——抓取TIOBE指数前20名排行开发语言目标网址TIOBE指数前20名排行开发语言：https:&#x2F;&#x2F;www.tiobe.com&#x2F;tiobe-index&#x2F; 说明 TIOBE排行榜是根据互联网上有经验的程序员、课程和第三方厂商的数量，并使用搜索引擎（如Google、Bing、Yahoo!）以及Wikipedia、Amazon、YouTube统计出排名数据，只是反映某个编程语言的热门程度，并不">
 <meta property="og:type" content="article">
-<meta property="og:title" content="网络爬虫——猫眼电影数据抓取——RE（正则表达式）">
-<meta property="og:url" content="http://ailous.top/2017/10/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E7%8C%AB%E7%9C%BC%E7%94%B5%E5%BD%B1%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%E2%80%94%E2%80%94RE%EF%BC%88%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%89/index.html">
+<meta property="og:title" content="网络爬虫——抓取TIOBE指数前20名排行开发语言">
+<meta property="og:url" content="http://ailous.top/2017/10/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E6%8A%93%E5%8F%96TIOBE%E6%8C%87%E6%95%B0%E5%89%8D20%E5%90%8D%E6%8E%92%E8%A1%8C%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80/index.html">
 <meta property="og:site_name" content="Michaelming&#39;s Blog">
-<meta property="og:description" content="网络爬虫——猫眼电影数据抓取——RE（正则表达式）猫眼电影榜单网址：https:&#x2F;&#x2F;maoyan.com&#x2F;board&#x2F;4 目标数据描述：（1）排名 （2）电影名称 （3）主演 （4）上映时间  （5）评分任务要求 （1）使用requests库实现该网站网页源代码的获取； （2）使用正则表达式对获取的源代码进行解析，并成功找到目标数据所在的特定标签，进行网页结构的解析； （3）定义函数，将获取的目标">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200413213540934.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200413213845848.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:description" content="网络爬虫——抓取TIOBE指数前20名排行开发语言目标网址TIOBE指数前20名排行开发语言：https:&#x2F;&#x2F;www.tiobe.com&#x2F;tiobe-index&#x2F; 说明 TIOBE排行榜是根据互联网上有经验的程序员、课程和第三方厂商的数量，并使用搜索引擎（如Google、Bing、Yahoo!）以及Wikipedia、Amazon、YouTube统计出排名数据，只是反映某个编程语言的热门程度，并不">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200413220913662.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200413221221131.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="article:published_time" content="2017-10-27T05:47:40.000Z">
-<meta property="article:modified_time" content="2020-04-13T13:41:08.688Z">
+<meta property="article:modified_time" content="2020-04-13T14:13:44.173Z">
 <meta property="article:author" content="Michaelming">
-<meta property="article:tag" content="RE（正则表达式）">
+<meta property="article:tag" content="Xpath">
+<meta property="article:tag" content="TIOBE指数">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200413213540934.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200413220913662.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -65,7 +66,7 @@
   };
 </script>
 
-  <title> 网络爬虫——猫眼电影数据抓取——RE（正则表达式） | Michaelming's Blog </title>
+  <title> 网络爬虫——抓取TIOBE指数前20名排行开发语言 | Michaelming's Blog </title>
 <meta name="generator" content="Hexo 4.2.0"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -315,7 +316,7 @@
           
           
             
-              网络爬虫——猫眼电影数据抓取——RE（正则表达式）
+              网络爬虫——抓取TIOBE指数前20名排行开发语言
             
           
         </h1>
@@ -358,15 +359,17 @@
       
 
       
-        <span itemprop="articleBody"><h2 id="网络爬虫——猫眼电影数据抓取——RE（正则表达式）"><a href="#网络爬虫——猫眼电影数据抓取——RE（正则表达式）" class="headerlink" title="网络爬虫——猫眼电影数据抓取——RE（正则表达式）"></a>网络爬虫——猫眼电影数据抓取——RE（正则表达式）</h2><p>猫眼电影榜单网址：<a href="https://maoyan.com/board/4" target="_blank" rel="noopener">https://maoyan.com/board/4</a></p>
-<p>目标数据描述：<br>（1）排名 （2）电影名称 （3）主演 （4）上映时间  （5）评分<br><img src="https://img-blog.csdnimg.cn/20200413213540934.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>任务要求</p>
-<p>（1）使用requests库实现该网站网页源代码的获取；</p>
-<p>（2）使用正则表达式对获取的源代码进行解析，并成功找到目标数据所在的特定标签，进行网页结构的解析；</p>
-<p>（3）定义函数，将获取的目标数据打印输出，有能力的同学可以试着将结果写入文件中。</p>
-<p>（4）使用框架式结构，通过参数传递实现整个特定数据的爬取。</p>
-<p>可以使用生成器，将目标数据获取后放到字典中返回，同时，注意观察分页时url的变化，以便获取整个的排行榜数据。建议通过for循环传递变化参数实现。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">import json</span><br><span class="line">import requests</span><br><span class="line">from requests.exceptions import RequestException</span><br><span class="line">import re</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">def get_one_page(url):</span><br><span class="line">    try:</span><br><span class="line">        headers&#x3D;&#123;&#39;User-Agent&#39;:&#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;80.0.3987.132 Safari&#x2F;537.36&#39;&#125;</span><br><span class="line">        response&#x3D;requests.get(&quot;https:&#x2F;&#x2F;maoyan.com&#x2F;board&#x2F;4&quot;,headers &#x3D; headers)</span><br><span class="line">        if response.status_code &#x3D;&#x3D; 200:</span><br><span class="line">                 return response.text</span><br><span class="line">        return None</span><br><span class="line">    except RequestException:</span><br><span class="line">        return None</span><br><span class="line">        </span><br><span class="line">def parse_one_page(html):</span><br><span class="line">    pattern&#x3D; re.compile(&#39;&lt;dd&gt;.*?board-index.*?&gt;(\d+)&lt;&#x2F;i&gt;.*?data-src&#x3D;&quot;(.*?)&quot;.*?name&quot;&gt;&lt;a&#39; + &#39;.*?&gt;(.*?)&lt;&#x2F;a&gt;.*?star&quot;&gt;(.*?)&lt;&#x2F;p&gt;.*?releasetime&quot;&gt;(.*?)&lt;&#x2F;p&gt;&#39; + &#39;.*?integer&quot;&gt;(.*?)&lt;&#x2F;i&gt;.*?fraction&quot;&gt;(.*?)&lt;&#x2F;i&gt;.*?&lt;&#x2F;dd&gt;&#39;,re.S)</span><br><span class="line">    items &#x3D; re.findall(pattern,html)</span><br><span class="line">    for item in items:</span><br><span class="line">        yield&#123;</span><br><span class="line">            &#39;index&#39;: item[0],</span><br><span class="line">            &#39;image&#39;: item[1],</span><br><span class="line">            &#39;title&#39;: item[2],</span><br><span class="line">            &#39;actor&#39;: item[3].strip()[3:],</span><br><span class="line">            &#39;time&#39;: item[4].strip()[5:],</span><br><span class="line">            &#39;score&#39;: item[5] + item[6]</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">def write_to_file(content):</span><br><span class="line">    with open(&#39;result.txt&#39;, &#39;a&#39; , encoding&#x3D;&#39;utf-8&#39;) as f:</span><br><span class="line">       f.write(json.dumps(content, ensure_ascii&#x3D;False) + &#39;\n&#39;)</span><br><span class="line">            </span><br><span class="line">def main(offset):</span><br><span class="line">    url &#x3D; &#39;https:&#x2F;&#x2F;maoyan.com&#x2F;board&#x2F;4&#39;</span><br><span class="line">    html&#x3D;get_one_page(url)</span><br><span class="line">    for item in parse_one_page(html):</span><br><span class="line">        print(item)</span><br><span class="line">        write_to_file(item)</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">    for i in range(10):</span><br><span class="line">         main(offset&#x3D;i * 10)</span><br><span class="line">         time.sleep(1)</span><br></pre></td></tr></table></figure>
-<p>输出如下<br><img src="https://img-blog.csdnimg.cn/20200413213845848.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+        <span itemprop="articleBody"><h2 id="网络爬虫——抓取TIOBE指数前20名排行开发语言"><a href="#网络爬虫——抓取TIOBE指数前20名排行开发语言" class="headerlink" title="网络爬虫——抓取TIOBE指数前20名排行开发语言"></a>网络爬虫——抓取TIOBE指数前20名排行开发语言</h2><p>目标网址<br>TIOBE指数前20名排行开发语言：<a href="https://www.tiobe.com/tiobe-index/" target="_blank" rel="noopener">https://www.tiobe.com/tiobe-index/</a></p>
+<p>说明<br> TIOBE排行榜是根据互联网上有经验的程序员、课程和第三方厂商的数量，并使用搜索引擎（如Google、Bing、Yahoo!）以及Wikipedia、Amazon、YouTube统计出排名数据，只是反映某个编程语言的热门程度，并不能说明一门编程语言好不好，或者一门语言所编写的代码数量多少。</p>
+<p> 该指数可以用来检阅开发者的编程技能能否跟上趋势，或是否有必要作出战略改变，以及什么编程语言是应该及时掌握的。观察认为，该指数反应的虽并非当前最流行或应用最广的语言，但对世界范围内开发语言的走势仍具有重要参考意义。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200413220913662.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>目标数据：（如上表所示）</p>
+<p>（1）2020年3月的排名（2）2019年3月排名（3）编程语言（4）评分（5）变化率</p>
+<p>明细：<br>（1）使用urllib或者requests库抓取目标网页中的网页源代码；</p>
+<p>（2）使用lxml库中的xpath方法解析源代码，提取上面所示的目标数据，并打印输出；</p>
+<p>（3）尝试着使用try..except方法及时捕获异常。</p>
+<p>（4）可以尝试将获取的数据保存到文本文件中。</p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from requests.exceptions import RequestException</span><br><span class="line">from lxml import etree</span><br><span class="line">def one_to_page(url):</span><br><span class="line">    headers&#x3D;&#123;</span><br><span class="line">        &#39;user-agent&#39;:&#39;Mozilla&#x2F;5.0 (Windows NT 10.0; WOW64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;70.0.3538.25 Safari&#x2F;537.36 Core&#x2F;1.70.3756.400 QQBrowser&#x2F;10.5.4039.400&#39;</span><br><span class="line">    &#125;</span><br><span class="line">    try:</span><br><span class="line">        response&#x3D;requests.get(url,headers&#x3D;headers)</span><br><span class="line">        body&#x3D;response.text</span><br><span class="line">        return body</span><br><span class="line">    except RequestException as e:</span><br><span class="line">        print(&#39;request is error!&#39;,e)</span><br><span class="line">def parsePage(html):</span><br><span class="line">    htmlNew &#x3D; etree.HTML(html,etree.HTMLParser())</span><br><span class="line">    result &#x3D; htmlNew.xpath(&#39;&#x2F;&#x2F;table[contains(@class,&quot;table-top20&quot;)]&#x2F;tbody&#x2F;tr&#x2F;&#x2F;text()&#39;)</span><br><span class="line">    pos &#x3D; 0</span><br><span class="line">    for i in range(20):</span><br><span class="line">        if i &#x3D;&#x3D; 0:</span><br><span class="line">            yield result[i:5]</span><br><span class="line">        else:</span><br><span class="line">            yield result[pos:pos+5]</span><br><span class="line">        pos +&#x3D; 5</span><br><span class="line">def printRank(data):</span><br><span class="line">    for i in data:</span><br><span class="line">        rank &#x3D; &#123;</span><br><span class="line">            &quot;2020年3月&quot;:i[0],</span><br><span class="line">            &quot;2019年3月&quot;:i[1],</span><br><span class="line">            &quot;编程语言&quot;:i[2],</span><br><span class="line">            &quot;评分&quot;:i[3],</span><br><span class="line">            &quot;变化率&quot;:i[4],    </span><br><span class="line">        &#125;</span><br><span class="line">        print(rank)</span><br><span class="line">def printRankEasy(data):</span><br><span class="line">    tplt &#x3D; &quot;&#123;0:^10&#125;\t&#123;1:^10&#125;\t&#123;2:^20&#125;\t&#123;3:^10&#125;\t&#123;4:^10&#125;&quot;</span><br><span class="line">    print(tplt.format(&quot;2020年3月&quot;,&quot;2019年3月&quot;,&quot;编程语言&quot;,&quot;评分&quot;,&quot;变化率&quot;,chr(12288)))</span><br><span class="line">    for i in data:</span><br><span class="line">        print(tplt.format(i[0],i[1],i[2],i[3],i[4],chr(12288)))</span><br><span class="line">def main():</span><br><span class="line">    url &#x3D; &#39;https:&#x2F;&#x2F;www.tiobe.com&#x2F;tiobe-index&#x2F;&#39;</span><br><span class="line">    html &#x3D; one_to_page(url)</span><br><span class="line">    data &#x3D; parsePage(html)</span><br><span class="line">    printRankEasy(data)</span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<p>输出如下<br><img src="https://img-blog.csdnimg.cn/20200413221221131.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 </span>
       
     </div>
@@ -375,7 +378,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/RE%EF%BC%88%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%89/" rel="tag">#RE（正则表达式）</a>
+            <a href="/tags/Xpath/" rel="tag">#Xpath</a>
+          
+            <a href="/tags/TIOBE%E6%8C%87%E6%95%B0/" rel="tag">#TIOBE指数</a>
           
         </div>
       
@@ -384,13 +389,13 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/10/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E6%90%9C%E7%8B%90%E6%9C%80%E6%96%B0%E6%97%B6%E6%94%BF%E6%96%B0%E9%97%BB%E6%95%B0%E6%8D%AE%E7%88%AC%E5%8F%96/" rel="prev">网络爬虫——搜狐最新时政新闻数据爬取——BS4</a>
+              <a href="/2017/10/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E5%89%8D%E7%A8%8B%E6%97%A0%E5%BF%A7%E7%BD%91%E6%95%B0%E6%8D%AE%E8%8E%B7%E5%8F%96%E5%8F%8A%E5%AD%98%E5%82%A8(%E9%AB%98%E7%BA%A7)/" rel="prev">网络爬虫——前程无忧网数据获取及存储（高级）</a>
             
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/10/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1%E6%8E%92%E8%A1%8C%E6%A6%9C%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%EF%BC%88%E9%AB%98%E7%BA%A7%EF%BC%89/" rel="next">豆瓣电影排行榜数据抓取（高级）——BS4</a>
+              <a href="/2017/10/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1%E6%8E%92%E8%A1%8C%E6%A6%9C%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%EF%BC%88%E5%88%9D%E7%BA%A7%EF%BC%89/" rel="next">豆瓣电影排行榜数据抓取（初级）——BS4</a>
             
           </div>
         </div>
@@ -523,7 +528,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络爬虫——猫眼电影数据抓取——RE（正则表达式）"><span class="nav-number">1.</span> <span class="nav-text">网络爬虫——猫眼电影数据抓取——RE（正则表达式）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#源码"><span class="nav-number">1.1.</span> <span class="nav-text">源码</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络爬虫——抓取TIOBE指数前20名排行开发语言"><span class="nav-number">1.</span> <span class="nav-text">网络爬虫——抓取TIOBE指数前20名排行开发语言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#源码"><span class="nav-number">1.1.</span> <span class="nav-text">源码</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
