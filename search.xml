@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>汇编题——CJNE</title>
+      <link href="/2020/02/20/%E6%B1%87%E7%BC%96%E9%A2%98%E2%80%94%E2%80%94CJNE/"/>
+      <url>/2020/02/20/%E6%B1%87%E7%BC%96%E9%A2%98%E2%80%94%E2%80%94CJNE/</url>
+      
+        <content type="html"><![CDATA[<h2 id="汇编题——CJNE"><a href="#汇编题——CJNE" class="headerlink" title="汇编题——CJNE"></a>汇编题——CJNE</h2><p><img src="https://img-blog.csdnimg.cn/20200423220905984.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 汇编 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CJNE </tag>
+            
+            <tag> DJNE </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>网络爬虫——前程无忧网数据获取及存储（高级）</title>
       <link href="/2019/09/03/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E5%89%8D%E7%A8%8B%E6%97%A0%E5%BF%A7%E7%BD%91%E6%95%B0%E6%8D%AE%E8%8E%B7%E5%8F%96%E5%8F%8A%E5%AD%98%E5%82%A8(%E9%AB%98%E7%BA%A7)/"/>
       <url>/2019/09/03/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E5%89%8D%E7%A8%8B%E6%97%A0%E5%BF%A7%E7%BD%91%E6%95%B0%E6%8D%AE%E8%8E%B7%E5%8F%96%E5%8F%8A%E5%AD%98%E5%82%A8(%E9%AB%98%E7%BA%A7)/</url>
@@ -20,9 +47,9 @@
       
         <tags>
             
-            <tag> CSV </tag>
-            
             <tag> Xpath </tag>
+            
+            <tag> CSV </tag>
             
         </tags>
       

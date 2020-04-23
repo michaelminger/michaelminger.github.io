@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://ailous.top/"/>
-  <updated>2020-04-14T06:07:53.533Z</updated>
+  <updated>2020-04-23T14:11:59.352Z</updated>
   <id>http://ailous.top/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>汇编题——CJNE</title>
+    <link href="http://ailous.top/2020/02/20/%E6%B1%87%E7%BC%96%E9%A2%98%E2%80%94%E2%80%94CJNE/"/>
+    <id>http://ailous.top/2020/02/20/%E6%B1%87%E7%BC%96%E9%A2%98%E2%80%94%E2%80%94CJNE/</id>
+    <published>2020-02-20T05:47:40.000Z</published>
+    <updated>2020-04-23T14:11:59.352Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="汇编题——CJNE"><a href="#汇编题——CJNE" class="headerlink" title="汇编题——CJNE"></a>汇编题——CJNE</h2><p><img src="https://img-blog.csdnimg.cn/20200423220905984.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;汇编题——CJNE&quot;&gt;&lt;a href=&quot;#汇编题——CJNE&quot; class=&quot;headerlink&quot; title=&quot;汇编题——CJNE&quot;&gt;&lt;/a&gt;汇编题——CJNE&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;https://img-blog.csdnimg.cn/2020
+      
+    
+    </summary>
+    
+    
+      <category term="汇编" scheme="http://ailous.top/categories/%E6%B1%87%E7%BC%96/"/>
+    
+    
+      <category term="CJNE" scheme="http://ailous.top/tags/CJNE/"/>
+    
+      <category term="DJNE" scheme="http://ailous.top/tags/DJNE/"/>
+    
+  </entry>
   
   <entry>
     <title>网络爬虫——前程无忧网数据获取及存储（高级）</title>
@@ -38,9 +66,9 @@
       <category term="网络爬虫" scheme="http://ailous.top/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/"/>
     
     
-      <category term="CSV" scheme="http://ailous.top/tags/CSV/"/>
-    
       <category term="Xpath" scheme="http://ailous.top/tags/Xpath/"/>
+    
+      <category term="CSV" scheme="http://ailous.top/tags/CSV/"/>
     
   </entry>
   
