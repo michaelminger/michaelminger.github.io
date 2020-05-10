@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>网络爬虫——古诗文网中验证码（超级鹰） | Hexo</title>
+  <meta name="description" content="网络爬虫——古诗文网中验证码（超级鹰）目标网址: 古诗文网目标网址：https:&#x2F;&#x2F;so.gushiwen.org&#x2F;user&#x2F;login.aspx?from&#x3D;http:&#x2F;&#x2F;so.gushiwen.org&#x2F;user&#x2F;collect.aspx 任务要求：（1）通过selenium的方式模拟该网站的登录，并成功输入用户名和密码； （2）保存验证码图片，并使用输入式验证码识别的方式识别验证码的文字，获取后">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络爬虫——古诗文网中验证码（超级鹰）">
+<meta property="og:url" content="http://ailous.top/2020/05/10/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E5%8F%A4%E8%AF%97%E6%96%87%E7%BD%91%E4%B8%AD%E9%AA%8C%E8%AF%81%E7%A0%81%EF%BC%88%E8%B6%85%E7%BA%A7%E9%B9%B0%EF%BC%89/index.html">
+<meta property="og:site_name" content="Michaelming&#39;s Blog">
+<meta property="og:description" content="网络爬虫——古诗文网中验证码（超级鹰）目标网址: 古诗文网目标网址：https:&#x2F;&#x2F;so.gushiwen.org&#x2F;user&#x2F;login.aspx?from&#x3D;http:&#x2F;&#x2F;so.gushiwen.org&#x2F;user&#x2F;collect.aspx 任务要求：（1）通过selenium的方式模拟该网站的登录，并成功输入用户名和密码； （2）保存验证码图片，并使用输入式验证码识别的方式识别验证码的文字，获取后">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200510095336662.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="article:published_time" content="2020-05-10T02:33:38.166Z">
+<meta property="article:modified_time" content="2020-05-10T02:33:38.354Z">
+<meta property="article:author" content="Michaelming">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200510095336662.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://ailous.top/2020/05/10/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E5%8F%A4%E8%AF%97%E6%96%87%E7%BD%91%E4%B8%AD%E9%AA%8C%E8%AF%81%E7%A0%81%EF%BC%88%E8%B6%85%E7%BA%A7%E9%B9%B0%EF%BC%89/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Michaelming&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/cofess" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">昵称</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Designer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shenzhen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">Books</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">Links</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B1%87%E7%BC%96/">汇编</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/">网络爬虫</a><span class="category-list-count">15</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BS4/" rel="tag">BS4</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CJNE/" rel="tag">CJNE</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSV/" rel="tag">CSV</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DJNE/" rel="tag">DJNE</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MYSQL/" rel="tag">MYSQL</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RE%EF%BC%88%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%89/" rel="tag">RE（正则表达式）</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TIOBE%E6%8C%87%E6%95%B0/" rel="tag">TIOBE指数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Xpath/" rel="tag">Xpath</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mnist/" rel="tag">mnist</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E6%89%8B%E6%88%BF/" rel="tag">二手房</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%A8%8B%E6%97%A0%E5%BF%A7/" rel="tag">前程无忧</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">卷积神经网络</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%89%8B%E5%86%99%E8%AF%86%E5%88%AB/" rel="tag">手写识别</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A5%A8%E6%88%BF/" rel="tag">票房</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B6%85%E7%BA%A7%E9%B9%B0/" rel="tag">超级鹰</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%97%AE%E9%A2%98/" rel="tag">问题</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/" rel="tag">风格迁移</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/BS4/" style="font-size: 14px;">BS4</a> <a href="/tags/CJNE/" style="font-size: 13px;">CJNE</a> <a href="/tags/CSV/" style="font-size: 13px;">CSV</a> <a href="/tags/DJNE/" style="font-size: 13px;">DJNE</a> <a href="/tags/MYSQL/" style="font-size: 13.67px;">MYSQL</a> <a href="/tags/RE%EF%BC%88%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%89/" style="font-size: 13.33px;">RE（正则表达式）</a> <a href="/tags/TIOBE%E6%8C%87%E6%95%B0/" style="font-size: 13px;">TIOBE指数</a> <a href="/tags/Xpath/" style="font-size: 13.67px;">Xpath</a> <a href="/tags/mnist/" style="font-size: 13px;">mnist</a> <a href="/tags/%E4%BA%8C%E6%89%8B%E6%88%BF/" style="font-size: 13px;">二手房</a> <a href="/tags/%E5%89%8D%E7%A8%8B%E6%97%A0%E5%BF%A7/" style="font-size: 13px;">前程无忧</a> <a href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 13.67px;">卷积神经网络</a> <a href="/tags/%E6%89%8B%E5%86%99%E8%AF%86%E5%88%AB/" style="font-size: 13px;">手写识别</a> <a href="/tags/%E7%A5%A8%E6%88%BF/" style="font-size: 13.33px;">票房</a> <a href="/tags/%E8%B6%85%E7%BA%A7%E9%B9%B0/" style="font-size: 13px;">超级鹰</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 13px;">问题</a> <a href="/tags/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/" style="font-size: 13.67px;">风格迁移</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/05/10/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E5%8F%A4%E8%AF%97%E6%96%87%E7%BD%91%E4%B8%AD%E9%AA%8C%E8%AF%81%E7%A0%81%EF%BC%88%E8%B6%85%E7%BA%A7%E9%B9%B0%EF%BC%89/" class="title">网络爬虫——古诗文网中验证码（超级鹰）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-05-10T02:33:38.166Z" itemprop="datePublished">2020-05-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/">网络爬虫</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E8%B6%85%E7%BA%A7%E9%B9%B0%E6%BA%90%E7%A0%81%E4%B8%8B%E8%BD%BD/" class="title">网络爬虫——超级鹰源码下载</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-27T05:47:40.000Z" itemprop="datePublished">2020-04-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/24/%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/" class="title">算法——最长公共子序列</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-23T23:33:47.063Z" itemprop="datePublished">2020-04-24</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%B1%87%E7%BC%96/">汇编</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/02/20/%E6%B1%87%E7%BC%96%E9%A2%98%E2%80%94%E2%80%94CJNE/" class="title">汇编题——CJNE</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-02-20T05:47:40.000Z" itemprop="datePublished">2020-02-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/">网络爬虫</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/03/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E5%89%8D%E7%A8%8B%E6%97%A0%E5%BF%A7%E7%BD%91%E6%95%B0%E6%8D%AE%E8%8E%B7%E5%8F%96%E5%8F%8A%E5%AD%98%E5%82%A8(%E9%AB%98%E7%BA%A7)/" class="title">网络爬虫——前程无忧网数据获取及存储（高级）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-03T05:47:40.000Z" itemprop="datePublished">2019-09-03</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-网络爬虫——古诗文网中验证码（超级鹰）" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      网络爬虫——古诗文网中验证码（超级鹰）
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/05/10/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E5%8F%A4%E8%AF%97%E6%96%87%E7%BD%91%E4%B8%AD%E9%AA%8C%E8%AF%81%E7%A0%81%EF%BC%88%E8%B6%85%E7%BA%A7%E9%B9%B0%EF%BC%89/" class="article-date">
+	  <time datetime="2020-05-10T02:33:38.166Z" itemprop="datePublished">2020-05-10</time>
+	</a>
+</span>
+        
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/05/10/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E5%8F%A4%E8%AF%97%E6%96%87%E7%BD%91%E4%B8%AD%E9%AA%8C%E8%AF%81%E7%A0%81%EF%BC%88%E8%B6%85%E7%BA%A7%E9%B9%B0%EF%BC%89/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="网络爬虫——古诗文网中验证码（超级鹰）"><a href="#网络爬虫——古诗文网中验证码（超级鹰）" class="headerlink" title="网络爬虫——古诗文网中验证码（超级鹰）"></a>网络爬虫——古诗文网中验证码（超级鹰）</h2><h4 id="目标网址-古诗文网"><a href="#目标网址-古诗文网" class="headerlink" title="目标网址: 古诗文网"></a>目标网址: 古诗文网</h4><h6 id="目标网址：https-so-gushiwen-org-user-login-aspx-from-http-so-gushiwen-org-user-collect-aspx"><a href="#目标网址：https-so-gushiwen-org-user-login-aspx-from-http-so-gushiwen-org-user-collect-aspx" class="headerlink" title="目标网址：https://so.gushiwen.org/user/login.aspx?from=http://so.gushiwen.org/user/collect.aspx"></a>目标网址：<a href="https://so.gushiwen.org/user/login.aspx?from=http://so.gushiwen.org/user/collect.aspx" target="_blank" rel="noopener">https://so.gushiwen.org/user/login.aspx?from=http://so.gushiwen.org/user/collect.aspx</a></h6><p><img src="https://img-blog.csdnimg.cn/20200510095336662.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h6 id="任务要求："><a href="#任务要求：" class="headerlink" title="任务要求："></a>任务要求：</h6><p>（1）通过selenium的方式模拟该网站的登录，并成功输入用户名和密码；</p>
+<p>（2）保存验证码图片，并使用输入式验证码识别的方式识别验证码的文字，获取后输入到输入框中，</p>
+<p>（3）验证登录是否成功。</p>
+<h4 id="源码："><a href="#源码：" class="headerlink" title="源码："></a>源码：</h4><h6 id="超级鹰源码："><a href="#超级鹰源码：" class="headerlink" title="超级鹰源码："></a>超级鹰源码：</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from hashlib import md5</span><br><span class="line"></span><br><span class="line">class Chaojiying_Client(object):</span><br><span class="line"></span><br><span class="line">    def __init__(self, username, password, soft_id):</span><br><span class="line">        self.username &#x3D; username</span><br><span class="line">        # todo:更改点一</span><br><span class="line">        self.password &#x3D; md5(password.encode(&quot;utf-8&quot;)).hexdigest()</span><br><span class="line">        self.soft_id &#x3D; soft_id</span><br><span class="line">        self.base_params &#x3D; &#123;</span><br><span class="line">            &#39;user&#39;: self.username,</span><br><span class="line">            &#39;pass2&#39;: self.password,</span><br><span class="line">            &#39;softid&#39;: self.soft_id,</span><br><span class="line">        &#125;</span><br><span class="line">        self.headers &#x3D; &#123;</span><br><span class="line">            &#39;Connection&#39;: &#39;Keep-Alive&#39;,</span><br><span class="line">            &#39;User-Agent&#39;: &#39;Mozilla&#x2F;4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident&#x2F;4.0)&#39;,</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    def PostPic(self, im, codetype):</span><br><span class="line">        params &#x3D; &#123;</span><br><span class="line">            &#39;codetype&#39;: codetype,</span><br><span class="line">        &#125;</span><br><span class="line">        params.update(self.base_params)</span><br><span class="line">        files &#x3D; &#123;&#39;userfile&#39;: (&#39;ccc.jpg&#39;, im)&#125;</span><br><span class="line">        r &#x3D; requests.post(&#39;http:&#x2F;&#x2F;upload.chaojiying.net&#x2F;Upload&#x2F;Processing.php&#39;, data&#x3D;params, files&#x3D;files, headers&#x3D;self.headers)</span><br><span class="line">        return r.json()</span><br><span class="line"></span><br><span class="line">    def ReportError(self, im_id):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        im_id:报错题目的图片ID</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        params &#x3D; &#123;</span><br><span class="line">            &#39;id&#39;: im_id,</span><br><span class="line">        &#125;</span><br><span class="line">        params.update(self.base_params)</span><br><span class="line">        r &#x3D; requests.post(&#39;http:&#x2F;&#x2F;upload.chaojiying.net&#x2F;Upload&#x2F;ReportError.php&#39;, data&#x3D;params, headers&#x3D;self.headers)</span><br><span class="line">        return r.json()</span><br></pre></td></tr></table></figure>
+<h6 id="识别源码："><a href="#识别源码：" class="headerlink" title="识别源码："></a>识别源码：</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver </span><br><span class="line">from selenium.common.exceptions import TimeoutException , NoSuchElementException</span><br><span class="line">import time </span><br><span class="line">from PIL import Image</span><br><span class="line">import pytesseract</span><br><span class="line">import chaojiying</span><br><span class="line"></span><br><span class="line">browser &#x3D; webdriver.Edge(&#39;E:\\anaconda\\Scripts\\msedgedriver.exe&#39;)</span><br><span class="line"># browser &#x3D; webdriver.Chrome()</span><br><span class="line">try:</span><br><span class="line">    browser.get(&#39;https:&#x2F;&#x2F;so.gushiwen.org&#x2F;user&#x2F;login.aspx?from&#x3D;http:&#x2F;&#x2F;so.gushiwen.org&#x2F;user&#x2F;collect.aspx&#39;)</span><br><span class="line">except TimeoutException:</span><br><span class="line">    print(&#39;Time Out&#39;)</span><br><span class="line"></span><br><span class="line">try:   </span><br><span class="line">    username &#x3D; browser.find_element_by_xpath(&#39;&#x2F;&#x2F;*[@id&#x3D;&quot;email&quot;]&#39;)</span><br><span class="line">    username.send_keys(&#39;自己账号&#39;)</span><br><span class="line">    time.sleep(1)</span><br><span class="line">    </span><br><span class="line">    password &#x3D; browser.find_element_by_xpath(&#39;&#x2F;&#x2F;*[@id&#x3D;&quot;pwd&quot;]&#39;)</span><br><span class="line">    password.send_keys(&#39;自己密码&#39;)</span><br><span class="line">    time.sleep(1)</span><br><span class="line">    </span><br><span class="line">    pictureN &#x3D; browser.find_element_by_xpath(&#39;&#x2F;&#x2F;*[@id&#x3D;&quot;imgCode&quot;]&#39;)</span><br><span class="line">    </span><br><span class="line">    browser.save_screenshot(&#39;login.png&#39;)</span><br><span class="line"></span><br><span class="line">    loc &#x3D; pictureN.location</span><br><span class="line">    size &#x3D; pictureN.size</span><br><span class="line"> </span><br><span class="line">    left &#x3D; loc[&#39;x&#39;]</span><br><span class="line">    top &#x3D; loc[&#39;y&#39;]</span><br><span class="line">    bottom &#x3D; top+size[&#39;height&#39;]</span><br><span class="line">    right &#x3D; left+size[&#39;width&#39;]</span><br><span class="line"> </span><br><span class="line">    page &#x3D; Image.open(&#39;login.png&#39;)</span><br><span class="line">    Code &#x3D; page.crop((left,top,right,bottom))</span><br><span class="line">    Code.save(&#39;code.png&#39;)</span><br><span class="line">   </span><br><span class="line">    chaojiying &#x3D; Chaojiying_Client(&#39;超级鹰账号&#39;, &#39;密码&#39;, &#39;ID&#39;)#ID 具体看软件ID。</span><br><span class="line">    im &#x3D; open(&#39;code.png&#39;, &#39;rb&#39;).read()</span><br><span class="line">    text &#x3D; chaojiying.PostPic(im,2004)[&#39;pic_str&#39;]</span><br><span class="line">    print(text)</span><br><span class="line">       </span><br><span class="line">#     text &#x3D; pytesseract.image_to_string(Image.open(&#39;code.png&#39;))</span><br><span class="line">#     print(text)    </span><br><span class="line"></span><br><span class="line">    CodeWhere &#x3D; browser.find_element_by_xpath(&#39;&#x2F;&#x2F;*[@id&#x3D;&quot;code&quot;]&#39;)</span><br><span class="line">    CodeWhere.send_keys(text)</span><br><span class="line">    time.sleep(5)</span><br><span class="line">                     </span><br><span class="line">    Submit &#x3D; browser.find_element_by_xpath(&#39;&#x2F;&#x2F;*[@id&#x3D;&quot;denglu&quot;]&#39;)</span><br><span class="line">    Submit.click()</span><br><span class="line">    time.sleep(5)</span><br><span class="line">except NoSuchElementException:</span><br><span class="line">    print(&#39;No Element&#39;)</span><br><span class="line">finally:</span><br><span class="line">    browser.close()</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://ailous.top/2020/05/10/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E5%8F%A4%E8%AF%97%E6%96%87%E7%BD%91%E4%B8%AD%E9%AA%8C%E8%AF%81%E7%A0%81%EF%BC%88%E8%B6%85%E7%BA%A7%E9%B9%B0%EF%BC%89/" title="网络爬虫——古诗文网中验证码（超级鹰）" target="_blank" rel="external">http://ailous.top/2020/05/10/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E5%8F%A4%E8%AF%97%E6%96%87%E7%BD%91%E4%B8%AD%E9%AA%8C%E8%AF%81%E7%A0%81%EF%BC%88%E8%B6%85%E7%BA%A7%E9%B9%B0%EF%BC%89/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/cofess" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/cofess" target="_blank"><span class="text-dark">昵称</span><small class="ml-1x">Web Developer &amp; Designer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2020/04/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E8%B6%85%E7%BA%A7%E9%B9%B0%E6%BA%90%E7%A0%81%E4%B8%8B%E8%BD%BD/" title="网络爬虫——超级鹰源码下载"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
