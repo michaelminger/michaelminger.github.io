@@ -872,6 +872,101 @@
 
 
   
+    <article id="post-网络爬虫——票房网数据抓取及存储" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E7%A5%A8%E6%88%BF%E7%BD%91%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%E5%8F%8A%E5%AD%98%E5%82%A8/">网络爬虫——票房网数据抓取及存储（初级）</a>
+    </h1>
+  
+
+        
+        <a href="/2019/05/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E7%A5%A8%E6%88%BF%E7%BD%91%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%E5%8F%8A%E5%AD%98%E5%82%A8/" class="archive-article-date">
+  	<time datetime="2019-05-27T05:47:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="网络爬虫——票房网数据抓取及存储"><a href="#网络爬虫——票房网数据抓取及存储" class="headerlink" title="网络爬虫——票房网数据抓取及存储"></a>网络爬虫——票房网数据抓取及存储</h2><h4 id="实验内容"><a href="#实验内容" class="headerlink" title="实验内容"></a>实验内容</h4><p>目标网站：电影票房网</p>
+<p>目标网址：<a href="http://58921.com/daily/wangpiao" target="_blank" rel="noopener">http://58921.com/daily/wangpiao</a></p>
+<h4 id="任务要求"><a href="#任务要求" class="headerlink" title="任务要求"></a>任务要求</h4><p>目标数据：（1）名次（2）电影名称 （3）日期（4）票房 （5）总场次（6）废场（7）人次（8）上座率（9）票价</p>
+<p><img src="https://img-blog.csdnimg.cn/20200423214801795.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>（1）使用urllib或requests库实现该网站网页源代码的获取，并将源代码进行保存；</p>
+<p>（2）自主选择re、bs4、lxml中的一种解析方法对保存的的源代码读取并进行解析，成功找到目标数据所在的特定标签，进行网页结构的解析；</p>
+<p>（3）定义函数，将获取的目标数据保存到csv文件中。</p>
+<p>（4）使用框架式结构，通过参数传递实现整个特定数据的爬取。</p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import json</span><br><span class="line">import csv</span><br><span class="line">from requests.exceptions import RequestException</span><br><span class="line">from lxml import etree</span><br><span class="line"></span><br><span class="line">def getHtmlText(url):</span><br><span class="line">    headers &#x3D; &#123;</span><br><span class="line">        &#39;User-Agent&#39;: &#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64)AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;80.0.3987.149 Safari&#x2F;537.36 Edg&#x2F;80.0.361.69&#39;        </span><br><span class="line">    &#125;</span><br><span class="line">    try:</span><br><span class="line">        result &#x3D; requests.get(url,headers&#x3D;headers,timeout&#x3D;30)</span><br><span class="line">        result.raise_for_status()</span><br><span class="line">        result.encoding &#x3D; result.apparent_encoding</span><br><span class="line">        return result.text</span><br><span class="line">    except:</span><br><span class="line">        return &quot;&quot;</span><br><span class="line"></span><br><span class="line">def parsePage(html):</span><br><span class="line">    ulist &#x3D; []</span><br><span class="line">    clist &#x3D; []</span><br><span class="line">    rlist &#x3D; []</span><br><span class="line">    ilist &#x3D; []</span><br><span class="line">    </span><br><span class="line">    newhtml &#x3D;etree.HTML(html,etree.HTMLParser())</span><br><span class="line">    result&#x3D;newhtml.xpath(&#39;&#x2F;&#x2F;*[@id&#x3D;&quot;content&quot;]&#x2F;div[2]&#x2F;table&#x2F;tbody&#x2F;tr&#x2F;td&#x2F;&#x2F;text()&#39;)</span><br><span class="line">    imgs &#x3D; newhtml.xpath(&#39;&#x2F;&#x2F;*[@id&#x3D;&quot;content&quot;]&#x2F;div[2]&#x2F;table&#x2F;tbody&#x2F;tr&#x2F;td&#x2F;a&#x2F;img&#x2F;@src&#39;, stream&#x3D;True)</span><br><span class="line">    j &#x3D; 0 </span><br><span class="line">    </span><br><span class="line">    for img in imgs:</span><br><span class="line">        j&#x3D;j+1</span><br><span class="line">        with open(str(j)+&#39;.png&#39;, &#39;wb&#39;) as fd:</span><br><span class="line">            picture&#x3D;requests.get(img).content</span><br><span class="line">            fd.write(picture)  </span><br><span class="line">      </span><br><span class="line">    for i in range(len(imgs)):  </span><br><span class="line">            str_ &#x3D; str(i+1)+&#39;.png&#39;</span><br><span class="line">            text &#x3D; pytesseract.image_to_string(Image.open(str_))</span><br><span class="line">            ilist.append(text.replace(&quot; &quot;,&quot;.&quot;).replace(&quot;M&quot;,&quot;亿&quot;).replace(&quot;a&quot;,&quot;亿&quot;))</span><br><span class="line">#     print(ilist)        </span><br><span class="line">    for i in range(len(result)):</span><br><span class="line">        ulist.append(result[i].replace(&quot; &quot;,&quot;&quot;).replace(&#39;\r&#39;,&quot;&quot;).replace(&quot;\n&quot;,&#39;&#39;))</span><br><span class="line"></span><br><span class="line">    while &#39;&#39; in ulist:</span><br><span class="line">        ulist.remove(&#39;&#39;)</span><br><span class="line">    </span><br><span class="line">    length &#x3D; len(ulist)</span><br><span class="line">    weight &#x3D; int(length &#x2F; 8 )</span><br><span class="line">    </span><br><span class="line">    for i in range(weight):</span><br><span class="line">        for j in range(8):</span><br><span class="line">            clist.append(ulist[i*8+j])</span><br><span class="line">        clist.append(ilist[i])</span><br><span class="line">        rlist.append(clist)</span><br><span class="line">        clist &#x3D; []</span><br><span class="line">        </span><br><span class="line">    return rlist</span><br><span class="line"></span><br><span class="line"># def txtdata(data):</span><br><span class="line">#     with open(&#39;top20.txt&#39;,&#39;w&#39;)as file:</span><br><span class="line">#         for i in data:</span><br><span class="line">#             for j in i:</span><br><span class="line">#                 print(j)</span><br><span class="line">#         print(&#39;successful&#39;)</span><br><span class="line"></span><br><span class="line">def storedata(data):</span><br><span class="line">    with open(&#39;top20.txt&#39;,&#39;w&#39;,encoding &#x3D; &#39;utf-8&#39;)as file:</span><br><span class="line">        for i in data:</span><br><span class="line">            file.write(json.dumps(i,ensure_ascii&#x3D;False)+&#39;\n&#39;)</span><br><span class="line">        print(&#39;ok&#39;)</span><br><span class="line">        </span><br><span class="line">def csvdata(data):</span><br><span class="line">    with open(&#39;top20.csv&#39;,&#39;w&#39;,encoding &#x3D; &#39;utf-8&#39;,newline&#x3D;&#39;&#39;)as csvfile:</span><br><span class="line">        fieldnames &#x3D; [&#39;名次&#39;,&#39;电影名称&#39;,&#39;日期&#39;,&#39;票房&#39;,&#39;总场次&#39;,&#39;废场&#39;,&#39;人次&#39;,&#39;上座率&#39;,&#39;票价（元）&#39;]</span><br><span class="line">        writer &#x3D; csv.DictWriter(csvfile,fieldnames&#x3D;fieldnames)</span><br><span class="line">        writer.writeheader()</span><br><span class="line">        for i in data:</span><br><span class="line">            writer.writerow(&#123;&#39;名次&#39;:i[0],&#39;电影名称&#39;:i[1],&#39;日期&#39;:i[2],&#39;票房&#39;:i[8],&#39;总场次&#39;:i[3],&#39;废场&#39;:i[4],&#39;人次&#39;:i[5],&#39;上座率&#39;:i[6],&#39;票价（元）&#39;:i[7]&#125;)</span><br><span class="line">        print(&#39;ok&#39;)</span><br><span class="line">            </span><br><span class="line">def main():</span><br><span class="line">    url&#x3D;&quot;http:&#x2F;&#x2F;58921.com&#x2F;daily&#x2F;wangpiao&quot;</span><br><span class="line">    html&#x3D;getHtmlText(url)</span><br><span class="line">    rlist&#x3D;parsePage(html)</span><br><span class="line">    </span><br><span class="line">#     txtdata(rlist)</span><br><span class="line">    storedata(rlist)</span><br><span class="line">    csvdata(rlist)</span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<h3 id="结果输出："><a href="#结果输出：" class="headerlink" title="结果输出："></a>结果输出：</h3><p><img src="https://img-blog.csdnimg.cn/20200413222149472.jpg#pic_center" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200423215045899.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200423215045907.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">票房</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/网络爬虫//" class="article-tag-list-link color5">网络爬虫</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/05/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E7%A5%A8%E6%88%BF%E7%BD%91%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%E5%8F%8A%E5%AD%98%E5%82%A8/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-网络爬虫——票房网数据抓取及MYSQL存储" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -941,101 +1036,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/05/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E7%A5%A8%E6%88%BF%E7%BD%91%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%E5%8F%8AMYSQL%E5%AD%98%E5%82%A8/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-网络爬虫——票房网数据抓取及存储" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E7%A5%A8%E6%88%BF%E7%BD%91%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%E5%8F%8A%E5%AD%98%E5%82%A8/">网络爬虫——票房网数据抓取及存储（初级）</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E7%A5%A8%E6%88%BF%E7%BD%91%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%E5%8F%8A%E5%AD%98%E5%82%A8/" class="archive-article-date">
-  	<time datetime="2019-05-27T05:47:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="网络爬虫——票房网数据抓取及存储"><a href="#网络爬虫——票房网数据抓取及存储" class="headerlink" title="网络爬虫——票房网数据抓取及存储"></a>网络爬虫——票房网数据抓取及存储</h2><h4 id="实验内容"><a href="#实验内容" class="headerlink" title="实验内容"></a>实验内容</h4><p>目标网站：电影票房网</p>
-<p>目标网址：<a href="http://58921.com/daily/wangpiao" target="_blank" rel="noopener">http://58921.com/daily/wangpiao</a></p>
-<h4 id="任务要求"><a href="#任务要求" class="headerlink" title="任务要求"></a>任务要求</h4><p>目标数据：（1）名次（2）电影名称 （3）日期（4）票房 （5）总场次（6）废场（7）人次（8）上座率（9）票价</p>
-<p><img src="https://img-blog.csdnimg.cn/20200423214801795.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
-<p>（1）使用urllib或requests库实现该网站网页源代码的获取，并将源代码进行保存；</p>
-<p>（2）自主选择re、bs4、lxml中的一种解析方法对保存的的源代码读取并进行解析，成功找到目标数据所在的特定标签，进行网页结构的解析；</p>
-<p>（3）定义函数，将获取的目标数据保存到csv文件中。</p>
-<p>（4）使用框架式结构，通过参数传递实现整个特定数据的爬取。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import json</span><br><span class="line">import csv</span><br><span class="line">from requests.exceptions import RequestException</span><br><span class="line">from lxml import etree</span><br><span class="line"></span><br><span class="line">def getHtmlText(url):</span><br><span class="line">    headers &#x3D; &#123;</span><br><span class="line">        &#39;User-Agent&#39;: &#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64)AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;80.0.3987.149 Safari&#x2F;537.36 Edg&#x2F;80.0.361.69&#39;        </span><br><span class="line">    &#125;</span><br><span class="line">    try:</span><br><span class="line">        result &#x3D; requests.get(url,headers&#x3D;headers,timeout&#x3D;30)</span><br><span class="line">        result.raise_for_status()</span><br><span class="line">        result.encoding &#x3D; result.apparent_encoding</span><br><span class="line">        return result.text</span><br><span class="line">    except:</span><br><span class="line">        return &quot;&quot;</span><br><span class="line"></span><br><span class="line">def parsePage(html):</span><br><span class="line">    ulist &#x3D; []</span><br><span class="line">    clist &#x3D; []</span><br><span class="line">    rlist &#x3D; []</span><br><span class="line">    ilist &#x3D; []</span><br><span class="line">    </span><br><span class="line">    newhtml &#x3D;etree.HTML(html,etree.HTMLParser())</span><br><span class="line">    result&#x3D;newhtml.xpath(&#39;&#x2F;&#x2F;*[@id&#x3D;&quot;content&quot;]&#x2F;div[2]&#x2F;table&#x2F;tbody&#x2F;tr&#x2F;td&#x2F;&#x2F;text()&#39;)</span><br><span class="line">    imgs &#x3D; newhtml.xpath(&#39;&#x2F;&#x2F;*[@id&#x3D;&quot;content&quot;]&#x2F;div[2]&#x2F;table&#x2F;tbody&#x2F;tr&#x2F;td&#x2F;a&#x2F;img&#x2F;@src&#39;, stream&#x3D;True)</span><br><span class="line">    j &#x3D; 0 </span><br><span class="line">    </span><br><span class="line">    for img in imgs:</span><br><span class="line">        j&#x3D;j+1</span><br><span class="line">        with open(str(j)+&#39;.png&#39;, &#39;wb&#39;) as fd:</span><br><span class="line">            picture&#x3D;requests.get(img).content</span><br><span class="line">            fd.write(picture)  </span><br><span class="line">      </span><br><span class="line">    for i in range(len(imgs)):  </span><br><span class="line">            str_ &#x3D; str(i+1)+&#39;.png&#39;</span><br><span class="line">            text &#x3D; pytesseract.image_to_string(Image.open(str_))</span><br><span class="line">            ilist.append(text.replace(&quot; &quot;,&quot;.&quot;).replace(&quot;M&quot;,&quot;亿&quot;).replace(&quot;a&quot;,&quot;亿&quot;))</span><br><span class="line">#     print(ilist)        </span><br><span class="line">    for i in range(len(result)):</span><br><span class="line">        ulist.append(result[i].replace(&quot; &quot;,&quot;&quot;).replace(&#39;\r&#39;,&quot;&quot;).replace(&quot;\n&quot;,&#39;&#39;))</span><br><span class="line"></span><br><span class="line">    while &#39;&#39; in ulist:</span><br><span class="line">        ulist.remove(&#39;&#39;)</span><br><span class="line">    </span><br><span class="line">    length &#x3D; len(ulist)</span><br><span class="line">    weight &#x3D; int(length &#x2F; 8 )</span><br><span class="line">    </span><br><span class="line">    for i in range(weight):</span><br><span class="line">        for j in range(8):</span><br><span class="line">            clist.append(ulist[i*8+j])</span><br><span class="line">        clist.append(ilist[i])</span><br><span class="line">        rlist.append(clist)</span><br><span class="line">        clist &#x3D; []</span><br><span class="line">        </span><br><span class="line">    return rlist</span><br><span class="line"></span><br><span class="line"># def txtdata(data):</span><br><span class="line">#     with open(&#39;top20.txt&#39;,&#39;w&#39;)as file:</span><br><span class="line">#         for i in data:</span><br><span class="line">#             for j in i:</span><br><span class="line">#                 print(j)</span><br><span class="line">#         print(&#39;successful&#39;)</span><br><span class="line"></span><br><span class="line">def storedata(data):</span><br><span class="line">    with open(&#39;top20.txt&#39;,&#39;w&#39;,encoding &#x3D; &#39;utf-8&#39;)as file:</span><br><span class="line">        for i in data:</span><br><span class="line">            file.write(json.dumps(i,ensure_ascii&#x3D;False)+&#39;\n&#39;)</span><br><span class="line">        print(&#39;ok&#39;)</span><br><span class="line">        </span><br><span class="line">def csvdata(data):</span><br><span class="line">    with open(&#39;top20.csv&#39;,&#39;w&#39;,encoding &#x3D; &#39;utf-8&#39;,newline&#x3D;&#39;&#39;)as csvfile:</span><br><span class="line">        fieldnames &#x3D; [&#39;名次&#39;,&#39;电影名称&#39;,&#39;日期&#39;,&#39;票房&#39;,&#39;总场次&#39;,&#39;废场&#39;,&#39;人次&#39;,&#39;上座率&#39;,&#39;票价（元）&#39;]</span><br><span class="line">        writer &#x3D; csv.DictWriter(csvfile,fieldnames&#x3D;fieldnames)</span><br><span class="line">        writer.writeheader()</span><br><span class="line">        for i in data:</span><br><span class="line">            writer.writerow(&#123;&#39;名次&#39;:i[0],&#39;电影名称&#39;:i[1],&#39;日期&#39;:i[2],&#39;票房&#39;:i[8],&#39;总场次&#39;:i[3],&#39;废场&#39;:i[4],&#39;人次&#39;:i[5],&#39;上座率&#39;:i[6],&#39;票价（元）&#39;:i[7]&#125;)</span><br><span class="line">        print(&#39;ok&#39;)</span><br><span class="line">            </span><br><span class="line">def main():</span><br><span class="line">    url&#x3D;&quot;http:&#x2F;&#x2F;58921.com&#x2F;daily&#x2F;wangpiao&quot;</span><br><span class="line">    html&#x3D;getHtmlText(url)</span><br><span class="line">    rlist&#x3D;parsePage(html)</span><br><span class="line">    </span><br><span class="line">#     txtdata(rlist)</span><br><span class="line">    storedata(rlist)</span><br><span class="line">    csvdata(rlist)</span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
-<h3 id="结果输出："><a href="#结果输出：" class="headerlink" title="结果输出："></a>结果输出：</h3><p><img src="https://img-blog.csdnimg.cn/20200413222149472.jpg#pic_center" alt="在这里插入图片描述"></p>
-<p><img src="https://img-blog.csdnimg.cn/20200423215045899.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200423215045907.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">票房</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/网络爬虫//" class="article-tag-list-link color5">网络爬虫</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/05/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E7%A5%A8%E6%88%BF%E7%BD%91%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%E5%8F%8A%E5%AD%98%E5%82%A8/">展开全文 >></a>
         </p>
       
 
@@ -1162,19 +1162,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">卷积神经网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">风格迁移</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">手写识别</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">mnist</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">卷积神经网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">风格迁移</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1190,19 +1190,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CSV</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Xpath</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">二手房</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">MYSQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CSV</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Xpath</a>
               </li>
              
               <li class="article-tag-list-item">
