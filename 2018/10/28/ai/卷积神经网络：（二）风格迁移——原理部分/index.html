@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">风格迁移——原理部分 | Michaelming&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "不见你如我一般michaelminger";
+  mashiro_option.author_name = "michaelminger";
+  mashiro_option.site_url = "https://ailous.top";
+  mashiro_option.v_appId = "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz";
+  mashiro_option.v_appKey = "mgOpfzbkHYqU92CV4IDlAUHQ";
+  mashiro_option.mathjax = "0";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/cover/(1).jpg.webp,https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/cover/(2).jpg.webp,https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/cover/(3).jpg.webp,https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/cover/(4).jpg.webp,https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/cover/(5).jpg.webp,https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/cover/(6).jpg.webp,https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/cover/(7).jpg.webp,https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/cover/(8).jpg.webp".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+</head>
+</html>
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop filter-grid">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://ailous.top">
+          <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/custom/avatar.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>待到秋来九月八，我花开遍百花杀。</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="http://github.com/honjun" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://weibo.com/mashirozx?is_all=1" target="_blank" class="social-github" title="sina">
+                    <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/social/sina.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://weibo.com/mashirozx?is_all=1" target="_blank" class="social-github" title="wangyiyun">
+                    <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/social/wangyiyun.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://weibo.com/mashirozx?is_all=1" target="_blank" class="social-github" title="zhihu">
+                    <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/social/zhihu.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://weibo.com/mashirozx?is_all=1" target="_blank" class="social-github" title="email">
+                    <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/social/email.svg">
+                  </a>
+                </li>
+              
+            
+              
+                <li class="wechat">
+                  <a href="/#">
+                    <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/social/wechat.png">
+                  </a>
+                  <div class="wechatInner">
+                    <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/custom/wechat.jpg">
+                  </div>
+                </li>
+              
+            
+              
+                <li class="wechat">
+                  <a href="/#">
+                    <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/social/wechat.png">
+                  </a>
+                  <div class="wechatInner">
+                    <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/custom/wechat.jpg">
+                  </div>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">不见你如我一般</span>
+            <span class="shironeko">michaelminger</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    爱好
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories/capture/">
+                          <i class="fa fa-code" aria-hidden="true"></i>
+                          网络爬虫
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/ai/">
+                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                          人工智能
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/arithmetic/">
+                          <i class="fa fa-cloud-download" aria-hidden="true"></i>
+                          高级算法
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/practise/">
+                          <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                          个人练习
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/lab/">
+                          <i class="fa fa-cogs" aria-hidden="true"></i>
+                          Lab
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+          <header class="entry-header">
+            <h1 class="entry-title">风格迁移——原理部分</h1>
+            <p class="entry-census">&nbsp;·&nbsp;2018-10-28&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
+
+            <hr>
+          </header>
+        
+        <div class="entry-content">
+          <h1 id="卷积神经网络：（二）风格迁移——原理部分"><a href="#卷积神经网络：（二）风格迁移——原理部分" class="headerlink" title="卷积神经网络：（二）风格迁移——原理部分"></a>卷积神经网络：（二）风格迁移——原理部分</h1><h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><h4 id="本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）。若想查看环境配置步骤，请点击https-blog-csdn-net-weixin-41108515-article-details-103636284，因原理部分篇幅较多，所以将所有代码，知识部分移到第三篇博客上，若是对于该原理了解熟悉，或只想操作不需深入的，可以直接跳过。所有操作都在第三篇上。"><a href="#本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）。若想查看环境配置步骤，请点击https-blog-csdn-net-weixin-41108515-article-details-103636284，因原理部分篇幅较多，所以将所有代码，知识部分移到第三篇博客上，若是对于该原理了解熟悉，或只想操作不需深入的，可以直接跳过。所有操作都在第三篇上。" class="headerlink" title="本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）。若想查看环境配置步骤，请点击https://blog.csdn.net/weixin_41108515/article/details/103636284，因原理部分篇幅较多，所以将所有代码，知识部分移到第三篇博客上，若是对于该原理了解熟悉，或只想操作不需深入的，可以直接跳过。所有操作都在第三篇上。"></a>本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）。若想查看环境配置步骤，请点击<a href="https://blog.csdn.net/weixin_41108515/article/details/103636284" target="_blank" rel="noopener">https://blog.csdn.net/weixin_41108515/article/details/103636284</a>，因原理部分篇幅较多，所以将所有代码，知识部分移到第三篇博客上，若是对于该原理了解熟悉，或只想操作不需深入的，可以直接跳过。所有操作都在第三篇上。</h4><p>&nbsp;<br>转载请注明出处：<a href="https://blog.csdn.net/weixin_41108515/article/details/103650964" target="_blank" rel="noopener">https://blog.csdn.net/weixin_41108515/article/details/103650964</a><br>&nbsp;<br>这里引用的是：<br><a href="http://zh.gluon.ai/chapter_computer-vision/neural-style.html" target="_blank" rel="noopener">http://zh.gluon.ai/chapter_computer-vision/neural-style.html</a><br><a href="https://blog.csdn.net/aaronjny/article/details/79681080" target="_blank" rel="noopener">https://blog.csdn.net/aaronjny/article/details/79681080</a><br>这两篇都非常详细，并且经调试可以使用。</p>
+<h1 id="涉及到的相关原理："><a href="#涉及到的相关原理：" class="headerlink" title="涉及到的相关原理："></a>涉及到的相关原理：</h1><h1 id="1、神经网络部分原理："><a href="#1、神经网络部分原理：" class="headerlink" title="1、神经网络部分原理："></a>1、神经网络部分原理：</h1><h2 id="1-1-神经网络基础介绍"><a href="#1-1-神经网络基础介绍" class="headerlink" title="1.1 神经网络基础介绍"></a>1.1 神经网络基础介绍</h2><h4 id="神经网络基本可以分成两种：一种为生物神经网络，一种为人工神经网络。"><a href="#神经网络基本可以分成两种：一种为生物神经网络，一种为人工神经网络。" class="headerlink" title="神经网络基本可以分成两种：一种为生物神经网络，一种为人工神经网络。"></a>神经网络基本可以分成两种：一种为生物神经网络，一种为人工神经网络。</h4><h4 id="生物神经网络一般是指生物的大脑神经元，细胞，触点等组成的网络，用于产生生物的意识，帮助生物进行思考和行动。其主要是由生物神经元构成，如下图所示。人工神经网络就是模拟人思维的第二种方式。这是一个非线性动力学系统，其特色在于信息的分布式存储和并行协同处理。虽然单个神经元的结构极其简单，功能有限，但大量神经元构成的网络系统所能实现的行为却是极其丰富多彩的。"><a href="#生物神经网络一般是指生物的大脑神经元，细胞，触点等组成的网络，用于产生生物的意识，帮助生物进行思考和行动。其主要是由生物神经元构成，如下图所示。人工神经网络就是模拟人思维的第二种方式。这是一个非线性动力学系统，其特色在于信息的分布式存储和并行协同处理。虽然单个神经元的结构极其简单，功能有限，但大量神经元构成的网络系统所能实现的行为却是极其丰富多彩的。" class="headerlink" title="生物神经网络一般是指生物的大脑神经元，细胞，触点等组成的网络，用于产生生物的意识，帮助生物进行思考和行动。其主要是由生物神经元构成，如下图所示。人工神经网络就是模拟人思维的第二种方式。这是一个非线性动力学系统，其特色在于信息的分布式存储和并行协同处理。虽然单个神经元的结构极其简单，功能有限，但大量神经元构成的网络系统所能实现的行为却是极其丰富多彩的。"></a>生物神经网络一般是指生物的大脑神经元，细胞，触点等组成的网络，用于产生生物的意识，帮助生物进行思考和行动。其主要是由生物神经元构成，如下图所示。<img src="https://img-blog.csdnimg.cn/2019122210122665.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">人工神经网络就是模拟人思维的第二种方式。这是一个非线性动力学系统，其特色在于信息的分布式存储和并行协同处理。虽然单个神经元的结构极其简单，功能有限，但大量神经元构成的网络系统所能实现的行为却是极其丰富多彩的。</h4><h4 id="神经网络的研究内容相当广泛，反映了多学科交叉技术领域的特点。主要的研究工作集中在以下几个方面："><a href="#神经网络的研究内容相当广泛，反映了多学科交叉技术领域的特点。主要的研究工作集中在以下几个方面：" class="headerlink" title="神经网络的研究内容相当广泛，反映了多学科交叉技术领域的特点。主要的研究工作集中在以下几个方面："></a>神经网络的研究内容相当广泛，反映了多学科交叉技术领域的特点。主要的研究工作集中在以下几个方面：</h4><h5 id="（1）生物原型研究。从生理学、心理学、解剖学、脑科学、病理学等生物科学方面研究神经细胞、神经网络、神经系统的生物原型结构及其功能机理。"><a href="#（1）生物原型研究。从生理学、心理学、解剖学、脑科学、病理学等生物科学方面研究神经细胞、神经网络、神经系统的生物原型结构及其功能机理。" class="headerlink" title="（1）生物原型研究。从生理学、心理学、解剖学、脑科学、病理学等生物科学方面研究神经细胞、神经网络、神经系统的生物原型结构及其功能机理。"></a>（1）生物原型研究。从生理学、心理学、解剖学、脑科学、病理学等生物科学方面研究神经细胞、神经网络、神经系统的生物原型结构及其功能机理。</h5><h5 id="（2）建立理论模型。根据生物原型的研究，建立神经元、神经网络的理论模型。其中包括概念模型、知识模型、物理化学模型、数学模型等。"><a href="#（2）建立理论模型。根据生物原型的研究，建立神经元、神经网络的理论模型。其中包括概念模型、知识模型、物理化学模型、数学模型等。" class="headerlink" title="（2）建立理论模型。根据生物原型的研究，建立神经元、神经网络的理论模型。其中包括概念模型、知识模型、物理化学模型、数学模型等。"></a>（2）建立理论模型。根据生物原型的研究，建立神经元、神经网络的理论模型。其中包括概念模型、知识模型、物理化学模型、数学模型等。</h5><h5 id="（3）网络模型与算法研究。在理论模型研究的基础上构作具体的神经网络模型，以实现计算机模拟或准备制作硬件，包括网络学习算法的研究。这方面的工作也称为技术模型研究。"><a href="#（3）网络模型与算法研究。在理论模型研究的基础上构作具体的神经网络模型，以实现计算机模拟或准备制作硬件，包括网络学习算法的研究。这方面的工作也称为技术模型研究。" class="headerlink" title="（3）网络模型与算法研究。在理论模型研究的基础上构作具体的神经网络模型，以实现计算机模拟或准备制作硬件，包括网络学习算法的研究。这方面的工作也称为技术模型研究。"></a>（3）网络模型与算法研究。在理论模型研究的基础上构作具体的神经网络模型，以实现计算机模拟或准备制作硬件，包括网络学习算法的研究。这方面的工作也称为技术模型研究。</h5><h5 id="（4）人工神经网络应用系统。在网络模型与算法研究的基础上，利用人工神经网络组成实际的应用系统，例如，完成某种信号处理或模式识别的功能、构造专家系统、制成机器人等等。"><a href="#（4）人工神经网络应用系统。在网络模型与算法研究的基础上，利用人工神经网络组成实际的应用系统，例如，完成某种信号处理或模式识别的功能、构造专家系统、制成机器人等等。" class="headerlink" title="（4）人工神经网络应用系统。在网络模型与算法研究的基础上，利用人工神经网络组成实际的应用系统，例如，完成某种信号处理或模式识别的功能、构造专家系统、制成机器人等等。"></a>（4）人工神经网络应用系统。在网络模型与算法研究的基础上，利用人工神经网络组成实际的应用系统，例如，完成某种信号处理或模式识别的功能、构造专家系统、制成机器人等等。</h5><h4 id="纵观当代新兴科学技术的发展历史，人类在征服宇宙空间、基本粒子，生命起源等科学技术领域的进程中历经了崎岖不平的道路。我们也会看到，探索人脑功能和神经网络的研究将伴随着重重困难的克服而日新月异。人工神经网络如下图所示。"><a href="#纵观当代新兴科学技术的发展历史，人类在征服宇宙空间、基本粒子，生命起源等科学技术领域的进程中历经了崎岖不平的道路。我们也会看到，探索人脑功能和神经网络的研究将伴随着重重困难的克服而日新月异。人工神经网络如下图所示。" class="headerlink" title="纵观当代新兴科学技术的发展历史，人类在征服宇宙空间、基本粒子，生命起源等科学技术领域的进程中历经了崎岖不平的道路。我们也会看到，探索人脑功能和神经网络的研究将伴随着重重困难的克服而日新月异。人工神经网络如下图所示。"></a>纵观当代新兴科学技术的发展历史，人类在征服宇宙空间、基本粒子，生命起源等科学技术领域的进程中历经了崎岖不平的道路。我们也会看到，探索人脑功能和神经网络的研究将伴随着重重困难的克服而日新月异。人工神经网络如下图所示。<img src="https://img-blog.csdnimg.cn/20191222101416373.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></h4><h2 id="1-2-卷积神经网络基本结构"><a href="#1-2-卷积神经网络基本结构" class="headerlink" title="1.2 卷积神经网络基本结构"></a>1.2 卷积神经网络基本结构</h2><h4 id="卷积神经网络-Convolutional-Neural-Network，CNN-是一种前馈神经网络，它的人工神经元可以对周围单元的一部分进行响应，并能很好的处理大型的图片。卷积神经网络是近几年来发展起来的一种高效的识别方法，并引起了广泛的关注-16-。正是由于高效的识别准确率，对卷积神经网络的研究才层出不穷。20世纪60年代，胡贝尔和魏塞尔发现，独特的网络结构可以有效地减少反馈神经网络在大脑皮层神经元研究中的局部敏感性和方向性选择的复杂性，从而提出了卷积神经网络-Convolutional-Neural-Networks简称CNN-的概念。目前，卷积神经网络已成为许多科学领域的热点话题。由于内部算法避免了对图像进行复杂的预处理，所以它可以直接输入原始图片。"><a href="#卷积神经网络-Convolutional-Neural-Network，CNN-是一种前馈神经网络，它的人工神经元可以对周围单元的一部分进行响应，并能很好的处理大型的图片。卷积神经网络是近几年来发展起来的一种高效的识别方法，并引起了广泛的关注-16-。正是由于高效的识别准确率，对卷积神经网络的研究才层出不穷。20世纪60年代，胡贝尔和魏塞尔发现，独特的网络结构可以有效地减少反馈神经网络在大脑皮层神经元研究中的局部敏感性和方向性选择的复杂性，从而提出了卷积神经网络-Convolutional-Neural-Networks简称CNN-的概念。目前，卷积神经网络已成为许多科学领域的热点话题。由于内部算法避免了对图像进行复杂的预处理，所以它可以直接输入原始图片。" class="headerlink" title="卷积神经网络(Convolutional Neural Network，CNN)是一种前馈神经网络，它的人工神经元可以对周围单元的一部分进行响应，并能很好的处理大型的图片。卷积神经网络是近几年来发展起来的一种高效的识别方法，并引起了广泛的关注[16]。正是由于高效的识别准确率，对卷积神经网络的研究才层出不穷。20世纪60年代，胡贝尔和魏塞尔发现，独特的网络结构可以有效地减少反馈神经网络在大脑皮层神经元研究中的局部敏感性和方向性选择的复杂性，从而提出了卷积神经网络(Convolutional Neural Networks简称CNN)的概念。目前，卷积神经网络已成为许多科学领域的热点话题。由于内部算法避免了对图像进行复杂的预处理，所以它可以直接输入原始图片。"></a>卷积神经网络(Convolutional Neural Network，CNN)是一种前馈神经网络，它的人工神经元可以对周围单元的一部分进行响应，并能很好的处理大型的图片。卷积神经网络是近几年来发展起来的一种高效的识别方法，并引起了广泛的关注[16]。正是由于高效的识别准确率，对卷积神经网络的研究才层出不穷。20世纪60年代，胡贝尔和魏塞尔发现，独特的网络结构可以有效地减少反馈神经网络在大脑皮层神经元研究中的局部敏感性和方向性选择的复杂性，从而提出了卷积神经网络(Convolutional Neural Networks简称CNN)的概念。目前，卷积神经网络已成为许多科学领域的热点话题。由于内部算法避免了对图像进行复杂的预处理，所以它可以直接输入原始图片。</h4><h3 id="1-2-1-输入层"><a href="#1-2-1-输入层" class="headerlink" title="1.2.1 输入层"></a>1.2.1 输入层</h3><h4 id="卷积神经网络的输入层可以处理多维数据，常见地，一维卷积神经网络的输入层接收一维或二维数组，其中一维数组通常为时间或频谱采样；二维数组可能包含多个通道；二维卷积神经网络的输入层接收二维或三维数组；三维卷积神经网络的输入层接收四维数组。"><a href="#卷积神经网络的输入层可以处理多维数据，常见地，一维卷积神经网络的输入层接收一维或二维数组，其中一维数组通常为时间或频谱采样；二维数组可能包含多个通道；二维卷积神经网络的输入层接收二维或三维数组；三维卷积神经网络的输入层接收四维数组。" class="headerlink" title="卷积神经网络的输入层可以处理多维数据，常见地，一维卷积神经网络的输入层接收一维或二维数组，其中一维数组通常为时间或频谱采样；二维数组可能包含多个通道；二维卷积神经网络的输入层接收二维或三维数组；三维卷积神经网络的输入层接收四维数组。"></a>卷积神经网络的输入层可以处理多维数据，常见地，一维卷积神经网络的输入层接收一维或二维数组，其中一维数组通常为时间或频谱采样；二维数组可能包含多个通道；二维卷积神经网络的输入层接收二维或三维数组；三维卷积神经网络的输入层接收四维数组。</h4><h3 id="1-2-2-隐含层"><a href="#1-2-2-隐含层" class="headerlink" title="1.2.2 隐含层"></a>1.2.2 隐含层</h3><h4 id="1-卷积层"><a href="#1-卷积层" class="headerlink" title="1.卷积层"></a>1.卷积层</h4><h5 id="（1）卷积层"><a href="#（1）卷积层" class="headerlink" title="（1）卷积层"></a>（1）卷积层</h5><h4 id="利用乘法卷积代替矩阵乘法。在图像处理的过程中，一张“小猫”的图片可以被看作是一个“薄饼”，它包括图片的高度、宽度和深度-即颜色的三原色，以RGB表示-。"><a href="#利用乘法卷积代替矩阵乘法。在图像处理的过程中，一张“小猫”的图片可以被看作是一个“薄饼”，它包括图片的高度、宽度和深度-即颜色的三原色，以RGB表示-。" class="headerlink" title="利用乘法卷积代替矩阵乘法。在图像处理的过程中，一张“小猫”的图片可以被看作是一个“薄饼”，它包括图片的高度、宽度和深度(即颜色的三原色，以RGB表示)。"></a>利用乘法卷积代替矩阵乘法。在图像处理的过程中，一张“小猫”的图片可以被看作是一个“薄饼”，它包括图片的高度、宽度和深度(即颜色的三原色，以RGB表示)。<img src="https://img-blog.csdnimg.cn/20191222102217444.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></h4><h4 id="如上图所示，若权重不变，把这个上方具有k个输出的小神经网络对应的小块滑遍整个图像，可以得到一个宽度、高度、深度都不同的新图像。得到的新图像如下图所示。"><a href="#如上图所示，若权重不变，把这个上方具有k个输出的小神经网络对应的小块滑遍整个图像，可以得到一个宽度、高度、深度都不同的新图像。得到的新图像如下图所示。" class="headerlink" title="如上图所示，若权重不变，把这个上方具有k个输出的小神经网络对应的小块滑遍整个图像，可以得到一个宽度、高度、深度都不同的新图像。得到的新图像如下图所示。"></a>如上图所示，若权重不变，把这个上方具有k个输出的小神经网络对应的小块滑遍整个图像，可以得到一个宽度、高度、深度都不同的新图像。得到的新图像如下图所示。</h4><p><img src="https://img-blog.csdnimg.cn/20191222102503552.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h5 id="（2）卷积层参数"><a href="#（2）卷积层参数" class="headerlink" title="（2）卷积层参数"></a>（2）卷积层参数</h5><h4 id="卷积层参数包括卷积核大小、步长和填充，三者共同决定了卷积层输出特征图的尺寸，是卷积神经网络的超参数。其中卷积核大小可以指定为小于输入图像尺寸的任意值，卷积核越大，可提取的输入特征越复杂。"><a href="#卷积层参数包括卷积核大小、步长和填充，三者共同决定了卷积层输出特征图的尺寸，是卷积神经网络的超参数。其中卷积核大小可以指定为小于输入图像尺寸的任意值，卷积核越大，可提取的输入特征越复杂。" class="headerlink" title="卷积层参数包括卷积核大小、步长和填充，三者共同决定了卷积层输出特征图的尺寸，是卷积神经网络的超参数。其中卷积核大小可以指定为小于输入图像尺寸的任意值，卷积核越大，可提取的输入特征越复杂。"></a>卷积层参数包括卷积核大小、步长和填充，三者共同决定了卷积层输出特征图的尺寸，是卷积神经网络的超参数。其中卷积核大小可以指定为小于输入图像尺寸的任意值，卷积核越大，可提取的输入特征越复杂。</h4><h4 id="卷积步长定义了卷积核相邻两次扫过特征图时位置的距离，卷积步长为1时，卷积核会逐个扫过特征图的元素，步长为n时会在下一次扫描跳过n-1个像素。"><a href="#卷积步长定义了卷积核相邻两次扫过特征图时位置的距离，卷积步长为1时，卷积核会逐个扫过特征图的元素，步长为n时会在下一次扫描跳过n-1个像素。" class="headerlink" title="卷积步长定义了卷积核相邻两次扫过特征图时位置的距离，卷积步长为1时，卷积核会逐个扫过特征图的元素，步长为n时会在下一次扫描跳过n-1个像素。"></a>卷积步长定义了卷积核相邻两次扫过特征图时位置的距离，卷积步长为1时，卷积核会逐个扫过特征图的元素，步长为n时会在下一次扫描跳过n-1个像素。</h4><h4 id="由卷积核的交叉相关计算可知，随着卷积层的堆叠，特征图的尺寸会逐步减小，例如16×16的输入图像在经过单位步长、无填充的5×5的卷积核后，会输出12×12的特征图。为此，填充是在特征图通过卷积核之前人为增大其尺寸以抵消计算中尺寸收缩影响的方法。常见的填充方法为按0填充和重复边界值填充。填充依据其层数和目的可分为四类："><a href="#由卷积核的交叉相关计算可知，随着卷积层的堆叠，特征图的尺寸会逐步减小，例如16×16的输入图像在经过单位步长、无填充的5×5的卷积核后，会输出12×12的特征图。为此，填充是在特征图通过卷积核之前人为增大其尺寸以抵消计算中尺寸收缩影响的方法。常见的填充方法为按0填充和重复边界值填充。填充依据其层数和目的可分为四类：" class="headerlink" title="由卷积核的交叉相关计算可知，随着卷积层的堆叠，特征图的尺寸会逐步减小，例如16×16的输入图像在经过单位步长、无填充的5×5的卷积核后，会输出12×12的特征图。为此，填充是在特征图通过卷积核之前人为增大其尺寸以抵消计算中尺寸收缩影响的方法。常见的填充方法为按0填充和重复边界值填充。填充依据其层数和目的可分为四类："></a>由卷积核的交叉相关计算可知，随着卷积层的堆叠，特征图的尺寸会逐步减小，例如16×16的输入图像在经过单位步长、无填充的5×5的卷积核后，会输出12×12的特征图。为此，填充是在特征图通过卷积核之前人为增大其尺寸以抵消计算中尺寸收缩影响的方法。常见的填充方法为按0填充和重复边界值填充。填充依据其层数和目的可分为四类：</h4><h5 id="有效填充（valid-padding）：即完全不使用填充，卷积核只允许访问特征图中包含完整感受野的位置。输出的所有像素都是输入中相同数量像素的函数。使用有效填充的卷积被称为“窄卷积”，窄卷积输出的特征图尺寸为-L-f-s-1。"><a href="#有效填充（valid-padding）：即完全不使用填充，卷积核只允许访问特征图中包含完整感受野的位置。输出的所有像素都是输入中相同数量像素的函数。使用有效填充的卷积被称为“窄卷积”，窄卷积输出的特征图尺寸为-L-f-s-1。" class="headerlink" title="有效填充（valid padding）：即完全不使用填充，卷积核只允许访问特征图中包含完整感受野的位置。输出的所有像素都是输入中相同数量像素的函数。使用有效填充的卷积被称为“窄卷积”，窄卷积输出的特征图尺寸为(L-f)/s+1。"></a>有效填充（valid padding）：即完全不使用填充，卷积核只允许访问特征图中包含完整感受野的位置。输出的所有像素都是输入中相同数量像素的函数。使用有效填充的卷积被称为“窄卷积”，窄卷积输出的特征图尺寸为(L-f)/s+1。</h5><h5 id="相同填充-半填充：只进行足够的填充来保持输出和输入的特征图尺寸相同。相同填充下特征图的尺寸不会缩减但输入像素中靠近边界的部分相比于中间部分对于特征图的影响更小，即存在边界像素的欠表达。使用相同填充的卷积被称为“等长卷积。"><a href="#相同填充-半填充：只进行足够的填充来保持输出和输入的特征图尺寸相同。相同填充下特征图的尺寸不会缩减但输入像素中靠近边界的部分相比于中间部分对于特征图的影响更小，即存在边界像素的欠表达。使用相同填充的卷积被称为“等长卷积。" class="headerlink" title="相同填充/半填充：只进行足够的填充来保持输出和输入的特征图尺寸相同。相同填充下特征图的尺寸不会缩减但输入像素中靠近边界的部分相比于中间部分对于特征图的影响更小，即存在边界像素的欠表达。使用相同填充的卷积被称为“等长卷积。"></a>相同填充/半填充：只进行足够的填充来保持输出和输入的特征图尺寸相同。相同填充下特征图的尺寸不会缩减但输入像素中靠近边界的部分相比于中间部分对于特征图的影响更小，即存在边界像素的欠表达。使用相同填充的卷积被称为“等长卷积。</h5><h5 id="全填充：进行足够多的填充使得每个像素在每个方向上被访问的次数相同。步长为1时，全填充输出的特征图尺寸为L-f-1，大于输入值。使用全填充的卷积被称为“宽卷积”。"><a href="#全填充：进行足够多的填充使得每个像素在每个方向上被访问的次数相同。步长为1时，全填充输出的特征图尺寸为L-f-1，大于输入值。使用全填充的卷积被称为“宽卷积”。" class="headerlink" title="全填充：进行足够多的填充使得每个像素在每个方向上被访问的次数相同。步长为1时，全填充输出的特征图尺寸为L+f-1，大于输入值。使用全填充的卷积被称为“宽卷积”。"></a>全填充：进行足够多的填充使得每个像素在每个方向上被访问的次数相同。步长为1时，全填充输出的特征图尺寸为L+f-1，大于输入值。使用全填充的卷积被称为“宽卷积”。</h5><h5 id="任意填充：介于有效填充和全填充之间，人为设定的填充，较少使用。"><a href="#任意填充：介于有效填充和全填充之间，人为设定的填充，较少使用。" class="headerlink" title="任意填充：介于有效填充和全填充之间，人为设定的填充，较少使用。"></a>任意填充：介于有效填充和全填充之间，人为设定的填充，较少使用。</h5><h5 id="（3）激励函数"><a href="#（3）激励函数" class="headerlink" title="（3）激励函数"></a>（3）激励函数</h5><h4 id="一个合适的激励函数可以有效地提高卷积神经网络的运行性能。激活函数应当具有的性质："><a href="#一个合适的激励函数可以有效地提高卷积神经网络的运行性能。激活函数应当具有的性质：" class="headerlink" title="一个合适的激励函数可以有效地提高卷积神经网络的运行性能。激活函数应当具有的性质："></a>一个合适的激励函数可以有效地提高卷积神经网络的运行性能。激活函数应当具有的性质：</h4><h5 id="1）可微性：当优化方法是基于梯度的时候，这个性质是必不可少的。"><a href="#1）可微性：当优化方法是基于梯度的时候，这个性质是必不可少的。" class="headerlink" title="1）可微性：当优化方法是基于梯度的时候，这个性质是必不可少的。"></a>1）可微性：当优化方法是基于梯度的时候，这个性质是必不可少的。</h5><h5 id="2）单调性：当激活函数为单调函数时，能够确保单层网络为凸函数。"><a href="#2）单调性：当激活函数为单调函数时，能够确保单层网络为凸函数。" class="headerlink" title="2）单调性：当激活函数为单调函数时，能够确保单层网络为凸函数。"></a>2）单调性：当激活函数为单调函数时，能够确保单层网络为凸函数。</h5><h5 id="3）输出值的范围：当激活函数的输出值受到限制时，基于梯度的优化方法将更加稳定，因为特征的表示更受有限权重的影响。当激活函数的输出是无限时，模型的训练将更加油效率，但在这种情形下，通常需要较小的学习速率。"><a href="#3）输出值的范围：当激活函数的输出值受到限制时，基于梯度的优化方法将更加稳定，因为特征的表示更受有限权重的影响。当激活函数的输出是无限时，模型的训练将更加油效率，但在这种情形下，通常需要较小的学习速率。" class="headerlink" title="3）输出值的范围：当激活函数的输出值受到限制时，基于梯度的优化方法将更加稳定，因为特征的表示更受有限权重的影响。当激活函数的输出是无限时，模型的训练将更加油效率，但在这种情形下，通常需要较小的学习速率。"></a>3）输出值的范围：当激活函数的输出值受到限制时，基于梯度的优化方法将更加稳定，因为特征的表示更受有限权重的影响。当激活函数的输出是无限时，模型的训练将更加油效率，但在这种情形下，通常需要较小的学习速率。</h5><h4 id="经常使用的非线性激活函数有sigmid、tanh、Relu等等，前两者sigmid与tanh在全连接层-比较常见，后者ReLU常见于卷积层。"><a href="#经常使用的非线性激活函数有sigmid、tanh、Relu等等，前两者sigmid与tanh在全连接层-比较常见，后者ReLU常见于卷积层。" class="headerlink" title="经常使用的非线性激活函数有sigmid、tanh、Relu等等，前两者sigmid与tanh在全连接层 比较常见，后者ReLU常见于卷积层。"></a>经常使用的非线性激活函数有sigmid、tanh、Relu等等，前两者sigmid与tanh在全连接层 比较常见，后者ReLU常见于卷积层。</h4><h4 id="2-池化层"><a href="#2-池化层" class="headerlink" title="2.池化层"></a>2.池化层</h4><h4 id="池化层是卷积神经网络的一个重要组成部分，它通过减少卷积层之间的连接数量来降低计算的困难度。包括以下几种池化："><a href="#池化层是卷积神经网络的一个重要组成部分，它通过减少卷积层之间的连接数量来降低计算的困难度。包括以下几种池化：" class="headerlink" title="池化层是卷积神经网络的一个重要组成部分，它通过减少卷积层之间的连接数量来降低计算的困难度。包括以下几种池化："></a>池化层是卷积神经网络的一个重要组成部分，它通过减少卷积层之间的连接数量来降低计算的困难度。包括以下几种池化：</h4><h5 id="（1）一般池化-General-Pooling"><a href="#（1）一般池化-General-Pooling" class="headerlink" title="（1）一般池化(General Pooling)"></a>（1）一般池化(General Pooling)</h5><h5 id="1）mean-pooling，即只要求邻域中特征点的平均值；"><a href="#1）mean-pooling，即只要求邻域中特征点的平均值；" class="headerlink" title="1）mean-pooling，即只要求邻域中特征点的平均值；"></a>1）mean-pooling，即只要求邻域中特征点的平均值；</h5><h5 id="2）max-pooling，即在邻域中提取最大特征点；"><a href="#2）max-pooling，即在邻域中提取最大特征点；" class="headerlink" title="2）max-pooling，即在邻域中提取最大特征点；"></a>2）max-pooling，即在邻域中提取最大特征点；</h5><h5 id="3）Stochastic-pooling，介于两者之间，根据数值给出像素的概率，并根据概率进行二次采样。"><a href="#3）Stochastic-pooling，介于两者之间，根据数值给出像素的概率，并根据概率进行二次采样。" class="headerlink" title="3）Stochastic-pooling，介于两者之间，根据数值给出像素的概率，并根据概率进行二次采样。"></a>3）Stochastic-pooling，介于两者之间，根据数值给出像素的概率，并根据概率进行二次采样。</h5><h4 id="特征提取的误差主要来自两个方面："><a href="#特征提取的误差主要来自两个方面：" class="headerlink" title="特征提取的误差主要来自两个方面："></a>特征提取的误差主要来自两个方面：</h4><h5 id="1）邻域大小受限造成的估计值方差增大；"><a href="#1）邻域大小受限造成的估计值方差增大；" class="headerlink" title="1）邻域大小受限造成的估计值方差增大；"></a>1）邻域大小受限造成的估计值方差增大；</h5><h5 id="2）卷积层参数误差导致估计均值的偏移。"><a href="#2）卷积层参数误差导致估计均值的偏移。" class="headerlink" title="2）卷积层参数误差导致估计均值的偏移。"></a>2）卷积层参数误差导致估计均值的偏移。</h5><h4 id="一般来说，mean-pooling能减小第一种误差并保留图像的背景信息，max-pooling能减小第二类的错误，并保留更多的纹理信息。在平均意义上，与mean"><a href="#一般来说，mean-pooling能减小第一种误差并保留图像的背景信息，max-pooling能减小第二类的错误，并保留更多的纹理信息。在平均意义上，与mean" class="headerlink" title="一般来说，mean-pooling能减小第一种误差并保留图像的背景信息，max-pooling能减小第二类的错误，并保留更多的纹理信息。在平均意义上，与mean-"></a>一般来说，mean-pooling能减小第一种误差并保留图像的背景信息，max-pooling能减小第二类的错误，并保留更多的纹理信息。在平均意义上，与mean-</h4><h4 id="pooling近似，在局部意义上，则服从max-pooling的准则。如图下图所示，"><a href="#pooling近似，在局部意义上，则服从max-pooling的准则。如图下图所示，" class="headerlink" title="pooling近似，在局部意义上，则服从max-pooling的准则。如图下图所示，"></a>pooling近似，在局部意义上，则服从max-pooling的准则。如图下图所示，</h4><p><img src="https://img-blog.csdnimg.cn/20191222102557759.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h5 id="（2）空间金字塔池化-Spatial-pyramid-pooling"><a href="#（2）空间金字塔池化-Spatial-pyramid-pooling" class="headerlink" title="（2）空间金字塔池化(Spatial pyramid pooling)"></a>（2）空间金字塔池化(Spatial pyramid pooling)</h5><h4 id="一般的卷积神将网络都需要输入图像的大小是固定的，这是因为全连接层的输入需要一个固定的维度。几乎所有作者提出了空间金字塔池化，先让图像进行卷积，然后变换为要输入到全连接层的维度，这样可以把卷积神经网络扩展到任意大小的图像。"><a href="#一般的卷积神将网络都需要输入图像的大小是固定的，这是因为全连接层的输入需要一个固定的维度。几乎所有作者提出了空间金字塔池化，先让图像进行卷积，然后变换为要输入到全连接层的维度，这样可以把卷积神经网络扩展到任意大小的图像。" class="headerlink" title="一般的卷积神将网络都需要输入图像的大小是固定的，这是因为全连接层的输入需要一个固定的维度。几乎所有作者提出了空间金字塔池化，先让图像进行卷积，然后变换为要输入到全连接层的维度，这样可以把卷积神经网络扩展到任意大小的图像。"></a>一般的卷积神将网络都需要输入图像的大小是固定的，这是因为全连接层的输入需要一个固定的维度。几乎所有作者提出了空间金字塔池化，先让图像进行卷积，然后变换为要输入到全连接层的维度，这样可以把卷积神经网络扩展到任意大小的图像。</h4><h4 id="空间金字塔池化可以把任何尺度的卷积特征转化成同一维，这不仅可以让卷积神经网络处理任意大小的图像，还能避免裁剪和扭曲操作，这具有重要意义。"><a href="#空间金字塔池化可以把任何尺度的卷积特征转化成同一维，这不仅可以让卷积神经网络处理任意大小的图像，还能避免裁剪和扭曲操作，这具有重要意义。" class="headerlink" title="空间金字塔池化可以把任何尺度的卷积特征转化成同一维，这不仅可以让卷积神经网络处理任意大小的图像，还能避免裁剪和扭曲操作，这具有重要意义。"></a>空间金字塔池化可以把任何尺度的卷积特征转化成同一维，这不仅可以让卷积神经网络处理任意大小的图像，还能避免裁剪和扭曲操作，这具有重要意义。</h4><h4 id="3-全连接层"><a href="#3-全连接层" class="headerlink" title="3.全连接层"></a>3.全连接层</h4><h4 id="卷积神经网络中的全连接层等价于传统前馈神经网络中的隐含层。全连接层通常搭建在卷积神经网络隐含层的最后部分，并只向其它全连接层传递信号。特征图在全连接层中会失去三维结构，被展开为向量并通过激励函数传递至下一层。"><a href="#卷积神经网络中的全连接层等价于传统前馈神经网络中的隐含层。全连接层通常搭建在卷积神经网络隐含层的最后部分，并只向其它全连接层传递信号。特征图在全连接层中会失去三维结构，被展开为向量并通过激励函数传递至下一层。" class="headerlink" title="卷积神经网络中的全连接层等价于传统前馈神经网络中的隐含层。全连接层通常搭建在卷积神经网络隐含层的最后部分，并只向其它全连接层传递信号。特征图在全连接层中会失去三维结构，被展开为向量并通过激励函数传递至下一层。"></a>卷积神经网络中的全连接层等价于传统前馈神经网络中的隐含层。全连接层通常搭建在卷积神经网络隐含层的最后部分，并只向其它全连接层传递信号。特征图在全连接层中会失去三维结构，被展开为向量并通过激励函数传递至下一层。</h4><h3 id="1-2-3-输出层"><a href="#1-2-3-输出层" class="headerlink" title="1.2.3 输出层"></a>1.2.3 输出层</h3><h4 id="卷积神经网络中输出层的上游通常是全连接层，因此其结构和工作原理与传统前馈神经网络中的输出层相同。对于图像分类问题，输出层使用逻辑函数或归一化指数函数输出分类标签。在物体识别问题中，输出层可设计为输出物体的中心标、大小和分类。在图像语义分割中，输出层直接输出每个像素的分类结果。"><a href="#卷积神经网络中输出层的上游通常是全连接层，因此其结构和工作原理与传统前馈神经网络中的输出层相同。对于图像分类问题，输出层使用逻辑函数或归一化指数函数输出分类标签。在物体识别问题中，输出层可设计为输出物体的中心标、大小和分类。在图像语义分割中，输出层直接输出每个像素的分类结果。" class="headerlink" title="卷积神经网络中输出层的上游通常是全连接层，因此其结构和工作原理与传统前馈神经网络中的输出层相同。对于图像分类问题，输出层使用逻辑函数或归一化指数函数输出分类标签。在物体识别问题中，输出层可设计为输出物体的中心标、大小和分类。在图像语义分割中，输出层直接输出每个像素的分类结果。"></a>卷积神经网络中输出层的上游通常是全连接层，因此其结构和工作原理与传统前馈神经网络中的输出层相同。对于图像分类问题，输出层使用逻辑函数或归一化指数函数输出分类标签。在物体识别问题中，输出层可设计为输出物体的中心标、大小和分类。在图像语义分割中，输出层直接输出每个像素的分类结果。</h4><h2 id="1-3-卷积神经网络的卷积过程"><a href="#1-3-卷积神经网络的卷积过程" class="headerlink" title="1.3 卷积神经网络的卷积过程"></a>1.3 卷积神经网络的卷积过程</h2><h4 id="卷积神经网络的结构有很多种，但是其基本结构是类似的。如下图，它包含三个主要的层——卷积层-convolutional-layer-、池化层-pooling-layer-、全连接层-fully-connected-layer-。"><a href="#卷积神经网络的结构有很多种，但是其基本结构是类似的。如下图，它包含三个主要的层——卷积层-convolutional-layer-、池化层-pooling-layer-、全连接层-fully-connected-layer-。" class="headerlink" title="卷积神经网络的结构有很多种，但是其基本结构是类似的。如下图，它包含三个主要的层——卷积层(convolutional layer)、池化层(pooling layer)、全连接层(fully-connected layer)。"></a>卷积神经网络的结构有很多种，但是其基本结构是类似的。如下图，它包含三个主要的层——卷积层(convolutional layer)、池化层(pooling layer)、全连接层(fully-connected layer)。</h4><p><img src="https://img-blog.csdnimg.cn/20191222102628441.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="图中的卷积网络工作流程如下，-输入图片是像素是32×32的来组成输入层。然后，计算流程在卷积和抽样之间交替进行，如下所述："><a href="#图中的卷积网络工作流程如下，-输入图片是像素是32×32的来组成输入层。然后，计算流程在卷积和抽样之间交替进行，如下所述：" class="headerlink" title="图中的卷积网络工作流程如下， 输入图片是像素是32×32的来组成输入层。然后，计算流程在卷积和抽样之间交替进行，如下所述："></a>图中的卷积网络工作流程如下， 输入图片是像素是32×32的来组成输入层。然后，计算流程在卷积和抽样之间交替进行，如下所述：</h4><h4 id="第一隐藏层进行卷积的工作，它由6个特征图组成，每个特征图由28×28个神经元组成，每个神经元指定5×5-的接受域。"><a href="#第一隐藏层进行卷积的工作，它由6个特征图组成，每个特征图由28×28个神经元组成，每个神经元指定5×5-的接受域。" class="headerlink" title="第一隐藏层进行卷积的工作，它由6个特征图组成，每个特征图由28×28个神经元组成，每个神经元指定5×5 的接受域。"></a>第一隐藏层进行卷积的工作，它由6个特征图组成，每个特征图由28×28个神经元组成，每个神经元指定5×5 的接受域。</h4><h4 id="第二隐藏层实现子采样和局部平均，它同样由-6个特征图组成，但其每个特征图由14×14-个神经元组成。每个神经元具有2×2-的接受域。"><a href="#第二隐藏层实现子采样和局部平均，它同样由-6个特征图组成，但其每个特征图由14×14-个神经元组成。每个神经元具有2×2-的接受域。" class="headerlink" title="第二隐藏层实现子采样和局部平均，它同样由 6个特征图组成，但其每个特征图由14×14 个神经元组成。每个神经元具有2×2 的接受域。"></a>第二隐藏层实现子采样和局部平均，它同样由 6个特征图组成，但其每个特征图由14×14 个神经元组成。每个神经元具有2×2 的接受域。</h4><h4 id="第三隐藏层进行第二次卷积，它由-16个特征图组成，每个特征图由-10×10个神经元组成。隐藏层中的每个神经元可以具有与下一隐藏层的多个特征图相关联的突触连接，其操作方式类似于第一层隐藏层的卷积过程。"><a href="#第三隐藏层进行第二次卷积，它由-16个特征图组成，每个特征图由-10×10个神经元组成。隐藏层中的每个神经元可以具有与下一隐藏层的多个特征图相关联的突触连接，其操作方式类似于第一层隐藏层的卷积过程。" class="headerlink" title="第三隐藏层进行第二次卷积，它由 16个特征图组成，每个特征图由 10×10个神经元组成。隐藏层中的每个神经元可以具有与下一隐藏层的多个特征图相关联的突触连接，其操作方式类似于第一层隐藏层的卷积过程。"></a>第三隐藏层进行第二次卷积，它由 16个特征图组成，每个特征图由 10×10个神经元组成。隐藏层中的每个神经元可以具有与下一隐藏层的多个特征图相关联的突触连接，其操作方式类似于第一层隐藏层的卷积过程。</h4><h4 id="第四个隐藏层进行第二次子采样和局部平均计算。它由-16个特征图组成，但每个特征图由-5×5个神经元构成，它以与第一次采样相同的方式进行工作。"><a href="#第四个隐藏层进行第二次子采样和局部平均计算。它由-16个特征图组成，但每个特征图由-5×5个神经元构成，它以与第一次采样相同的方式进行工作。" class="headerlink" title="第四个隐藏层进行第二次子采样和局部平均计算。它由 16个特征图组成，但每个特征图由 5×5个神经元构成，它以与第一次采样相同的方式进行工作。"></a>第四个隐藏层进行第二次子采样和局部平均计算。它由 16个特征图组成，但每个特征图由 5×5个神经元构成，它以与第一次采样相同的方式进行工作。</h4><h4 id="第五个隐藏层实现了卷积的最后阶段，它由-120个神经元组成，每个神经元指定5×5-的接受域。"><a href="#第五个隐藏层实现了卷积的最后阶段，它由-120个神经元组成，每个神经元指定5×5-的接受域。" class="headerlink" title="第五个隐藏层实现了卷积的最后阶段，它由 120个神经元组成，每个神经元指定5×5 的接受域。"></a>第五个隐藏层实现了卷积的最后阶段，它由 120个神经元组成，每个神经元指定5×5 的接受域。</h4><h4 id="端部是个全连接层，得到输出向量。"><a href="#端部是个全连接层，得到输出向量。" class="headerlink" title="端部是个全连接层，得到输出向量。"></a>端部是个全连接层，得到输出向量。</h4><h4 id="卷积和采样之间的计算层的连续交替是“双尖塔”的结果，即在每个卷积或采样层中，与先前的层相比，特征图的数目随着空间分辨率的减小而增加-17-。"><a href="#卷积和采样之间的计算层的连续交替是“双尖塔”的结果，即在每个卷积或采样层中，与先前的层相比，特征图的数目随着空间分辨率的减小而增加-17-。" class="headerlink" title="卷积和采样之间的计算层的连续交替是“双尖塔”的结果，即在每个卷积或采样层中，与先前的层相比，特征图的数目随着空间分辨率的减小而增加[17]。"></a>卷积和采样之间的计算层的连续交替是“双尖塔”的结果，即在每个卷积或采样层中，与先前的层相比，特征图的数目随着空间分辨率的减小而增加[17]。</h4><h4 id="卷积层研究输入数据的特征。卷积层由卷积核-convolutional-kernel-组成，卷积核用来计算不同的特征图；激励函数-activation-function-给卷积神经网络引入了非线性，常用的有sigmid、tanh、-ReLU函数；池化层减少了卷积层输出的特征向量，改良结果-使结构不易过拟合-，典型应用有average-pooling-和-max-pooling；全连接层将卷积层和池化层组合起来以后，然后可以形成层或多层全连接层，从而可以完成更高水平的特征取得。"><a href="#卷积层研究输入数据的特征。卷积层由卷积核-convolutional-kernel-组成，卷积核用来计算不同的特征图；激励函数-activation-function-给卷积神经网络引入了非线性，常用的有sigmid、tanh、-ReLU函数；池化层减少了卷积层输出的特征向量，改良结果-使结构不易过拟合-，典型应用有average-pooling-和-max-pooling；全连接层将卷积层和池化层组合起来以后，然后可以形成层或多层全连接层，从而可以完成更高水平的特征取得。" class="headerlink" title="卷积层研究输入数据的特征。卷积层由卷积核(convolutional kernel)组成，卷积核用来计算不同的特征图；激励函数(activation function)给卷积神经网络引入了非线性，常用的有sigmid、tanh、 ReLU函数；池化层减少了卷积层输出的特征向量，改良结果(使结构不易过拟合)，典型应用有average pooling 和 max pooling；全连接层将卷积层和池化层组合起来以后，然后可以形成层或多层全连接层，从而可以完成更高水平的特征取得。"></a>卷积层研究输入数据的特征。卷积层由卷积核(convolutional kernel)组成，卷积核用来计算不同的特征图；激励函数(activation function)给卷积神经网络引入了非线性，常用的有sigmid、tanh、 ReLU函数；池化层减少了卷积层输出的特征向量，改良结果(使结构不易过拟合)，典型应用有average pooling 和 max pooling；全连接层将卷积层和池化层组合起来以后，然后可以形成层或多层全连接层，从而可以完成更高水平的特征取得。</h4><h1 id="2、迁移学习相关原理"><a href="#2、迁移学习相关原理" class="headerlink" title="2、迁移学习相关原理"></a>2、迁移学习相关原理</h1><h2 id="2-1-迁移学习"><a href="#2-1-迁移学习" class="headerlink" title="2.1 迁移学习"></a>2.1 迁移学习</h2><h4 id="在深度学习中，所谓的迁移学习是将一个问题A上训练好的模型通过简单的调整使其适应一个新的问题B。在实际使用中，往往是完成问题A的训练出的模型有更完善的数据，而问题B的数据量偏小。而调整的过程根据现实情况决定，可以选择保留前几层卷积层的权重，以保留低级特征的提取；也可以保留全部的模型，只根据新的任务改变其fc层。被迁移的模型往往是使用大量样本训练出来的，比如Google提供的Inception-V3网络模型使用ImageNet数据集训练，而ImageNet中有120万标注图片，然后在实际应用中，很难收集到如此多的样本数据。而且收集的过程需要消耗大量的人力无力，所以一般情况下来说，问题B的数据量是较少的。所以，同样一个模型在使用大样本很好的解决了问题A，那么有理由相信该模型中训练处的权重参数能够很好的完成特征提取任务。迁移学习具有如下优势：更短的训练时间，更快的收敛速度，更精准的权重参数。但是一般情况下如果任务B的数据量是足够的，那么迁移来的模型效果会不如训练的到，但是此时起码可以将底层的权重参数作为初始值来重新训练。"><a href="#在深度学习中，所谓的迁移学习是将一个问题A上训练好的模型通过简单的调整使其适应一个新的问题B。在实际使用中，往往是完成问题A的训练出的模型有更完善的数据，而问题B的数据量偏小。而调整的过程根据现实情况决定，可以选择保留前几层卷积层的权重，以保留低级特征的提取；也可以保留全部的模型，只根据新的任务改变其fc层。被迁移的模型往往是使用大量样本训练出来的，比如Google提供的Inception-V3网络模型使用ImageNet数据集训练，而ImageNet中有120万标注图片，然后在实际应用中，很难收集到如此多的样本数据。而且收集的过程需要消耗大量的人力无力，所以一般情况下来说，问题B的数据量是较少的。所以，同样一个模型在使用大样本很好的解决了问题A，那么有理由相信该模型中训练处的权重参数能够很好的完成特征提取任务。迁移学习具有如下优势：更短的训练时间，更快的收敛速度，更精准的权重参数。但是一般情况下如果任务B的数据量是足够的，那么迁移来的模型效果会不如训练的到，但是此时起码可以将底层的权重参数作为初始值来重新训练。" class="headerlink" title="在深度学习中，所谓的迁移学习是将一个问题A上训练好的模型通过简单的调整使其适应一个新的问题B。在实际使用中，往往是完成问题A的训练出的模型有更完善的数据，而问题B的数据量偏小。而调整的过程根据现实情况决定，可以选择保留前几层卷积层的权重，以保留低级特征的提取；也可以保留全部的模型，只根据新的任务改变其fc层。被迁移的模型往往是使用大量样本训练出来的，比如Google提供的Inception V3网络模型使用ImageNet数据集训练，而ImageNet中有120万标注图片，然后在实际应用中，很难收集到如此多的样本数据。而且收集的过程需要消耗大量的人力无力，所以一般情况下来说，问题B的数据量是较少的。所以，同样一个模型在使用大样本很好的解决了问题A，那么有理由相信该模型中训练处的权重参数能够很好的完成特征提取任务。迁移学习具有如下优势：更短的训练时间，更快的收敛速度，更精准的权重参数。但是一般情况下如果任务B的数据量是足够的，那么迁移来的模型效果会不如训练的到，但是此时起码可以将底层的权重参数作为初始值来重新训练。"></a>在深度学习中，所谓的迁移学习是将一个问题A上训练好的模型通过简单的调整使其适应一个新的问题B。在实际使用中，往往是完成问题A的训练出的模型有更完善的数据，而问题B的数据量偏小。而调整的过程根据现实情况决定，可以选择保留前几层卷积层的权重，以保留低级特征的提取；也可以保留全部的模型，只根据新的任务改变其fc层。被迁移的模型往往是使用大量样本训练出来的，比如Google提供的Inception V3网络模型使用ImageNet数据集训练，而ImageNet中有120万标注图片，然后在实际应用中，很难收集到如此多的样本数据。而且收集的过程需要消耗大量的人力无力，所以一般情况下来说，问题B的数据量是较少的。所以，同样一个模型在使用大样本很好的解决了问题A，那么有理由相信该模型中训练处的权重参数能够很好的完成特征提取任务。迁移学习具有如下优势：更短的训练时间，更快的收敛速度，更精准的权重参数。但是一般情况下如果任务B的数据量是足够的，那么迁移来的模型效果会不如训练的到，但是此时起码可以将底层的权重参数作为初始值来重新训练。</h4><h2 id="2-2TensorFlow"><a href="#2-2TensorFlow" class="headerlink" title="2.2TensorFlow"></a>2.2TensorFlow</h2><h4 id="TensorFlow是谷歌基于DistBelief进行研发的第二代人工智能学习系统。Tensor-张量-意味着N维数组，Flow-流-意味着基于数据流图的计算，TensorFlow为张量从流图的一端流动到另一端计算过程。TensorFlow是将复杂的数据传递到人工智能神经网络进行处理和分析的系统。"><a href="#TensorFlow是谷歌基于DistBelief进行研发的第二代人工智能学习系统。Tensor-张量-意味着N维数组，Flow-流-意味着基于数据流图的计算，TensorFlow为张量从流图的一端流动到另一端计算过程。TensorFlow是将复杂的数据传递到人工智能神经网络进行处理和分析的系统。" class="headerlink" title="TensorFlow是谷歌基于DistBelief进行研发的第二代人工智能学习系统。Tensor(张量)意味着N维数组，Flow(流)意味着基于数据流图的计算，TensorFlow为张量从流图的一端流动到另一端计算过程。TensorFlow是将复杂的数据传递到人工智能神经网络进行处理和分析的系统。"></a>TensorFlow是谷歌基于DistBelief进行研发的第二代人工智能学习系统。Tensor(张量)意味着N维数组，Flow(流)意味着基于数据流图的计算，TensorFlow为张量从流图的一端流动到另一端计算过程。TensorFlow是将复杂的数据传递到人工智能神经网络进行处理和分析的系统。</h4><h4 id="TensorFlow-表达了高层次的机器学习计算，大幅简化了第一代系统，并且具备更好的灵活性和可延展性。TensorFlow一大亮点是支持异构设备分布式计算，它能够在各个平台上自动运行模型，从手机、单个CPU-GPU到成百上千GPU卡组成的分布式系。TensorFlow支持CNN、RNN和LSTM算法，这都是目前在Image，Speech和NLP最流行的深度神经网络模型。"><a href="#TensorFlow-表达了高层次的机器学习计算，大幅简化了第一代系统，并且具备更好的灵活性和可延展性。TensorFlow一大亮点是支持异构设备分布式计算，它能够在各个平台上自动运行模型，从手机、单个CPU-GPU到成百上千GPU卡组成的分布式系。TensorFlow支持CNN、RNN和LSTM算法，这都是目前在Image，Speech和NLP最流行的深度神经网络模型。" class="headerlink" title="TensorFlow 表达了高层次的机器学习计算，大幅简化了第一代系统，并且具备更好的灵活性和可延展性。TensorFlow一大亮点是支持异构设备分布式计算，它能够在各个平台上自动运行模型，从手机、单个CPU / GPU到成百上千GPU卡组成的分布式系。TensorFlow支持CNN、RNN和LSTM算法，这都是目前在Image，Speech和NLP最流行的深度神经网络模型。"></a>TensorFlow 表达了高层次的机器学习计算，大幅简化了第一代系统，并且具备更好的灵活性和可延展性。TensorFlow一大亮点是支持异构设备分布式计算，它能够在各个平台上自动运行模型，从手机、单个CPU / GPU到成百上千GPU卡组成的分布式系。TensorFlow支持CNN、RNN和LSTM算法，这都是目前在Image，Speech和NLP最流行的深度神经网络模型。</h4><h4 id="TensorFlow可被用于像机器学习和深度学习的许多领域，如语音识别或者是图像处理，以及对深度学习的基础设施的各个方面进行改进。它能够运行在小到一个只能电话或数以百万计的CEN上。TensorFlow将是完全开源的，可以被任何人使用。这也是选择TensorFlow这个平台的主要原因。"><a href="#TensorFlow可被用于像机器学习和深度学习的许多领域，如语音识别或者是图像处理，以及对深度学习的基础设施的各个方面进行改进。它能够运行在小到一个只能电话或数以百万计的CEN上。TensorFlow将是完全开源的，可以被任何人使用。这也是选择TensorFlow这个平台的主要原因。" class="headerlink" title="TensorFlow可被用于像机器学习和深度学习的许多领域，如语音识别或者是图像处理，以及对深度学习的基础设施的各个方面进行改进。它能够运行在小到一个只能电话或数以百万计的CEN上。TensorFlow将是完全开源的，可以被任何人使用。这也是选择TensorFlow这个平台的主要原因。"></a>TensorFlow可被用于像机器学习和深度学习的许多领域，如语音识别或者是图像处理，以及对深度学习的基础设施的各个方面进行改进。它能够运行在小到一个只能电话或数以百万计的CEN上。TensorFlow将是完全开源的，可以被任何人使用。这也是选择TensorFlow这个平台的主要原因。</h4><h5 id="（1）支持多种硬件的平台"><a href="#（1）支持多种硬件的平台" class="headerlink" title="（1）支持多种硬件的平台"></a>（1）支持多种硬件的平台</h5><h4 id="例如，它支持CPU、GPU混合数据中心的训练平台，并且还支持数据中心的训练模型，它相对方便地部署到不同的移动端应用程序，并且可以支持由谷歌自主开发的TPU处理器。这种多硬件支持平台会大大给用户带来方便。"><a href="#例如，它支持CPU、GPU混合数据中心的训练平台，并且还支持数据中心的训练模型，它相对方便地部署到不同的移动端应用程序，并且可以支持由谷歌自主开发的TPU处理器。这种多硬件支持平台会大大给用户带来方便。" class="headerlink" title="例如，它支持CPU、GPU混合数据中心的训练平台，并且还支持数据中心的训练模型，它相对方便地部署到不同的移动端应用程序，并且可以支持由谷歌自主开发的TPU处理器。这种多硬件支持平台会大大给用户带来方便。"></a>例如，它支持CPU、GPU混合数据中心的训练平台，并且还支持数据中心的训练模型，它相对方便地部署到不同的移动端应用程序，并且可以支持由谷歌自主开发的TPU处理器。这种多硬件支持平台会大大给用户带来方便。</h4><h5 id="（2）支持多种开发环境"><a href="#（2）支持多种开发环境" class="headerlink" title="（2）支持多种开发环境"></a>（2）支持多种开发环境</h5><h4 id="支持各种硬件的平台是基础，也是TensorFlow始终能够帮助尽可能多的开发人员利用深度学习技术并最终受益于广大用户的原因。基于这一思想，TensorFlow一直都非常重视各种程序员开发环境。例如，开发人员可以在各式各样的、位于主要的位置的开发环境中使用TensorFlow环境。"><a href="#支持各种硬件的平台是基础，也是TensorFlow始终能够帮助尽可能多的开发人员利用深度学习技术并最终受益于广大用户的原因。基于这一思想，TensorFlow一直都非常重视各种程序员开发环境。例如，开发人员可以在各式各样的、位于主要的位置的开发环境中使用TensorFlow环境。" class="headerlink" title="支持各种硬件的平台是基础，也是TensorFlow始终能够帮助尽可能多的开发人员利用深度学习技术并最终受益于广大用户的原因。基于这一思想，TensorFlow一直都非常重视各种程序员开发环境。例如，开发人员可以在各式各样的、位于主要的位置的开发环境中使用TensorFlow环境。"></a>支持各种硬件的平台是基础，也是TensorFlow始终能够帮助尽可能多的开发人员利用深度学习技术并最终受益于广大用户的原因。基于这一思想，TensorFlow一直都非常重视各种程序员开发环境。例如，开发人员可以在各式各样的、位于主要的位置的开发环境中使用TensorFlow环境。</h4><h4 id="目前TensorFlow仍处于快速开发迭代中，有大量新功能及性能优化在次持续研发。"><a href="#目前TensorFlow仍处于快速开发迭代中，有大量新功能及性能优化在次持续研发。" class="headerlink" title="目前TensorFlow仍处于快速开发迭代中，有大量新功能及性能优化在次持续研发。"></a>目前TensorFlow仍处于快速开发迭代中，有大量新功能及性能优化在次持续研发。</h4><h2 id="2-3VGG卷积神经网络模型"><a href="#2-3VGG卷积神经网络模型" class="headerlink" title="2.3VGG卷积神经网络模型"></a>2.3VGG卷积神经网络模型</h2><h4 id="VGG全称是Visual-Geometry-Group属于牛津大学科学工程系，其发布了一些列以VGG开头的卷积网络模型，可以应用在人脸识别、图像分类等方面，分别从VGG16～VGG19-20-。VGG研究卷积网络深度的初衷是想搞清楚卷积网络深度是如何影响大规模图像分类与识别的精度和准确率的，最初是VGG-16号称非常深的卷积网络全称为-GG-Very-Deep-16-CNN-，VGG在加深网络层数同时为了避免参数过多，在所有层都采用3x3的小卷积核，卷积层步长被设置为1。VGG的输入被设置为224x244大小的RGB图像，在训练集图像上对所有图像计算RGB均值，然后把图像作为输入传入VGG卷积网络，使用3x3或者1x1的filter，卷积步长被固定1。VGG全连接层有3层，根据卷积层-全连接层总数目的不同可以从VGG11-～-VGG19，最少的VGG11有8个卷积层与3个全连接层，最多的VGG19有16个卷积层-3个全连接层，此外VGG网络并不是在每个卷积层后面跟上一个池化层，还是总数5个池化层，分布在不同的卷积层之下，下图是VGG11-～GVV19的结构图："><a href="#VGG全称是Visual-Geometry-Group属于牛津大学科学工程系，其发布了一些列以VGG开头的卷积网络模型，可以应用在人脸识别、图像分类等方面，分别从VGG16～VGG19-20-。VGG研究卷积网络深度的初衷是想搞清楚卷积网络深度是如何影响大规模图像分类与识别的精度和准确率的，最初是VGG-16号称非常深的卷积网络全称为-GG-Very-Deep-16-CNN-，VGG在加深网络层数同时为了避免参数过多，在所有层都采用3x3的小卷积核，卷积层步长被设置为1。VGG的输入被设置为224x244大小的RGB图像，在训练集图像上对所有图像计算RGB均值，然后把图像作为输入传入VGG卷积网络，使用3x3或者1x1的filter，卷积步长被固定1。VGG全连接层有3层，根据卷积层-全连接层总数目的不同可以从VGG11-～-VGG19，最少的VGG11有8个卷积层与3个全连接层，最多的VGG19有16个卷积层-3个全连接层，此外VGG网络并不是在每个卷积层后面跟上一个池化层，还是总数5个池化层，分布在不同的卷积层之下，下图是VGG11-～GVV19的结构图：" class="headerlink" title="VGG全称是Visual Geometry Group属于牛津大学科学工程系，其发布了一些列以VGG开头的卷积网络模型，可以应用在人脸识别、图像分类等方面，分别从VGG16～VGG19[20]。VGG研究卷积网络深度的初衷是想搞清楚卷积网络深度是如何影响大规模图像分类与识别的精度和准确率的，最初是VGG-16号称非常深的卷积网络全称为(GG-Very-Deep-16 CNN)，VGG在加深网络层数同时为了避免参数过多，在所有层都采用3x3的小卷积核，卷积层步长被设置为1。VGG的输入被设置为224x244大小的RGB图像，在训练集图像上对所有图像计算RGB均值，然后把图像作为输入传入VGG卷积网络，使用3x3或者1x1的filter，卷积步长被固定1。VGG全连接层有3层，根据卷积层+全连接层总数目的不同可以从VGG11 ～ VGG19，最少的VGG11有8个卷积层与3个全连接层，最多的VGG19有16个卷积层+3个全连接层，此外VGG网络并不是在每个卷积层后面跟上一个池化层，还是总数5个池化层，分布在不同的卷积层之下，下图是VGG11 ～GVV19的结构图："></a>VGG全称是Visual Geometry Group属于牛津大学科学工程系，其发布了一些列以VGG开头的卷积网络模型，可以应用在人脸识别、图像分类等方面，分别从VGG16～VGG19[20]。VGG研究卷积网络深度的初衷是想搞清楚卷积网络深度是如何影响大规模图像分类与识别的精度和准确率的，最初是VGG-16号称非常深的卷积网络全称为(GG-Very-Deep-16 CNN)，VGG在加深网络层数同时为了避免参数过多，在所有层都采用3x3的小卷积核，卷积层步长被设置为1。VGG的输入被设置为224x244大小的RGB图像，在训练集图像上对所有图像计算RGB均值，然后把图像作为输入传入VGG卷积网络，使用3x3或者1x1的filter，卷积步长被固定1。VGG全连接层有3层，根据卷积层+全连接层总数目的不同可以从VGG11 ～ VGG19，最少的VGG11有8个卷积层与3个全连接层，最多的VGG19有16个卷积层+3个全连接层，此外VGG网络并不是在每个卷积层后面跟上一个池化层，还是总数5个池化层，分布在不同的卷积层之下，下图是VGG11 ～GVV19的结构图：</h4><p><img src="https://img-blog.csdnimg.cn/20191222102708425.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="在图中，A列是最基本的模型，有8个卷积层，3个全连接层，一共11层。B列是在A列的基础上，在stage1和stage2基础上分别增加了一层33卷积层，一共13层。C列是在B的基础上，在stage3-stage4和stage5基础上分别增加了一层11的卷积层。一共16层。D列是在B的基础上，在stage3-stage4和stage5基础上分别增加了一层33的卷积层，一共16层。E层是在D的基础上，在stage3-stage4和stage5基础上分别增加33的卷积层，一共19层。模型E就是VGG19网络。"><a href="#在图中，A列是最基本的模型，有8个卷积层，3个全连接层，一共11层。B列是在A列的基础上，在stage1和stage2基础上分别增加了一层33卷积层，一共13层。C列是在B的基础上，在stage3-stage4和stage5基础上分别增加了一层11的卷积层。一共16层。D列是在B的基础上，在stage3-stage4和stage5基础上分别增加了一层33的卷积层，一共16层。E层是在D的基础上，在stage3-stage4和stage5基础上分别增加33的卷积层，一共19层。模型E就是VGG19网络。" class="headerlink" title="在图中，A列是最基本的模型，有8个卷积层，3个全连接层，一共11层。B列是在A列的基础上，在stage1和stage2基础上分别增加了一层33卷积层，一共13层。C列是在B的基础上，在stage3,stage4和stage5基础上分别增加了一层11的卷积层。一共16层。D列是在B的基础上，在stage3,stage4和stage5基础上分别增加了一层33的卷积层，一共16层。E层是在D的基础上，在stage3,stage4和stage5基础上分别增加33的卷积层，一共19层。模型E就是VGG19网络。"></a>在图中，A列是最基本的模型，有8个卷积层，3个全连接层，一共11层。B列是在A列的基础上，在stage1和stage2基础上分别增加了一层3<em>3卷积层，一共13层。C列是在B的基础上，在stage3,stage4和stage5基础上分别增加了一层1</em>1的卷积层。一共16层。D列是在B的基础上，在stage3,stage4和stage5基础上分别增加了一层3<em>3的卷积层，一共16层。E层是在D的基础上，在stage3,stage4和stage5基础上分别增加3</em>3的卷积层，一共19层。模型E就是VGG19网络。</h4><h1 id="3、通过VGG实现风格迁移"><a href="#3、通过VGG实现风格迁移" class="headerlink" title="3、通过VGG实现风格迁移"></a>3、通过VGG实现风格迁移</h1><h2 id="3-1-图像风格迁移的原理"><a href="#3-1-图像风格迁移的原理" class="headerlink" title="3.1 图像风格迁移的原理"></a>3.1 图像风格迁移的原理</h2><h4 id="VGGNET是一种图像识别模型，它也拥有者卷积层和全连接层。可以这样理解VGG的结构：前面的卷积层是从图像中提取“特征”，而后面的全连接层把图片的“特征”转换为类别概率。其中VGGNET中的浅层（conv1-1-conv1-2-），提取的特征往往是比较简单的（比如提取检测点、线、亮度），VGGNET中的深层（c比如onv5-1-conv5-2），提取的特征往往比较复杂（如是否存在人脸、某种特定物体）。"><a href="#VGGNET是一种图像识别模型，它也拥有者卷积层和全连接层。可以这样理解VGG的结构：前面的卷积层是从图像中提取“特征”，而后面的全连接层把图片的“特征”转换为类别概率。其中VGGNET中的浅层（conv1-1-conv1-2-），提取的特征往往是比较简单的（比如提取检测点、线、亮度），VGGNET中的深层（c比如onv5-1-conv5-2），提取的特征往往比较复杂（如是否存在人脸、某种特定物体）。" class="headerlink" title="VGGNET是一种图像识别模型，它也拥有者卷积层和全连接层。可以这样理解VGG的结构：前面的卷积层是从图像中提取“特征”，而后面的全连接层把图片的“特征”转换为类别概率。其中VGGNET中的浅层（conv1_1,conv1_2 ），提取的特征往往是比较简单的（比如提取检测点、线、亮度），VGGNET中的深层（c比如onv5_1,conv5_2），提取的特征往往比较复杂（如是否存在人脸、某种特定物体）。"></a>VGGNET是一种图像识别模型，它也拥有者卷积层和全连接层。可以这样理解VGG的结构：前面的卷积层是从图像中提取“特征”，而后面的全连接层把图片的“特征”转换为类别概率。其中VGGNET中的浅层（conv1_1,conv1_2 ），提取的特征往往是比较简单的（比如提取检测点、线、亮度），VGGNET中的深层（c比如onv5_1,conv5_2），提取的特征往往比较复杂（如是否存在人脸、某种特定物体）。</h4><h4 id="VGGNET的本意是输入图像，提取特征，然后输出图像类别。图像风格迁移恰好与其相反，输入特征，之后输出对应这种特征的图片。两种过程的对比图片如下图所示："><a href="#VGGNET的本意是输入图像，提取特征，然后输出图像类别。图像风格迁移恰好与其相反，输入特征，之后输出对应这种特征的图片。两种过程的对比图片如下图所示：" class="headerlink" title="VGGNET的本意是输入图像，提取特征，然后输出图像类别。图像风格迁移恰好与其相反，输入特征，之后输出对应这种特征的图片。两种过程的对比图片如下图所示："></a>VGGNET的本意是输入图像，提取特征，然后输出图像类别。图像风格迁移恰好与其相反，输入特征，之后输出对应这种特征的图片。两种过程的对比图片如下图所示：</h4><p><img src="https://img-blog.csdnimg.cn/20191222104202202.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="具体来说，风格迁移使用卷积层的中间特征还原出对应这种特征的原始图像。具体过程就是：先选取一副原始图像，经过VGGNET计算后得到各个卷积层的特征。之后，根据这些卷积层的特征，还原出对应这种特征的原始图像-研究发现：浅层的还原效果往往比较好，卷积特征基本保留了所有原始图像中形状、位置、颜色、纹理等信息；深层对应的还原图像丢失了部分颜色和纹理信息，但大体保留原始图像中物体的形状和位置。"><a href="#具体来说，风格迁移使用卷积层的中间特征还原出对应这种特征的原始图像。具体过程就是：先选取一副原始图像，经过VGGNET计算后得到各个卷积层的特征。之后，根据这些卷积层的特征，还原出对应这种特征的原始图像-研究发现：浅层的还原效果往往比较好，卷积特征基本保留了所有原始图像中形状、位置、颜色、纹理等信息；深层对应的还原图像丢失了部分颜色和纹理信息，但大体保留原始图像中物体的形状和位置。" class="headerlink" title="具体来说，风格迁移使用卷积层的中间特征还原出对应这种特征的原始图像。具体过程就是：先选取一副原始图像，经过VGGNET计算后得到各个卷积层的特征。之后，根据这些卷积层的特征，还原出对应这种特征的原始图像.研究发现：浅层的还原效果往往比较好，卷积特征基本保留了所有原始图像中形状、位置、颜色、纹理等信息；深层对应的还原图像丢失了部分颜色和纹理信息，但大体保留原始图像中物体的形状和位置。"></a>具体来说，风格迁移使用卷积层的中间特征还原出对应这种特征的原始图像。具体过程就是：先选取一副原始图像，经过VGGNET计算后得到各个卷积层的特征。之后，根据这些卷积层的特征，还原出对应这种特征的原始图像.研究发现：浅层的还原效果往往比较好，卷积特征基本保留了所有原始图像中形状、位置、颜色、纹理等信息；深层对应的还原图像丢失了部分颜色和纹理信息，但大体保留原始图像中物体的形状和位置。</h4><h2 id="3-2-代价函数"><a href="#3-2-代价函数" class="headerlink" title="3.2 代价函数"></a>3.2 代价函数</h2><h4 id="要构建一个神经风格迁移系统，首先需要为生成的图像定义一个代价函数，通过最小化代价函数，可以大大缩短图片生成所需要的时间。为了实现神经风格迁移，需要定义一个关于G的代价函数，J用来评判某个生成图像的好坏，我们将使用梯度下降法去最小化J-G-，以便于生成这个图像。那么如何去判断生成图像的好坏，在这里把这个代价函数定义为两个部分。"><a href="#要构建一个神经风格迁移系统，首先需要为生成的图像定义一个代价函数，通过最小化代价函数，可以大大缩短图片生成所需要的时间。为了实现神经风格迁移，需要定义一个关于G的代价函数，J用来评判某个生成图像的好坏，我们将使用梯度下降法去最小化J-G-，以便于生成这个图像。那么如何去判断生成图像的好坏，在这里把这个代价函数定义为两个部分。" class="headerlink" title="要构建一个神经风格迁移系统，首先需要为生成的图像定义一个代价函数，通过最小化代价函数，可以大大缩短图片生成所需要的时间。为了实现神经风格迁移，需要定义一个关于G的代价函数，J用来评判某个生成图像的好坏，我们将使用梯度下降法去最小化J(G)，以便于生成这个图像。那么如何去判断生成图像的好坏，在这里把这个代价函数定义为两个部分。"></a>要构建一个神经风格迁移系统，首先需要为生成的图像定义一个代价函数，通过最小化代价函数，可以大大缩短图片生成所需要的时间。为了实现神经风格迁移，需要定义一个关于G的代价函数，J用来评判某个生成图像的好坏，我们将使用梯度下降法去最小化J(G)，以便于生成这个图像。那么如何去判断生成图像的好坏，在这里把这个代价函数定义为两个部分。</h4><h4 id="Jcontent-C-G"><a href="#Jcontent-C-G" class="headerlink" title="Jcontent(C,G)"></a>Jcontent(C,G)</h4><h4 id="第一部分被称作内容代价，这是一个关于内容图片和生成图片的函数，它是用来度量生成图片G的内容与内容图片C的内容有多相似。"><a href="#第一部分被称作内容代价，这是一个关于内容图片和生成图片的函数，它是用来度量生成图片G的内容与内容图片C的内容有多相似。" class="headerlink" title="第一部分被称作内容代价，这是一个关于内容图片和生成图片的函数，它是用来度量生成图片G的内容与内容图片C的内容有多相似。"></a>第一部分被称作内容代价，这是一个关于内容图片和生成图片的函数，它是用来度量生成图片G的内容与内容图片C的内容有多相似。</h4><h4 id="Jstyle-S-G"><a href="#Jstyle-S-G" class="headerlink" title="Jstyle(S,G)"></a>Jstyle(S,G)</h4><h4 id="然后会把结果加上一个风格代价函数，也就是关于S和G的函数，用来度量图片G的风格和图片S的风格的相似度。"><a href="#然后会把结果加上一个风格代价函数，也就是关于S和G的函数，用来度量图片G的风格和图片S的风格的相似度。" class="headerlink" title="然后会把结果加上一个风格代价函数，也就是关于S和G的函数，用来度量图片G的风格和图片S的风格的相似度。"></a>然后会把结果加上一个风格代价函数，也就是关于S和G的函数，用来度量图片G的风格和图片S的风格的相似度。</h4><h4 id="J-G-αJcontent-C-G-βJstyle-S-G"><a href="#J-G-αJcontent-C-G-βJstyle-S-G" class="headerlink" title="J(G)=αJcontent(C,G)+βJstyle(S,G)"></a>J(G)=αJcontent(C,G)+βJstyle(S,G)</h4><h4 id="最后用两个超参数α和β来来确定内容代价和风格代价，两者之间的权重用两个超参数来确定。"><a href="#最后用两个超参数α和β来来确定内容代价和风格代价，两者之间的权重用两个超参数来确定。" class="headerlink" title="最后用两个超参数α和β来来确定内容代价和风格代价，两者之间的权重用两个超参数来确定。"></a>最后用两个超参数α和β来来确定内容代价和风格代价，两者之间的权重用两个超参数来确定。</h4><h2 id="3-3-内容代价函数"><a href="#3-3-内容代价函数" class="headerlink" title="3.3 内容代价函数"></a>3.3 内容代价函数</h2><h4 id="风格迁移网络的代价函数有一个内容代价部分，还有一个风格代价部分。"><a href="#风格迁移网络的代价函数有一个内容代价部分，还有一个风格代价部分。" class="headerlink" title="风格迁移网络的代价函数有一个内容代价部分，还有一个风格代价部分。"></a>风格迁移网络的代价函数有一个内容代价部分，还有一个风格代价部分。</h4><h4 id="首先定义内容代价部分。"><a href="#首先定义内容代价部分。" class="headerlink" title="首先定义内容代价部分。"></a>首先定义内容代价部分。</h4><h4 id="用隐含层m来计算内容代价，如果m是个很小的数，比如用隐含层-1，这个代价函数就会使生成图片像素上非常接近内容图片。然而如果使用很深的层，那么可能在内容图片里面有一个具体的物体，在生成的图片里就会存在这个物体。比如是一只小猫，那么在生成的图片里就一定会有一个小猫。所以在实际中，这个层m在网络中既不会选的太浅也不会选的太深。通常𝑚会选择在网络的中间层，既不太浅也不很深，然后用一个预训练的卷积模型，本篇论文使用的是-VGG-网络。"><a href="#用隐含层m来计算内容代价，如果m是个很小的数，比如用隐含层-1，这个代价函数就会使生成图片像素上非常接近内容图片。然而如果使用很深的层，那么可能在内容图片里面有一个具体的物体，在生成的图片里就会存在这个物体。比如是一只小猫，那么在生成的图片里就一定会有一个小猫。所以在实际中，这个层m在网络中既不会选的太浅也不会选的太深。通常𝑚会选择在网络的中间层，既不太浅也不很深，然后用一个预训练的卷积模型，本篇论文使用的是-VGG-网络。" class="headerlink" title="用隐含层m来计算内容代价，如果m是个很小的数，比如用隐含层 1，这个代价函数就会使生成图片像素上非常接近内容图片。然而如果使用很深的层，那么可能在内容图片里面有一个具体的物体，在生成的图片里就会存在这个物体。比如是一只小猫，那么在生成的图片里就一定会有一个小猫。所以在实际中，这个层m在网络中既不会选的太浅也不会选的太深。通常𝑚会选择在网络的中间层，既不太浅也不很深，然后用一个预训练的卷积模型，本篇论文使用的是 VGG 网络。"></a>用隐含层m来计算内容代价，如果m是个很小的数，比如用隐含层 1，这个代价函数就会使生成图片像素上非常接近内容图片。然而如果使用很深的层，那么可能在内容图片里面有一个具体的物体，在生成的图片里就会存在这个物体。比如是一只小猫，那么在生成的图片里就一定会有一个小猫。所以在实际中，这个层m在网络中既不会选的太浅也不会选的太深。通常𝑚会选择在网络的中间层，既不太浅也不很深，然后用一个预训练的卷积模型，本篇论文使用的是 VGG 网络。</h4><h4 id="之后需要衡量假如有一个内容图片和一个生成图片他们在内容上的相似度，令这个代表这两个图片α-L-C-和α-L-G-的l层的激活函数值。如果这两个激活值相似，那么就意味着两个图片的内容相似。"><a href="#之后需要衡量假如有一个内容图片和一个生成图片他们在内容上的相似度，令这个代表这两个图片α-L-C-和α-L-G-的l层的激活函数值。如果这两个激活值相似，那么就意味着两个图片的内容相似。" class="headerlink" title="之后需要衡量假如有一个内容图片和一个生成图片他们在内容上的相似度，令这个代表这两个图片α^([L][C])和α^([L][G])的l层的激活函数值。如果这两个激活值相似，那么就意味着两个图片的内容相似。"></a>之后需要衡量假如有一个内容图片和一个生成图片他们在内容上的相似度，令这个代表这两个图片α^([L][C])和α^([L][G])的l层的激活函数值。如果这两个激活值相似，那么就意味着两个图片的内容相似。</h4><p> <img src="https://img-blog.csdnimg.cn/20191222110732731.png" alt="在这里插入图片描述"></p>
+<h4 id="为两个激活值不同或者相似的程度，取l层的隐含单元的激活值，按元素相减，内容图片的激活值与生成图片相比较，然后取平方，也可以在前面加上归一化或者不加，比如1-2或者其他的，都影响不大，因为这都可以由这个超参数α来调整。"><a href="#为两个激活值不同或者相似的程度，取l层的隐含单元的激活值，按元素相减，内容图片的激活值与生成图片相比较，然后取平方，也可以在前面加上归一化或者不加，比如1-2或者其他的，都影响不大，因为这都可以由这个超参数α来调整。" class="headerlink" title="为两个激活值不同或者相似的程度，取l层的隐含单元的激活值，按元素相减，内容图片的激活值与生成图片相比较，然后取平方，也可以在前面加上归一化或者不加，比如1/2或者其他的，都影响不大，因为这都可以由这个超参数α来调整。"></a>为两个激活值不同或者相似的程度，取l层的隐含单元的激活值，按元素相减，内容图片的激活值与生成图片相比较，然后取平方，也可以在前面加上归一化或者不加，比如1/2或者其他的，都影响不大，因为这都可以由这个超参数α来调整。</h4><h2 id="3-4-风格代价函数"><a href="#3-4-风格代价函数" class="headerlink" title="3.4 风格代价函数"></a>3.4 风格代价函数</h2><h4 id="图像的风格可以用使用图像的卷积层特征的Gram矩阵来进行表示。在线性代数中这种矩阵被称为Gram矩阵，在这里可以称之为风格矩阵。"><a href="#图像的风格可以用使用图像的卷积层特征的Gram矩阵来进行表示。在线性代数中这种矩阵被称为Gram矩阵，在这里可以称之为风格矩阵。" class="headerlink" title="图像的风格可以用使用图像的卷积层特征的Gram矩阵来进行表示。在线性代数中这种矩阵被称为Gram矩阵，在这里可以称之为风格矩阵。"></a>图像的风格可以用使用图像的卷积层特征的Gram矩阵来进行表示。在线性代数中这种矩阵被称为Gram矩阵，在这里可以称之为风格矩阵。</h4><h4 id="风格矩阵是一组向量的内积对称矩阵，比如向量组"><a href="#风格矩阵是一组向量的内积对称矩阵，比如向量组" class="headerlink" title="风格矩阵是一组向量的内积对称矩阵，比如向量组"></a>风格矩阵是一组向量的内积对称矩阵，比如向量组<img src="https://img-blog.csdnimg.cn/20191222110804515.png" alt="在这里插入图片描述"></h4><h4 id="的Gram矩阵是"><a href="#的Gram矩阵是" class="headerlink" title="的Gram矩阵是"></a>的Gram矩阵是</h4><p><img src="https://img-blog.csdnimg.cn/20191222111053849.png" alt="在这里插入图片描述"></p>
+<h4 id="取内积即欧几里得空间上的标准内积，即"><a href="#取内积即欧几里得空间上的标准内积，即" class="headerlink" title="取内积即欧几里得空间上的标准内积，即"></a>取内积即欧几里得空间上的标准内积，即</h4><p> <img src="https://img-blog.csdnimg.cn/20191222111102313.png" alt="在这里插入图片描述"></p>
+<h4 id="假设卷积层的输出为F-ij-l，那么这个卷积特征对应的Gram矩阵的第i行第j个元素定义为"><a href="#假设卷积层的输出为F-ij-l，那么这个卷积特征对应的Gram矩阵的第i行第j个元素定义为" class="headerlink" title="假设卷积层的输出为F_ij^l，那么这个卷积特征对应的Gram矩阵的第i行第j个元素定义为"></a>假设卷积层的输出为F_ij^l，那么这个卷积特征对应的Gram矩阵的第i行第j个元素定义为</h4><p><img src="https://img-blog.csdnimg.cn/20191222111118616.png" alt="在这里插入图片描述"></p>
+<h4 id="设在第l层中，卷积特征的通道数为N-l-卷积的高、宽乘积数为M-l-那么F-ij-l满足"><a href="#设在第l层中，卷积特征的通道数为N-l-卷积的高、宽乘积数为M-l-那么F-ij-l满足" class="headerlink" title="设在第l层中，卷积特征的通道数为N_l,卷积的高、宽乘积数为M_l,那么F_ij^l满足"></a>设在第l层中，卷积特征的通道数为N_l,卷积的高、宽乘积数为M_l,那么F_ij^l满足</h4><h4 id="l≤i≤N-l，l≤j≤M-l"><a href="#l≤i≤N-l，l≤j≤M-l" class="headerlink" title="l≤i≤N_l，l≤j≤M_l"></a>l≤i≤N_l，l≤j≤M_l</h4><h4 id="Gram矩阵在一定程度上可以体现图片的风格。多层的风格损失是单层风格损失的加权累加。"><a href="#Gram矩阵在一定程度上可以体现图片的风格。多层的风格损失是单层风格损失的加权累加。" class="headerlink" title="Gram矩阵在一定程度上可以体现图片的风格。多层的风格损失是单层风格损失的加权累加。"></a>Gram矩阵在一定程度上可以体现图片的风格。多层的风格损失是单层风格损失的加权累加。</h4><h2 id="3-5-模型训练过程"><a href="#3-5-模型训练过程" class="headerlink" title="3.5 模型训练过程"></a>3.5 模型训练过程</h2><h4 id="首先，使用VGG中的一些层的输出来表示图片的内容特征和风格特征。"><a href="#首先，使用VGG中的一些层的输出来表示图片的内容特征和风格特征。" class="headerlink" title="首先，使用VGG中的一些层的输出来表示图片的内容特征和风格特征。"></a>首先，使用VGG中的一些层的输出来表示图片的内容特征和风格特征。</h4><h4 id="使用-‘conv4-2’-’conv5-2’-表示内容特征，使用-‘conv1-1’-’conv2-1’-’conv3-1’-’conv4-1’-表示风格特征。"><a href="#使用-‘conv4-2’-’conv5-2’-表示内容特征，使用-‘conv1-1’-’conv2-1’-’conv3-1’-’conv4-1’-表示风格特征。" class="headerlink" title="使用[‘conv4_2’,’conv5_2’]表示内容特征，使用[‘conv1_1’,’conv2_1’,’conv3_1’,’conv4_1’]表示风格特征。"></a>使用[‘conv4_2’,’conv5_2’]表示内容特征，使用[‘conv1_1’,’conv2_1’,’conv3_1’,’conv4_1’]表示风格特征。</h4><h4 id="将内容图片输入网络，计算内容图片在网络指定层上的输出值。"><a href="#将内容图片输入网络，计算内容图片在网络指定层上的输出值。" class="headerlink" title="将内容图片输入网络，计算内容图片在网络指定层上的输出值。"></a>将内容图片输入网络，计算内容图片在网络指定层上的输出值。</h4><h4 id="计算内容损失。可以这样定义内容损失：内容图片在指定层上提取出的特征矩阵，与噪声图片在对应层上的特征矩阵的差值的L2范数。即求两两之间的像素差值的平方。"><a href="#计算内容损失。可以这样定义内容损失：内容图片在指定层上提取出的特征矩阵，与噪声图片在对应层上的特征矩阵的差值的L2范数。即求两两之间的像素差值的平方。" class="headerlink" title="计算内容损失。可以这样定义内容损失：内容图片在指定层上提取出的特征矩阵，与噪声图片在对应层上的特征矩阵的差值的L2范数。即求两两之间的像素差值的平方。"></a>计算内容损失。可以这样定义内容损失：内容图片在指定层上提取出的特征矩阵，与噪声图片在对应层上的特征矩阵的差值的L2范数。即求两两之间的像素差值的平方。</h4><h4 id="对应每一层的内容损失函数："><a href="#对应每一层的内容损失函数：" class="headerlink" title="对应每一层的内容损失函数："></a>对应每一层的内容损失函数：</h4><p><img src="https://img-blog.csdnimg.cn/20191222111244537.png" alt="在这里插入图片描述"></p>
+<h4 id="其中，X是噪声图片的特征矩阵，P是内容图片的特征矩阵。M是P的长-宽，N是信道数。最终的内容损失为，每一层的内容损失加权和，再对层数取平均。"><a href="#其中，X是噪声图片的特征矩阵，P是内容图片的特征矩阵。M是P的长-宽，N是信道数。最终的内容损失为，每一层的内容损失加权和，再对层数取平均。" class="headerlink" title="其中，X是噪声图片的特征矩阵，P是内容图片的特征矩阵。M是P的长*宽，N是信道数。最终的内容损失为，每一层的内容损失加权和，再对层数取平均。"></a>其中，X是噪声图片的特征矩阵，P是内容图片的特征矩阵。M是P的长*宽，N是信道数。最终的内容损失为，每一层的内容损失加权和，再对层数取平均。</h4><h4 id="将风格图片输入网络，计算风格图片在网络指定层上的输出值。"><a href="#将风格图片输入网络，计算风格图片在网络指定层上的输出值。" class="headerlink" title="将风格图片输入网络，计算风格图片在网络指定层上的输出值。"></a>将风格图片输入网络，计算风格图片在网络指定层上的输出值。</h4><h4 id="计算风格损失。使用风格图像在指定层上的特征矩阵的GRAM矩阵来衡量其风格，风格损失可以定义为风格图像和噪音图像特征矩阵的格莱姆矩阵的差值的L2范数。"><a href="#计算风格损失。使用风格图像在指定层上的特征矩阵的GRAM矩阵来衡量其风格，风格损失可以定义为风格图像和噪音图像特征矩阵的格莱姆矩阵的差值的L2范数。" class="headerlink" title="计算风格损失。使用风格图像在指定层上的特征矩阵的GRAM矩阵来衡量其风格，风格损失可以定义为风格图像和噪音图像特征矩阵的格莱姆矩阵的差值的L2范数。"></a>计算风格损失。使用风格图像在指定层上的特征矩阵的GRAM矩阵来衡量其风格，风格损失可以定义为风格图像和噪音图像特征矩阵的格莱姆矩阵的差值的L2范数。</h4><h4 id="对于每一层的风格损失函数："><a href="#对于每一层的风格损失函数：" class="headerlink" title="对于每一层的风格损失函数："></a>对于每一层的风格损失函数：</h4><p><img src="https://img-blog.csdnimg.cn/20191222111337543.png" alt="在这里插入图片描述"></p>
+<h4 id="其中M是特征矩阵的长-宽，N是特征矩阵的信道数。G为噪音图像特征的Gram矩阵，A为风格图片特征的GRAM矩阵。"><a href="#其中M是特征矩阵的长-宽，N是特征矩阵的信道数。G为噪音图像特征的Gram矩阵，A为风格图片特征的GRAM矩阵。" class="headerlink" title="其中M是特征矩阵的长*宽，N是特征矩阵的信道数。G为噪音图像特征的Gram矩阵，A为风格图片特征的GRAM矩阵。"></a>其中M是特征矩阵的长*宽，N是特征矩阵的信道数。G为噪音图像特征的Gram矩阵，A为风格图片特征的GRAM矩阵。</h4><h4 id="最终的风格损失为，每一层的风格损失加权和，再对层数取平均。"><a href="#最终的风格损失为，每一层的风格损失加权和，再对层数取平均。" class="headerlink" title="最终的风格损失为，每一层的风格损失加权和，再对层数取平均。"></a>最终的风格损失为，每一层的风格损失加权和，再对层数取平均。</h4><h4 id="函数为内容损失和风格损失的加权和："><a href="#函数为内容损失和风格损失的加权和：" class="headerlink" title="函数为内容损失和风格损失的加权和："></a>函数为内容损失和风格损失的加权和：</h4><p><img src="https://img-blog.csdnimg.cn/20191222111355281.png" alt="在这里插入图片描述"></p>
+<h4 id="当训练开始时，根据内容图片和噪声，生成一张噪声图片。并将噪声图片传送给网络，计算loss，再根据loss调整噪声图片。将调整后的图片发给网络，重新计算loss，再调整，再计算，直到达到指定迭代次数，这时，噪声图片已兼具内容图片的内容和风格图片的风格，进行保存即可，其训练过程如图下所示，训练顺序依次从左向右。"><a href="#当训练开始时，根据内容图片和噪声，生成一张噪声图片。并将噪声图片传送给网络，计算loss，再根据loss调整噪声图片。将调整后的图片发给网络，重新计算loss，再调整，再计算，直到达到指定迭代次数，这时，噪声图片已兼具内容图片的内容和风格图片的风格，进行保存即可，其训练过程如图下所示，训练顺序依次从左向右。" class="headerlink" title="当训练开始时，根据内容图片和噪声，生成一张噪声图片。并将噪声图片传送给网络，计算loss，再根据loss调整噪声图片。将调整后的图片发给网络，重新计算loss，再调整，再计算，直到达到指定迭代次数，这时，噪声图片已兼具内容图片的内容和风格图片的风格，进行保存即可，其训练过程如图下所示，训练顺序依次从左向右。"></a>当训练开始时，根据内容图片和噪声，生成一张噪声图片。并将噪声图片传送给网络，计算loss，再根据loss调整噪声图片。将调整后的图片发给网络，重新计算loss，再调整，再计算，直到达到指定迭代次数，这时，噪声图片已兼具内容图片的内容和风格图片的风格，进行保存即可，其训练过程如图下所示，训练顺序依次从左向右。</h4><p><img src="https://img-blog.csdnimg.cn/20191222104239449.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="原理总结：感谢能翻到这的同学们，这一篇只是为了让大家了解到一些相关知识，毕竟操作简单，主要的是算法思想。下一篇就是与代码相关的部分了，可以开始打开建的工程，写代码了！"><a href="#原理总结：感谢能翻到这的同学们，这一篇只是为了让大家了解到一些相关知识，毕竟操作简单，主要的是算法思想。下一篇就是与代码相关的部分了，可以开始打开建的工程，写代码了！" class="headerlink" title="原理总结：感谢能翻到这的同学们，这一篇只是为了让大家了解到一些相关知识，毕竟操作简单，主要的是算法思想。下一篇就是与代码相关的部分了，可以开始打开建的工程，写代码了！"></a>原理总结：感谢能翻到这的同学们，这一篇只是为了让大家了解到一些相关知识，毕竟操作简单，主要的是算法思想。下一篇就是与代码相关的部分了，可以开始打开建的工程，写代码了！</h2><p><a href="https://blog.csdn.net/weixin_41108515/article/details/103651784" target="_blank" rel="noopener">卷积神经网络：（三）风格迁移——代码部分</a></p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/custom/donate/AliPayQR.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/custom/donate/WeChanQR.jpg"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/2018/10/29/ai/卷积神经网络：（三）风格迁移——代码部分 (1)/" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                风格迁移——代码部分</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/2018/10/27/ai/卷积神经网络：（一）风格迁移——环境配置 (1)/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                风格迁移——环境配置</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="" class="profile gravatar"><img src="" itemprop="image" alt="" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="" itemprop="url" rel="author"></a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            // PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Michaelming<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <p style="color: #666666;">&copy 2018</p>
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> by <a href="https://2heng.xin/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Mashiro</a>&<a href="https://www.hojun.cn/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Hojun</a>, Powered by Hexo, Hosted by Coding Pages</a>
+        </span>
+      </p>
+    </div>
+  </div><!-- .site-info -->
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/honjun/michaelminger@1.2","name":"Unbroken.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/honjun/michaelminger@1.2","name":"Unbroken.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/custom/avatar.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">不见你如我一般michaelminger</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="http://github.com/honjun" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+        <a href="http://weibo.com/mashirozx?is_all=1" class="fa fa-weibo" target="_blank" style="color: #dd4b39; margin-left:20px"></a>
+      
+        <a href="https://wpa.qq.com/msgrd?v=3&uin=954655431&site=qq&menu=yes" class="fa fa-qq" target="_blank" style="color: #25c6fe; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            爱好
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories/capture/">
+                  <i class="fa fa-code" aria-hidden="true"></i>
+                  网络爬虫
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/ai/">
+                  <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                  人工智能
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/arithmetic/">
+                  <i class="fa fa-cloud-download" aria-hidden="true"></i>
+                  高级算法
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/practise/">
+                  <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                  个人练习
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+              <li>
+                <a href="/lab/">
+                  <i class="fa fa-cogs" aria-hidden="true"></i>
+                  Lab
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+    id="2660651585"
+
+    server="netease"
+
+    type="playlist"
+
+    fixed="true"
+
+    autoplay="false"
+
+    loop="all"
+
+    order="random"
+
+    preload="auto"
+
+    volume="0.7"
+
+    mutex="true"
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>
