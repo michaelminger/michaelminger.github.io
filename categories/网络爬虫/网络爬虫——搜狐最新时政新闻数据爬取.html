@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">categories | Michaelming&#39;s Blog</title>
+  <title itemprop="name">网络爬虫——搜狐最新时政新闻数据爬取——BS4 | Michaelming&#39;s Blog</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -292,7 +292,70 @@
   
   <div id="content" class="site-content">
     <article class="post-item post-301 page type-page status-publish has-post-thumbnail hentry">
-      
+      <h2 id="网络爬虫——搜狐最新时政新闻数据爬取"><a href="#网络爬虫——搜狐最新时政新闻数据爬取" class="headerlink" title="网络爬虫——搜狐最新时政新闻数据爬取"></a>网络爬虫——搜狐最新时政新闻数据爬取</h2><p>目标网址：<a href="https://www.sohu.com/c/8/1460?spm=smpc.null.side-nav.14.1584869506422WxyU9iK" target="_blank" rel="noopener">https://www.sohu.com/c/8/1460?spm=smpc.null.side-nav.14.1584869506422WxyU9iK</a></p>
+<p>目标数据描述：（1）标题 （2）链接地址<br><img src="https://img-blog.csdnimg.cn/20200413211744198.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>要求：</p>
+<p>（1）使用urllib库或者requests抓取网页源代码；</p>
+<p>（2）使用BeautifulSoup的CSS选择器方法对获取的源代码进行解析，并成功找到目标数据所在的特定标签，进行网页结构的解析；</p>
+<p>（3）利用框架结构，通过函数调用，参数传递，实现目标数据抓取，并尝试将结果写入文本文件中。</p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
+from bs4 import BeautifulSoup
+import bs4 
+
+def getHtmlText(url):
+    headers = {
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
+    }
+    try:
+        result = requests.get(url,headers=headers,timeout=30)
+        result.raise_for_status()
+        result.encoding = result.apparent_encoding
+        return result.text
+    except:
+        print(&quot;A&quot;)
+        return &quot;&quot;
+
+def findUniverse(ulist , html):
+    soup = BeautifulSoup(html,&quot;html.parser&quot;)
+
+    for div in soup.find(attrs=[&#39;class&#39;,&#39;news-list clearfix&#39;]).children:
+        if isinstance(div ,bs4.element.Tag):
+            list_0 = div.find(&#39;h4&#39;).find(&#39;a&#39;).get(&#39;href&#39;)
+            list_1 = div.find(&#39;h4&#39;).string.replace(&quot; &quot;,&#39;&#39;).replace(&quot;\n&quot;,&#39;&#39;)
+            ulist.append([list_0,list_1])
+
+def findSame(ulist,html):
+    soup = BeautifulSoup(html,&quot;html.parser&quot;)
+
+    for div in soup.find(attrs=[&#39;class&#39;,&#39;second-nav&#39;]).children:
+        if isinstance(div ,bs4.element.Tag):
+            ulist.append(div.find(&#39;a&#39;).get(&#39;href&#39;))
+    return ulist
+
+def printUniverse(ulist):
+    tplt = &#39;{0:30}\t{1:18}&#39;
+    print(tplt.format(&quot;网址&quot;,&quot;名称&quot;,chr(12288)))
+    for i in range(len(ulist)):
+        u = ulist[i]
+        print(tplt.format(u[0],u[1],chr(12288)))
+
+def main():
+    ulist = []
+    ulist_Same = []
+
+    url = &#39;https://www.sohu.com/c/8/1460?spm=smpc.null.side-nav.14.1585491604691ZcX26aI&#39;    
+    html = getHtmlText(url)
+    ulist_Same = findSame(ulist_Same,html)
+
+    for i in range(len(ulist_Same) - 2 ):
+        url = &#39;https://www.sohu.com&#39; + ulist_Same[i+1]
+        html = getHtmlText(url)    
+        findUniverse(ulist,html)
+    printUniverse(ulist)
+
+main()
+
+</code></pre><h3 id="输出如下："><a href="#输出如下：" class="headerlink" title="输出如下："></a>输出如下：</h3><p><img src="https://img-blog.csdnimg.cn/20200413212248457.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+
       <!-- .entry-content -->
       
 <div id="vcomments"></div>

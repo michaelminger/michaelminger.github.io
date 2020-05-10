@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">categories | Michaelming&#39;s Blog</title>
+  <title itemprop="name">网络爬虫——抓取TIOBE指数前20名排行开发语言 | Michaelming&#39;s Blog</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -292,7 +292,61 @@
   
   <div id="content" class="site-content">
     <article class="post-item post-301 page type-page status-publish has-post-thumbnail hentry">
-      
+      <h2 id="网络爬虫——抓取TIOBE指数前20名排行开发语言"><a href="#网络爬虫——抓取TIOBE指数前20名排行开发语言" class="headerlink" title="网络爬虫——抓取TIOBE指数前20名排行开发语言"></a>网络爬虫——抓取TIOBE指数前20名排行开发语言</h2><p>目标网址<br>TIOBE指数前20名排行开发语言：<a href="https://www.tiobe.com/tiobe-index/" target="_blank" rel="noopener">https://www.tiobe.com/tiobe-index/</a></p>
+<p>说明<br> TIOBE排行榜是根据互联网上有经验的程序员、课程和第三方厂商的数量，并使用搜索引擎（如Google、Bing、Yahoo!）以及Wikipedia、Amazon、YouTube统计出排名数据，只是反映某个编程语言的热门程度，并不能说明一门编程语言好不好，或者一门语言所编写的代码数量多少。</p>
+<p> 该指数可以用来检阅开发者的编程技能能否跟上趋势，或是否有必要作出战略改变，以及什么编程语言是应该及时掌握的。观察认为，该指数反应的虽并非当前最流行或应用最广的语言，但对世界范围内开发语言的走势仍具有重要参考意义。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200413220913662.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>目标数据：（如上表所示）</p>
+<p>（1）2020年3月的排名（2）2019年3月排名（3）编程语言（4）评分（5）变化率</p>
+<p>明细：<br>（1）使用urllib或者requests库抓取目标网页中的网页源代码；</p>
+<p>（2）使用lxml库中的xpath方法解析源代码，提取上面所示的目标数据，并打印输出；</p>
+<p>（3）尝试着使用try..except方法及时捕获异常。</p>
+<p>（4）可以尝试将获取的数据保存到文本文件中。</p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
+from requests.exceptions import RequestException
+from lxml import etree
+def one_to_page(url):
+    headers={
+        &#39;user-agent&#39;:&#39;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3756.400 QQBrowser/10.5.4039.400&#39;
+    }
+    try:
+        response=requests.get(url,headers=headers)
+        body=response.text
+        return body
+    except RequestException as e:
+        print(&#39;request is error!&#39;,e)
+def parsePage(html):
+    htmlNew = etree.HTML(html,etree.HTMLParser())
+    result = htmlNew.xpath(&#39;//table[contains(@class,&quot;table-top20&quot;)]/tbody/tr//text()&#39;)
+    pos = 0
+    for i in range(20):
+        if i == 0:
+            yield result[i:5]
+        else:
+            yield result[pos:pos+5]
+        pos += 5
+def printRank(data):
+    for i in data:
+        rank = {
+            &quot;2020年3月&quot;:i[0],
+            &quot;2019年3月&quot;:i[1],
+            &quot;编程语言&quot;:i[2],
+            &quot;评分&quot;:i[3],
+            &quot;变化率&quot;:i[4],    
+        }
+        print(rank)
+def printRankEasy(data):
+    tplt = &quot;{0:^10}\t{1:^10}\t{2:^20}\t{3:^10}\t{4:^10}&quot;
+    print(tplt.format(&quot;2020年3月&quot;,&quot;2019年3月&quot;,&quot;编程语言&quot;,&quot;评分&quot;,&quot;变化率&quot;,chr(12288)))
+    for i in data:
+        print(tplt.format(i[0],i[1],i[2],i[3],i[4],chr(12288)))
+def main():
+    url = &#39;https://www.tiobe.com/tiobe-index/&#39;
+    html = one_to_page(url)
+    data = parsePage(html)
+    printRankEasy(data)
+main()
+</code></pre><p>输出如下<br><img src="https://img-blog.csdnimg.cn/20200413221221131.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+
       <!-- .entry-content -->
       
 <div id="vcomments"></div>

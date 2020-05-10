@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">categories | Michaelming&#39;s Blog</title>
+  <title itemprop="name">网络爬虫——前程无忧网数据获取及存储（低级） | Michaelming&#39;s Blog</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -292,7 +292,87 @@
   
   <div id="content" class="site-content">
     <article class="post-item post-301 page type-page status-publish has-post-thumbnail hentry">
-      
+      <h2 id="网络爬虫——前程无忧网数据获取及存储（低级）"><a href="#网络爬虫——前程无忧网数据获取及存储（低级）" class="headerlink" title="网络爬虫——前程无忧网数据获取及存储（低级）"></a>网络爬虫——前程无忧网数据获取及存储（低级）</h2><h3 id="目标网站：前程无忧招聘网"><a href="#目标网站：前程无忧招聘网" class="headerlink" title="目标网站：前程无忧招聘网"></a>目标网站：前程无忧招聘网</h3><p>目标网址：<a href="https://search.51job.com/list/120000,000000,0000,00,9,99,Python,2,1.html" target="_blank" rel="noopener">https://search.51job.com/list/120000,000000,0000,00,9,99,Python,2,1.html</a></p>
+<p>目标数据：（1）职位名（2）公司名（3）工作地点（4）薪资 （5）发布时间</p>
+<p>任务要求</p>
+<p>（1）使用urllib或requests库实现该网站网页源代码的获取，并将源代码进行保存；</p>
+<p>（2）通过Xpath解析方法对保存的的源代码读取并进行解析，成功找到目标数据所在的特定标签，进行网页结构的解析；</p>
+<p>（3）定义函数，将获取的目标数据保存到txt文本文件中。</p>
+<p>这里使用的是Xpath，相对于之前猫眼电影使用的，这个较为简单，但是数据处理上较为复杂。</p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
+import json
+import csv
+from requests.exceptions import RequestException
+from lxml import etree
+
+def getHtmlText(url):
+    headers = {
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
+    }
+    try:
+        result = requests.get(url,headers=headers,timeout=30)
+        result.raise_for_status()
+        result.encoding = result.apparent_encoding
+        return result.text
+    except:
+        return &quot;&quot;
+
+def parsePage(html):
+    ulist = []
+    clist = []
+    rlist = []
+    newhtml =etree.HTML(html,etree.HTMLParser())
+    result=newhtml.xpath(&#39;//*[@id=&quot;resultList&quot;]/div[@class=&quot;el&quot;]//text()&#39;)
+
+    for i in range(len(result)):
+        ulist.append(result[i].replace(&quot; &quot;,&quot;&quot;).replace(&#39;\r&#39;,&quot;&quot;).replace(&quot;\n&quot;,&#39;&#39;))
+
+    while &#39;&#39; in ulist:
+        ulist.remove(&#39;&#39;)
+
+    length = len(ulist)
+    weight = int(length / 5 )
+
+    for i in range(weight):
+        for j in range(5):
+            clist.append(ulist[i*5+j])
+        rlist.append(clist)
+        clist = []
+
+    return rlist
+
+# def txtdata(data):
+#     with open(&#39;top20.txt&#39;,&#39;w&#39;)as file:
+#         for i in data:
+#             for j in i:
+#                 print(j)
+#         print(&#39;successful&#39;)
+
+def storedata(data):
+    with open(&#39;top20.txt&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;)as file:
+        for i in data:
+            file.write(json.dumps(i,ensure_ascii=False)+&#39;\n&#39;)
+        print(&#39;ok&#39;)
+
+def csvdata(data):
+    with open(&#39;top20.csv&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;,newline=&#39;&#39;)as csvfile:
+        fieldnames = [&#39;职位名&#39;,&#39;公司名&#39;,&#39;工作地点&#39;,&#39;薪资&#39;,&#39;工作时间&#39;]
+        writer = csv.DictWriter(csvfile,fieldnames=fieldnames)
+        writer.writeheader()
+        for i in data:
+            writer.writerow({&#39;职位名&#39;:i[0],&#39;公司名&#39;:i[1],&#39;工作地点&#39;:i[2],&#39;薪资&#39;:i[3],&#39;工作时间&#39;:i[4]})
+        print(&#39;ok&#39;)
+
+def main():
+    url=&quot;https://search.51job.com/list/120000,000000,0000,00,9,99,Python,2,1.html&quot;
+    html=getHtmlText(url)
+    rlist=parsePage(html)
+
+#     txtdata(data)
+    storedata(rlist)
+    csvdata(rlist)
+main()
+</code></pre>
       <!-- .entry-content -->
       
 <div id="vcomments"></div>

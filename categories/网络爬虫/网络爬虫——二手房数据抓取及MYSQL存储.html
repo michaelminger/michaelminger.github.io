@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">categories | Michaelming&#39;s Blog</title>
+  <title itemprop="name">网络爬虫——二手房数据抓取及MYSQL存储 | Michaelming&#39;s Blog</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -292,7 +292,227 @@
   
   <div id="content" class="site-content">
     <article class="post-item post-301 page type-page status-publish has-post-thumbnail hentry">
-      
+      <h2 id="网络爬虫——二手房数据抓取及MYSQL存储"><a href="#网络爬虫——二手房数据抓取及MYSQL存储" class="headerlink" title="网络爬虫——二手房数据抓取及MYSQL存储"></a>网络爬虫——二手房数据抓取及MYSQL存储</h2><h4 id="目标网址："><a href="#目标网址：" class="headerlink" title="目标网址："></a>目标网址：</h4><p><a href="https://qd.anjuke.com/sale/jiaozhoushi/?from=SearchBar" target="_blank" rel="noopener">https://qd.anjuke.com/sale/jiaozhoushi/?from=SearchBar</a></p>
+<h4 id="目标数据："><a href="#目标数据：" class="headerlink" title="目标数据："></a>目标数据：</h4><p> 标题 + 链接地址 + 厅室+ 面积+ 层数+建造时间 + 地址 + 单价（或总价）</p>
+<p>要求：</p>
+<p>（1）自选请求库和解析库获取目标数据；</p>
+<p>（2）第一个存储至txt或者csv中，第二个源码存储至Mysql中。<br><img src="https://img-blog.csdnimg.cn/20200423220000472.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="源码（1）：csv-txt"><a href="#源码（1）：csv-txt" class="headerlink" title="源码（1）：csv,txt"></a>源码（1）：csv,txt</h3><pre><code>import requests
+import json
+import csv
+from requests.exceptions import RequestException
+from lxml import etree
+
+def getHtmlText(url):
+    headers = {
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
+    }
+    try:
+        result = requests.get(url,headers=headers,timeout=30)
+        result.raise_for_status()
+        result.encoding = result.apparent_encoding
+        return result.text
+    except:
+        return &quot;&quot;
+
+def cleanData(clist):
+    olist = []
+    for i in range(len(clist)):
+        olist.append(clist[i].replace(&quot; &quot;,&quot;&quot;).replace(&#39;\r&#39;,&quot;&quot;).replace(&quot;\n&quot;,&#39;&#39;).replace(&quot;\xa0\xa0&quot;,&#39;,&#39;))
+
+    return olist
+
+def parsePage(html):
+    ulist = []
+    clist = []
+
+    newhtml =etree.HTML(html,etree.HTMLParser())
+    titles =cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[2]/div/a//text()&#39;))
+    hrefs = cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[2]/div/a//@href&#39;, stream=True))
+    others =cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[2]/div[2]/span//text()&#39;))
+    addresss =cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[2]/div[3]/span//text()&#39;))
+    prices =cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[3]/span[2]//text()&#39;))
+
+    length = len(titles)   
+
+    for i in range(length):
+        ulist.append(titles[i])     
+        ulist.append(hrefs[i])
+        ulist.append(others[i*4+0])
+        ulist.append(others[i*4+1])
+        ulist.append(others[i*4+2])
+        ulist.append(others[i*4+3])
+        ulist.append(addresss[i])
+        ulist.append(prices[i])
+        clist.append(ulist)
+        ulist = []
+
+    return clist
+
+def txtdata(data):
+    with open(&#39;data.txt&#39;,&#39;w&#39;)as file:
+        for i in data:
+            for j in i:
+                print(j)
+        print(&#39;successful&#39;)
+
+def storedata(data):
+    with open(&#39;data.txt&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;)as file:
+        for i in data:
+            file.write(json.dumps(i,ensure_ascii=False)+&#39;\n&#39;)
+        print(&#39;ok&#39;)
+
+def csvdata(data): 
+    with open(&#39;data.csv&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;,newline=&#39;&#39;)as csvfile:
+        fieldnames = [&#39;标题&#39;,&#39;链接地址&#39;,&#39;厅室&#39;,&#39;面积&#39;,&#39;层数&#39;,&#39;建造时间&#39;,&#39;地址&#39;,&#39;单价&#39;]
+        writer = csv.DictWriter(csvfile,fieldnames=fieldnames)
+        writer.writeheader()
+        for i in data:
+            writer.writerow({&#39;标题&#39;:i[0],&#39;链接地址&#39;:i[1],&#39;厅室&#39;:i[2],&#39;面积&#39;:i[3],&#39;层数&#39;:i[4],&#39;建造时间&#39;:i[5],&#39;地址&#39;:i[6],&#39;单价&#39;:i[7]})
+        print(&#39;ok&#39;)
+
+def main():
+    url=&quot;https://qd.anjuke.com/sale/jiaozhoushi/?from=SearchBar&quot;
+    html=getHtmlText(url)
+    rlist=parsePage(html)
+
+    txtdata(rlist)
+    storedata(rlist)
+    csvdata(rlist)
+main()
+</code></pre><h3 id="源码（1）：MYSQL"><a href="#源码（1）：MYSQL" class="headerlink" title="源码（1）：MYSQL"></a>源码（1）：MYSQL</h3><pre><code>import requests
+import json
+import csv
+from requests.exceptions import RequestException
+from lxml import etree
+import pymysql 
+import pytesseract
+import traceback  
+
+def connectMysql():
+    return pymysql.connect(host=&#39;localhost&#39;,user=&#39;root&#39;,password=&#39;123456&#39;,port=3306,db=&#39;spiders&#39;)
+
+def createMysqlTable():
+    db = connectMysql()
+    cursor = db.cursor()
+    sql = &#39;create table if not exists data (\
+    标题 varchar(255) not null ,\
+    链接地址 varchar(255) not null ,\
+    厅室 varchar(255) not null,\
+    面积 varchar(255) not null,\
+    层数 varchar(255) not null,\
+    建造时间 varchar(255) not null,\
+    地址 varchar(255) not null,\
+    单价 varchar(255) not null,\
+    primary key(标题))&#39;
+    cursor.execute(sql)
+
+    print(&#39;ok&#39;)
+    db.close()
+
+def getHtmlText(url):
+    headers = {
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
+    }
+    try:
+        result = requests.get(url,headers=headers,timeout=30)
+        result.raise_for_status()
+        result.encoding = result.apparent_encoding
+        return result.text
+    except:
+        return &quot;&quot;
+
+def cleanData(clist):
+    olist = []
+    for i in range(len(clist)):
+        olist.append(clist[i].replace(&quot; &quot;,&quot;&quot;).replace(&#39;\r&#39;,&quot;&quot;).replace(&quot;\n&quot;,&#39;&#39;).replace(&quot;\xa0\xa0&quot;,&#39;,&#39;))
+
+    return olist
+
+def parsePage(html):
+    ulist = []
+    clist = []
+
+    newhtml =etree.HTML(html,etree.HTMLParser())
+    titles =cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[2]/div/a//text()&#39;))
+    hrefs = cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[2]/div/a//@href&#39;, stream=True))
+    others =cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[2]/div[2]/span//text()&#39;))
+    addresss =cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[2]/div[3]/span//text()&#39;))
+    prices =cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[3]/span[2]//text()&#39;))
+
+    length = len(titles)   
+
+    for i in range(length):
+        ulist.append(titles[i])     
+        ulist.append(hrefs[i][0:100])
+        ulist.append(others[i*4+0])
+        ulist.append(others[i*4+1])
+        ulist.append(others[i*4+2])
+        ulist.append(others[i*4+3])
+        ulist.append(addresss[i])
+        ulist.append(prices[i])
+        clist.append(ulist)
+        ulist = []
+
+    return clist
+
+def txtdata(data):
+    with open(&#39;data.txt&#39;,&#39;w&#39;)as file:
+        for i in data:
+            for j in i:
+                print(j)
+        print(&#39;successful&#39;)
+
+def storedata(data):
+    with open(&#39;data.txt&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;)as file:
+        for i in data:
+            file.write(json.dumps(i,ensure_ascii=False)+&#39;\n&#39;)
+        print(&#39;ok&#39;)
+
+def csvdata(data): 
+    with open(&#39;data.csv&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;,newline=&#39;&#39;)as csvfile:
+        fieldnames = [&#39;标题&#39;,&#39;链接地址&#39;,&#39;厅室&#39;,&#39;面积&#39;,&#39;层数&#39;,&#39;建造时间&#39;,&#39;地址&#39;,&#39;单价&#39;]
+        writer = csv.DictWriter(csvfile,fieldnames=fieldnames)
+        writer.writeheader()
+        for i in data:
+            writer.writerow({&#39;标题&#39;:i[0],&#39;链接地址&#39;:i[1],&#39;厅室&#39;:i[2],&#39;面积&#39;:i[3],&#39;层数&#39;:i[4],&#39;建造时间&#39;:i[5],&#39;地址&#39;:i[6],&#39;单价&#39;:i[7]})
+        print(&#39;ok&#39;)
+def mysqlData(datas):
+
+    table = &#39;data&#39;
+    keys = &#39;标题,链接地址,厅室,面积,层数,建造时间,地址,单价&#39;
+
+    db = connectMysql()
+    cursor = db.cursor()
+    for data in datas:
+        values = &#39;,&#39;.join([&#39;%s&#39;]*len(data))
+        sql = &#39;INSERT INTO {table}({keys}) VALUES({values})&#39;.format(table=table,keys = keys ,values = values)
+        print(sql)
+        print(tuple(data))
+        try :
+            if cursor.execute(sql, tuple(data)):
+                print(&quot;Succcessful&quot;)
+                db.commit()
+        except:
+            traceback.print_exc()
+            print(&quot;Failed&quot;)
+            db.rollback()
+
+    db.close()
+
+def main():
+#     createMysqlTable()
+    url=&quot;https://qd.anjuke.com/sale/jiaozhoushi/?from=SearchBar&quot;
+    html=getHtmlText(url)
+    rlist=parsePage(html)
+
+#     txtdata(rlist)
+    storedata(rlist)
+    csvdata(rlist)
+    mysqlData(rlist)
+main()
+</code></pre><p><img src="https://img-blog.csdnimg.cn/20200423220435815.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200423220435749.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200423220435717.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200423220435486.jpg" alt="在这里插入图片描述"></p>
+
       <!-- .entry-content -->
       
 <div id="vcomments"></div>

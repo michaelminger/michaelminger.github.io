@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">categories | Michaelming&#39;s Blog</title>
+  <title itemprop="name">豆瓣电影排行榜数据抓取（初级）——BS4 | Michaelming&#39;s Blog</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -292,7 +292,60 @@
   
   <div id="content" class="site-content">
     <article class="post-item post-301 page type-page status-publish has-post-thumbnail hentry">
-      
+      <h2 id="网络爬虫——豆瓣电影排行榜数据抓取（初级）"><a href="#网络爬虫——豆瓣电影排行榜数据抓取（初级）" class="headerlink" title="网络爬虫——豆瓣电影排行榜数据抓取（初级）"></a>网络爬虫——豆瓣电影排行榜数据抓取（初级）</h2><h3 id="目标网址："><a href="#目标网址：" class="headerlink" title="目标网址："></a>目标网址：</h3><p>豆瓣电影排行：<a href="https://movie.douban.com/top250?start=" target="_blank" rel="noopener">https://movie.douban.com/top250?start=</a></p>
+<p>目标数据描述：（1）排名（2）电影名称<br><img src="https://img-blog.csdnimg.cn/20200413210123780.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>任务明细：</p>
+<p>（1）使用requests库实现该网站网页源代码的获取；</p>
+<p>（2）使用BeautifulSoup对获取的源代码进行解析，并成功找到目标数据所在的特定标签，进行网页结构的解析；</p>
+<p>（3）定义函数，将获取的目标数据打印输出，有能力的同学可以试着将结果写入文件中。</p>
+<p>（4）使用框架式结构，通过参数传递实现整个特定数据的爬取。</p>
+<p>可以选择定义全局列表，将目标数据获取后添加到列表中，同时，注意观察分页时url的变化，以便获取整个的排行榜数据。建议通过for循环传递变化参数实现。</p>
+<p>下一阶段，目标数据增加导演、主演、评价人数等信息，将尽可能多的数据抓取保存。</p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
+from bs4 import BeautifulSoup
+import bs4 
+
+def getHtmlText(url):
+    headers = {
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
+    }
+    try:
+        result = requests.get(url,headers=headers,timeout=30)
+        result.raise_for_status()
+        result.encoding = result.apparent_encoding
+
+        result=(result.text.replace(&#39;&lt;br&gt;&#39;,&#39;&#39;)).replace(&#39;&lt;br/&gt;&#39;,&#39;&#39;)
+        return result
+    except:
+        return &quot;&quot;
+
+def findUniverse(ulist , html):
+    soup = BeautifulSoup(html,&quot;html.parser&quot;)
+    list = [0,0]
+    for li in soup.find(attrs=[&#39;class&#39;,&#39;grid_view&#39;]).children:
+        if isinstance(li ,bs4.element.Tag):
+            list[0] = li.find(&#39;em&#39;).string
+            list[1] = li.find(attrs=[&#39;class&#39;,&#39;title&#39;]).string
+            ulist.append([list[0],list[1]])
+
+def printUniverse(ulist):
+    tplt = &#39;{0:^10}\t{1:^10}&#39;
+    print(tplt.format(&quot;排名&quot;,&quot;电影名称&quot;,chr(12288)))
+    for i in range(len(ulist)):
+        u = ulist[i]
+        print(tplt.format(u[0],u[1],chr(12288)))
+
+def main():
+    ulist = []
+    url = &#39;https://movie.douban.com/top250?start=&#39;
+    html = getHtmlText(url)
+
+    findUniverse(ulist,html)
+    printUniverse(ulist)
+
+main()
+
+</code></pre><p>输出如下：<br><img src="https://img-blog.csdnimg.cn/20200413210616682.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+
       <!-- .entry-content -->
       
 <div id="vcomments"></div>

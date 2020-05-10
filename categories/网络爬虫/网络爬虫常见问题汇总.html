@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">categories | Michaelming&#39;s Blog</title>
+  <title itemprop="name">网络爬虫常见问题汇总 | Michaelming&#39;s Blog</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -292,7 +292,25 @@
   
   <div id="content" class="site-content">
     <article class="post-item post-301 page type-page status-publish has-post-thumbnail hentry">
-      
+      <h2 id="网络爬虫常见问题汇总"><a href="#网络爬虫常见问题汇总" class="headerlink" title="网络爬虫常见问题汇总"></a>网络爬虫常见问题汇总</h2><h3 id="问题一：使用requests库或者urllib库获取源代码时无法正常显示中文"><a href="#问题一：使用requests库或者urllib库获取源代码时无法正常显示中文" class="headerlink" title="问题一：使用requests库或者urllib库获取源代码时无法正常显示中文"></a>问题一：使用requests库或者urllib库获取源代码时无法正常显示中文</h3><p>解决方法：</p>
+<p>（1）requests库的文本中有两种类型，一种是文本类型，使用text属性，一种是针对音频、视频、图片等二进制数据类型，使用content属性；一般返回的是text属性时会出现中文乱码现象，因此在输出返回之前需要显示的修改属性encoding，将其赋值为“utf-8”或者是apparent_encoding即可。</p>
+<p>（2）urllib库的文本只有一种就是使用read()方法进行读取。因此要解决中文问题，一定要在读取后加入.decode(“utf-8”)，进行显示的转码之后便不会出现乱码问题了。</p>
+<h3 id="问题二：文本节点"><a href="#问题二：文本节点" class="headerlink" title="问题二：文本节点"></a>问题二：文本节点</h3><p>首先看两个HTML代码:</p>
+<p>这是你眼中的HTML代码<br><img src="https://img-blog.csdnimg.cn/202004132128304.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>这是计算机眼中的HTML代码:<br><img src="https://img-blog.csdnimg.cn/20200413212840829.png#pic_center" alt="在这里插入图片描述"><br>解决方法：</p>
+<p> 在BS4中, 我们在HTML中看到的换行符以及空格都是NavigableString 也就是文本节点.</p>
+<h3 id="问题三：滥用遍历文档树的方法"><a href="#问题三：滥用遍历文档树的方法" class="headerlink" title="问题三：滥用遍历文档树的方法"></a>问题三：滥用遍历文档树的方法</h3><p>常见的方法有:</p>
+<blockquote>
+<p>contents<br>descendants<br>parent<br>next_sibling<br>next_element</p>
+</blockquote>
+<p>这些方法都会遍历文档树中的所有节点, 包括文本节点. 也就是说: 只要你使用这些方法, 你就一定会选择出许多文本节点, 因为文本节点无处不在: 换行, 空格等.</p>
+<p>解决方法：</p>
+<p>使用过滤器find等方法:</p>
+<p>soup.find(name=’tagname’)<br>当我们一旦在过滤器中指定了name关键字, 那么返回的结果就一定是tag对象, 因为文档节点没有name属性.</p>
+<p>结论: 大多数情况下, 你需要的是find 这一类过滤器, 而不是遍历所有节点.</p>
+<h3 id="问题四：html-parser"><a href="#问题四：html-parser" class="headerlink" title="问题四：html.parser"></a>问题四：html.parser</h3><p>html.parser是个令人又恨又爱的解析器, 它是Python内置的解析器, 开箱即用. 但是在一些情况下, 它解析出来的文档会丢失信息. </p>
+<p>解决方法：</p>
+<p>如果你发现你的文档信息缺少了, 那么试着换其他解析器,例如: lxml</p>
+
       <!-- .entry-content -->
       
 <div id="vcomments"></div>
