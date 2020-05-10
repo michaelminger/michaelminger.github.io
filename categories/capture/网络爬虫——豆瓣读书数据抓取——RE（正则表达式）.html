@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Michaelming&#39;s Blog</title>
+  <title itemprop="name">网络爬虫——豆瓣读书数据抓取——RE（正则表达式） | Michaelming&#39;s Blog</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -222,28 +222,28 @@
                   <ul class="sub-menu">
                     
                       <li>
-                        <a href="/categories/网络爬虫/">
+                        <a href="/categories/capture/">
                           <i class="fa fa-code" aria-hidden="true"></i>
                           网络爬虫
                         </a>
                       </li>
                     
                       <li>
-                        <a href="/categories/人工智能/">
+                        <a href="/categories/ai/">
                           <i class="fa fa-file-text-o" aria-hidden="true"></i>
                           人工智能
                         </a>
                       </li>
                     
                       <li>
-                        <a href="/categories/高级算法/">
+                        <a href="/categories/arithmetic/">
                           <i class="fa fa-cloud-download" aria-hidden="true"></i>
                           高级算法
                         </a>
                       </li>
                     
                       <li>
-                        <a href="/categories/个人练习/">
+                        <a href="/categories/practise/">
                           <i class="fa fa-commenting-o" aria-hidden="true"></i>
                           个人练习
                         </a>
@@ -292,109 +292,44 @@
   
   <div id="content" class="site-content">
     <article class="post-item post-301 page type-page status-publish has-post-thumbnail hentry">
-      <h2 id="网络爬虫——古诗文网中验证码（超级鹰）"><a href="#网络爬虫——古诗文网中验证码（超级鹰）" class="headerlink" title="网络爬虫——古诗文网中验证码（超级鹰）"></a>网络爬虫——古诗文网中验证码（超级鹰）</h2><h4 id="目标网址-古诗文网"><a href="#目标网址-古诗文网" class="headerlink" title="目标网址: 古诗文网"></a>目标网址: 古诗文网</h4><h6 id="目标网址：https-so-gushiwen-org-user-login-aspx-from-http-so-gushiwen-org-user-collect-aspx"><a href="#目标网址：https-so-gushiwen-org-user-login-aspx-from-http-so-gushiwen-org-user-collect-aspx" class="headerlink" title="目标网址：https://so.gushiwen.org/user/login.aspx?from=http://so.gushiwen.org/user/collect.aspx"></a>目标网址：<a href="https://so.gushiwen.org/user/login.aspx?from=http://so.gushiwen.org/user/collect.aspx" target="_blank" rel="noopener">https://so.gushiwen.org/user/login.aspx?from=http://so.gushiwen.org/user/collect.aspx</a></h6><p><img src="https://img-blog.csdnimg.cn/20200510095336662.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
-<h6 id="任务要求："><a href="#任务要求：" class="headerlink" title="任务要求："></a>任务要求：</h6><p>（1）通过selenium的方式模拟该网站的登录，并成功输入用户名和密码；</p>
-<p>（2）保存验证码图片，并使用输入式验证码识别的方式识别验证码的文字，获取后输入到输入框中，</p>
-<p>（3）验证登录是否成功。</p>
-<h4 id="源码："><a href="#源码：" class="headerlink" title="源码："></a>源码：</h4><h6 id="超级鹰源码："><a href="#超级鹰源码：" class="headerlink" title="超级鹰源码："></a>超级鹰源码：</h6><pre><code>import requests
-from hashlib import md5
+      <h2 id="网络爬虫——豆瓣读书数据抓取——RE（正则表达式）"><a href="#网络爬虫——豆瓣读书数据抓取——RE（正则表达式）" class="headerlink" title="网络爬虫——豆瓣读书数据抓取——RE（正则表达式）"></a>网络爬虫——豆瓣读书数据抓取——RE（正则表达式）</h2><p>目标网址：<a href="https://book.douban.com/" target="_blank" rel="noopener">https://book.douban.com/</a></p>
+<p>目标数据：（1）书名（2）书的链接地址（3）作者（4）发行时间（5）出版社<br><img src="https://img-blog.csdnimg.cn/20200413214442366.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>分析网页结构，通过获取网页源代码，使用re库解析网页结构，完成豆瓣读书项目中目标数据的爬取。</p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
+import re
 
-class Chaojiying_Client(object):
+def getcode(url):
+    url = url
+    headers = {
+        &#39;User-Agent&#39;:&#39;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3756.400 QQBrowser/10.5.4039.400&#39;
+    }
+    response = requests.get(url,headers=headers)
+    response.encoding = &#39;utf_8&#39;
+    code = response.text
+    return code
 
-    def __init__(self, username, password, soft_id):
-        self.username = username
-        # todo:更改点一
-        self.password = md5(password.encode(&quot;utf-8&quot;)).hexdigest()
-        self.soft_id = soft_id
-        self.base_params = {
-            &#39;user&#39;: self.username,
-            &#39;pass2&#39;: self.password,
-            &#39;softid&#39;: self.soft_id,
-        }
-        self.headers = {
-            &#39;Connection&#39;: &#39;Keep-Alive&#39;,
-            &#39;User-Agent&#39;: &#39;Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)&#39;,
-        }
+def parse_page(code):
+    ulist = []
+    pattern = re.compile(&#39;&lt;div class=&quot;cover&quot;&gt;.*?&lt;a href=&quot;(.*?)&quot; title=&quot;(.*?)&quot;&gt;.*?&lt;div class=&quot;author&quot;&gt;(.*?)&lt;/div&gt;.*?&lt;span class=&quot;year&quot;&gt;(.*?)&lt;/span&gt;.*?&lt;span class=&quot;publisher&quot;&gt;(.*?)&lt;/span&gt;&#39;,re.S)
+    items = re.findall(pattern,code)
+# print(items)
+    for item in items:
+        ulist.append([item[1],item[0].strip(),item[2].strip(),item[3].strip(),item[4].strip()])
 
-    def PostPic(self, im, codetype):
-        params = {
-            &#39;codetype&#39;: codetype,
-        }
-        params.update(self.base_params)
-        files = {&#39;userfile&#39;: (&#39;ccc.jpg&#39;, im)}
-        r = requests.post(&#39;http://upload.chaojiying.net/Upload/Processing.php&#39;, data=params, files=files, headers=self.headers)
-        return r.json()
+    return (ulist)
 
-    def ReportError(self, im_id):
-        &quot;&quot;&quot;
-        im_id:报错题目的图片ID
-        &quot;&quot;&quot;
-        params = {
-            &#39;id&#39;: im_id,
-        }
-        params.update(self.base_params)
-        r = requests.post(&#39;http://upload.chaojiying.net/Upload/ReportError.php&#39;, data=params, headers=self.headers)
-        return r.json()
+def main():
+    ulist = []
+    url = &quot;https://book.douban.com/&quot;
+    code = getcode(url)
+    ulist = parse_page(code)
 
-</code></pre><h6 id="识别源码："><a href="#识别源码：" class="headerlink" title="识别源码："></a>识别源码：</h6><pre><code>from selenium import webdriver 
-from selenium.common.exceptions import TimeoutException , NoSuchElementException
-import time 
-from PIL import Image
-import pytesseract
-import chaojiying
+    print(len(ulist))
+    print()
+    for i in range(len(ulist)):
+        print(ulist[i])
+main()
+</code></pre><p>输出如下：<br><img src="https://img-blog.csdnimg.cn/20200413220242245.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 
-browser = webdriver.Edge(&#39;E:\\anaconda\\Scripts\\msedgedriver.exe&#39;)
-# browser = webdriver.Chrome()
-try:
-    browser.get(&#39;https://so.gushiwen.org/user/login.aspx?from=http://so.gushiwen.org/user/collect.aspx&#39;)
-except TimeoutException:
-    print(&#39;Time Out&#39;)
-
-try:   
-    username = browser.find_element_by_xpath(&#39;//*[@id=&quot;email&quot;]&#39;)
-    username.send_keys(&#39;自己账号&#39;)
-    time.sleep(1)
-
-    password = browser.find_element_by_xpath(&#39;//*[@id=&quot;pwd&quot;]&#39;)
-    password.send_keys(&#39;自己密码&#39;)
-    time.sleep(1)
-
-    pictureN = browser.find_element_by_xpath(&#39;//*[@id=&quot;imgCode&quot;]&#39;)
-
-    browser.save_screenshot(&#39;login.png&#39;)
-
-    loc = pictureN.location
-    size = pictureN.size
-
-    left = loc[&#39;x&#39;]
-    top = loc[&#39;y&#39;]
-    bottom = top+size[&#39;height&#39;]
-    right = left+size[&#39;width&#39;]
-
-    page = Image.open(&#39;login.png&#39;)
-    Code = page.crop((left,top,right,bottom))
-    Code.save(&#39;code.png&#39;)
-
-    chaojiying = Chaojiying_Client(&#39;超级鹰账号&#39;, &#39;密码&#39;, &#39;ID&#39;)#ID 具体看软件ID。
-    im = open(&#39;code.png&#39;, &#39;rb&#39;).read()
-    text = chaojiying.PostPic(im,2004)[&#39;pic_str&#39;]
-    print(text)
-
-#     text = pytesseract.image_to_string(Image.open(&#39;code.png&#39;))
-#     print(text)    
-
-    CodeWhere = browser.find_element_by_xpath(&#39;//*[@id=&quot;code&quot;]&#39;)
-    CodeWhere.send_keys(text)
-    time.sleep(5)
-
-    Submit = browser.find_element_by_xpath(&#39;//*[@id=&quot;denglu&quot;]&#39;)
-    Submit.click()
-    time.sleep(5)
-except NoSuchElementException:
-    print(&#39;No Element&#39;)
-finally:
-    browser.close()
-</code></pre>
       <!-- .entry-content -->
       
 <div id="vcomments"></div>
@@ -617,28 +552,28 @@ $(document).ready(function() {
           <ul class="sub-menu">
             
               <li>
-                <a href="/categories/网络爬虫/">
+                <a href="/categories/capture/">
                   <i class="fa fa-code" aria-hidden="true"></i>
                   网络爬虫
                 </a>
               </li>
             
               <li>
-                <a href="/categories/人工智能/">
+                <a href="/categories/ai/">
                   <i class="fa fa-file-text-o" aria-hidden="true"></i>
                   人工智能
                 </a>
               </li>
             
               <li>
-                <a href="/categories/高级算法/">
+                <a href="/categories/arithmetic/">
                   <i class="fa fa-cloud-download" aria-hidden="true"></i>
                   高级算法
                 </a>
               </li>
             
               <li>
-                <a href="/categories/个人练习/">
+                <a href="/categories/practise/">
                   <i class="fa fa-commenting-o" aria-hidden="true"></i>
                   个人练习
                 </a>

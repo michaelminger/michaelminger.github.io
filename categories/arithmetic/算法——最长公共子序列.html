@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">网络爬虫——猫眼电影数据抓取——RE（正则表达式） | Michaelming&#39;s Blog</title>
+  <title itemprop="name">Michaelming&#39;s Blog</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -222,28 +222,28 @@
                   <ul class="sub-menu">
                     
                       <li>
-                        <a href="/categories/网络爬虫/">
+                        <a href="/categories/capture/">
                           <i class="fa fa-code" aria-hidden="true"></i>
                           网络爬虫
                         </a>
                       </li>
                     
                       <li>
-                        <a href="/categories/人工智能/">
+                        <a href="/categories/ai/">
                           <i class="fa fa-file-text-o" aria-hidden="true"></i>
                           人工智能
                         </a>
                       </li>
                     
                       <li>
-                        <a href="/categories/高级算法/">
+                        <a href="/categories/arithmetic/">
                           <i class="fa fa-cloud-download" aria-hidden="true"></i>
                           高级算法
                         </a>
                       </li>
                     
                       <li>
-                        <a href="/categories/个人练习/">
+                        <a href="/categories/practise/">
                           <i class="fa fa-commenting-o" aria-hidden="true"></i>
                           个人练习
                         </a>
@@ -292,59 +292,50 @@
   
   <div id="content" class="site-content">
     <article class="post-item post-301 page type-page status-publish has-post-thumbnail hentry">
-      <h2 id="网络爬虫——猫眼电影数据抓取——RE（正则表达式）"><a href="#网络爬虫——猫眼电影数据抓取——RE（正则表达式）" class="headerlink" title="网络爬虫——猫眼电影数据抓取——RE（正则表达式）"></a>网络爬虫——猫眼电影数据抓取——RE（正则表达式）</h2><p>猫眼电影榜单网址：<a href="https://maoyan.com/board/4" target="_blank" rel="noopener">https://maoyan.com/board/4</a></p>
-<p>目标数据描述：<br>（1）排名 （2）电影名称 （3）主演 （4）上映时间  （5）评分<br><img src="https://img-blog.csdnimg.cn/20200413213540934.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>任务要求</p>
-<p>（1）使用requests库实现该网站网页源代码的获取；</p>
-<p>（2）使用正则表达式对获取的源代码进行解析，并成功找到目标数据所在的特定标签，进行网页结构的解析；</p>
-<p>（3）定义函数，将获取的目标数据打印输出，有能力的同学可以试着将结果写入文件中。</p>
-<p>（4）使用框架式结构，通过参数传递实现整个特定数据的爬取。</p>
-<p>可以使用生成器，将目标数据获取后放到字典中返回，同时，注意观察分页时url的变化，以便获取整个的排行榜数据。建议通过for循环传递变化参数实现。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import json
-import requests
-from requests.exceptions import RequestException
-import re
-import time
-
-def get_one_page(url):
-    try:
-        headers={&#39;User-Agent&#39;:&#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36&#39;}
-        response=requests.get(&quot;https://maoyan.com/board/4&quot;,headers = headers)
-        if response.status_code == 200:
-                 return response.text
-        return None
-    except RequestException:
-        return None
-
-def parse_one_page(html):
-    pattern= re.compile(&#39;&lt;dd&gt;.*?board-index.*?&gt;(\d+)&lt;/i&gt;.*?data-src=&quot;(.*?)&quot;.*?name&quot;&gt;&lt;a&#39; + &#39;.*?&gt;(.*?)&lt;/a&gt;.*?star&quot;&gt;(.*?)&lt;/p&gt;.*?releasetime&quot;&gt;(.*?)&lt;/p&gt;&#39; + &#39;.*?integer&quot;&gt;(.*?)&lt;/i&gt;.*?fraction&quot;&gt;(.*?)&lt;/i&gt;.*?&lt;/dd&gt;&#39;,re.S)
-    items = re.findall(pattern,html)
-    for item in items:
-        yield{
-            &#39;index&#39;: item[0],
-            &#39;image&#39;: item[1],
-            &#39;title&#39;: item[2],
-            &#39;actor&#39;: item[3].strip()[3:],
-            &#39;time&#39;: item[4].strip()[5:],
-            &#39;score&#39;: item[5] + item[6]
+      <h2 id="算法——最长公共子序列"><a href="#算法——最长公共子序列" class="headerlink" title="算法——最长公共子序列"></a>算法——最长公共子序列</h2><p>链接：<a href="https://ac.nowcoder.com/acm/problem/19978" target="_blank" rel="noopener">https://ac.nowcoder.com/acm/problem/19978</a></p>
+<p>来源：牛客网</p>
+<h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4><p>字符序列的子序列是指从给定字符序列中随意地（不一定连续）去掉若干个字符（可能一个也不去掉）后所形成的字符序列。<br>令给定的字符序列X=“x0，x1，…，xm-1”，序列Y=“y0，y1，…，yk-1”是X的子序列，存在X的一个严格递增下标序列 &lt; i0，i1，…，ik-1 &gt; ，使得对所有的j=0，1，…，k-1，有xij = yj。例如，X=“ABCBDAB”，Y=“BCDB”是X的一个子序列。对给定的两个字符序列，求出他们最长的公共子序列长度，以及最长公共子序列个数。</p>
+<h4 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述:"></a>输入描述:</h4><p>第1行为第1个字符序列，都是大写字母组成，以”.”结束。长度小于5000。<br>第2行为第2个字符序列，都是大写字母组成，以”.”结束，长度小于5000。</p>
+<h4 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述:"></a>输出描述:</h4><p>第1行输出上述两个最长公共子序列的长度。<br>第2行输出所有可能出现的最长公共子序列个数，答案可能很大，只要将答案对100,000,000求余即可。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200424073104637.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h4 id="源码："><a href="#源码：" class="headerlink" title="源码："></a>源码：</h4><pre><code>#include&lt;cstdio&gt;
+#include&lt;cstring&gt;
+#define N 5010
+#define mod 100000000
+int f[2][N],g[2][N];
+char A[N],B[N];
+int main()
+{
+    int n,m,i,j,d;
+    scanf(&quot;%s%s&quot;,A+1,B+1);
+    n=strlen(A+1)-1,m=strlen(B+1)-1;
+    for(i=0;i&lt;=m;i++) f[0][i]=0,g[0][i]=1;
+    for(d=i=1;i&lt;=n;i++,d^=1)
+    {
+        f[d][0]=0,g[d][0]=1;
+        for(j=1;j&lt;=m;j++)
+        {
+            if(f[d^1][j]&gt;f[d][j-1]) f[d][j]=f[d^1][j],
+            g[d][j]=g[d^1][j];
+            else if(f[d^1][j]&lt;f[d][j-1])
+            f[d][j]=f[d][j-1],g[d][j]=g[d][j-1];
+            else
+            {
+                f[d][j]=f[d^1][j],g[d][j]=(g[d^1][j]+g[d][j-1])%mod;
+                if(f[d][j]==f[d^1][j-1]) g[d][j]=(g[d][j]-g[d^1][j-1]+mod)%mod;
+            }
+            if(A[i]==B[j])
+            {
+                if(f[d^1][j-1]+1&gt;f[d][j]) f[d][j]=f[d^1][j-1]+1,g[d][j]=g[d^1][j-1];
+                else if(f[d^1][j-1]+1==f[d][j])
+                g[d][j]=(g[d][j]+g[d^1][j-1])%mod;
+            }
         }
-
-def write_to_file(content):
-    with open(&#39;result.txt&#39;, &#39;a&#39; , encoding=&#39;utf-8&#39;) as f:
-       f.write(json.dumps(content, ensure_ascii=False) + &#39;\n&#39;)
-
-def main(offset):
-    url = &#39;https://maoyan.com/board/4&#39;
-    html=get_one_page(url)
-    for item in parse_one_page(html):
-        print(item)
-        write_to_file(item)
-
-if __name__ == &#39;__main__&#39;:
-    for i in range(10):
-         main(offset=i * 10)
-         time.sleep(1)
-</code></pre><p>输出如下<br><img src="https://img-blog.csdnimg.cn/20200413213845848.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
-
+    }
+    printf(&quot;%d\n%d\n&quot;,f[n&amp;1][m],g[n&amp;1][m]);
+    return 0;
+}
+</code></pre>
       <!-- .entry-content -->
       
 <div id="vcomments"></div>
@@ -567,28 +558,28 @@ $(document).ready(function() {
           <ul class="sub-menu">
             
               <li>
-                <a href="/categories/网络爬虫/">
+                <a href="/categories/capture/">
                   <i class="fa fa-code" aria-hidden="true"></i>
                   网络爬虫
                 </a>
               </li>
             
               <li>
-                <a href="/categories/人工智能/">
+                <a href="/categories/ai/">
                   <i class="fa fa-file-text-o" aria-hidden="true"></i>
                   人工智能
                 </a>
               </li>
             
               <li>
-                <a href="/categories/高级算法/">
+                <a href="/categories/arithmetic/">
                   <i class="fa fa-cloud-download" aria-hidden="true"></i>
                   高级算法
                 </a>
               </li>
             
               <li>
-                <a href="/categories/个人练习/">
+                <a href="/categories/practise/">
                   <i class="fa fa-commenting-o" aria-hidden="true"></i>
                   个人练习
                 </a>
