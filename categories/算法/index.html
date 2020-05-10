@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Michaelming&#39;s Blog</title>
+  <title itemprop="name">Category: 算法 | Michaelming&#39;s Blog</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -347,166 +347,105 @@
   </div>
 </header>
 
-      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+      
 <div class="pattern-center-blank"></div>
-
+<div class="pattern-center ">
+  <div class="pattern-attachment-img">
+    <img data-src="算法.img" class="lazyload" onerror="imgError(this,3)" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+  </div>
+  <header class="pattern-header ">
+    <h1 class="cat-title">算法.zh</h1>
+    <span class="cat-des">
+      <p>算法.en</p>
+    </span>
+  </header>
+</div>
 <div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
-        <div class="toc"></div>
-        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
-        
-          <header class="entry-header">
-            <h1 class="entry-title"></h1>
-            <p class="entry-census">&nbsp;·&nbsp;2020-5-10&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
-
-            <hr>
-          </header>
-        
-        <div class="entry-content">
-          <h2 id="算法——最长公共子序列"><a href="#算法——最长公共子序列" class="headerlink" title="算法——最长公共子序列"></a>算法——最长公共子序列</h2><p>链接：<a href="https://ac.nowcoder.com/acm/problem/19978" target="_blank" rel="noopener">https://ac.nowcoder.com/acm/problem/19978</a></p>
-<p>来源：牛客网</p>
-<h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4><p>字符序列的子序列是指从给定字符序列中随意地（不一定连续）去掉若干个字符（可能一个也不去掉）后所形成的字符序列。<br>令给定的字符序列X=“x0，x1，…，xm-1”，序列Y=“y0，y1，…，yk-1”是X的子序列，存在X的一个严格递增下标序列 &lt; i0，i1，…，ik-1 &gt; ，使得对所有的j=0，1，…，k-1，有xij = yj。例如，X=“ABCBDAB”，Y=“BCDB”是X的一个子序列。对给定的两个字符序列，求出他们最长的公共子序列长度，以及最长公共子序列个数。</p>
-<h4 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述:"></a>输入描述:</h4><p>第1行为第1个字符序列，都是大写字母组成，以”.”结束。长度小于5000。<br>第2行为第2个字符序列，都是大写字母组成，以”.”结束，长度小于5000。</p>
-<h4 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述:"></a>输出描述:</h4><p>第1行输出上述两个最长公共子序列的长度。<br>第2行输出所有可能出现的最长公共子序列个数，答案可能很大，只要将答案对100,000,000求余即可。</p>
-<p><img src="https://img-blog.csdnimg.cn/20200424073104637.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
-<h4 id="源码："><a href="#源码：" class="headerlink" title="源码："></a>源码：</h4><pre><code>#include&lt;cstdio&gt;
-#include&lt;cstring&gt;
-#define N 5010
-#define mod 100000000
-int f[2][N],g[2][N];
-char A[N],B[N];
-int main()
-{
-    int n,m,i,j,d;
-    scanf(&quot;%s%s&quot;,A+1,B+1);
-    n=strlen(A+1)-1,m=strlen(B+1)-1;
-    for(i=0;i&lt;=m;i++) f[0][i]=0,g[0][i]=1;
-    for(d=i=1;i&lt;=n;i++,d^=1)
-    {
-        f[d][0]=0,g[d][0]=1;
-        for(j=1;j&lt;=m;j++)
-        {
-            if(f[d^1][j]&gt;f[d][j-1]) f[d][j]=f[d^1][j],
-            g[d][j]=g[d^1][j];
-            else if(f[d^1][j]&lt;f[d][j-1])
-            f[d][j]=f[d][j-1],g[d][j]=g[d][j-1];
-            else
-            {
-                f[d][j]=f[d^1][j],g[d][j]=(g[d^1][j]+g[d][j-1])%mod;
-                if(f[d][j]==f[d^1][j-1]) g[d][j]=(g[d][j]-g[d^1][j-1]+mod)%mod;
-            }
-            if(A[i]==B[j])
-            {
-                if(f[d^1][j-1]+1&gt;f[d][j]) f[d][j]=f[d^1][j-1]+1,g[d][j]=g[d^1][j-1];
-                else if(f[d^1][j-1]+1==f[d][j])
-                g[d][j]=(g[d][j]+g[d^1][j-1])%mod;
-            }
-        }
-    }
-    printf(&quot;%d\n%d\n&quot;,f[n&amp;1][m],g[n&amp;1][m]);
-    return 0;
-}
-</code></pre>
-        </div>
-        <!-- .entry-content -->
-        <div class="single-reward">
-          <div class="reward-open">赏
-            <div class="reward-main">
-              <ul class="reward-row">
-                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.2/img/custom/donate/AliPayQR.jpg"></li>
-                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.2/img/custom/donate/WeChanQR.jpg"></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
-        <footer class="post-footer">
-          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
-          <div class="post-tags">
-          </div>
-          <div class="post-share">
-            <div class="social-share sharehidden share-component"></div>
-            <i class="iconfont show-share icon-forward"></i>
-          </div>
-        </footer><!-- .entry-footer -->
-      </article>
-      <!-- #post-## -->
-      <div class="toc" style="background: none;"></div>
-      <section class="post-squares nextprev">
-        
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2020/05/10/网络爬虫——古诗文网中验证码（超级鹰）/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                </h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-        
-          
-            <div class="post-nepre half next">
-          
-            <a href="/2020/04/27/网络爬虫——超级鹰源码下载/" rel="next">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
-              </div>
-              <span class="label">
-              Next Post</span>
-              <div class="info">
-                <h3>
-                网络爬虫——超级鹰源码下载</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-      </section>
       
-<div id="vcomments"></div>
-<script>
-  window.onload = function(){
-      var valine = new Valine();
-      valine.init({
-        el: '#vcomments',
-        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
-        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
-        path: window.location.pathname,
-        placeholder: "你是我一生只会遇见一次的惊喜 ..."
-      })
-  }
-</script>
-
-      <section class="author-profile">
-        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
-          <a href="" class="profile gravatar"><img src="" itemprop="image" alt="" height="70" width="70"></a>
-          <div class="meta">
-            <span class="title">Author</span>
-            <h3 itemprop="name">
-            <a href="" itemprop="url" rel="author"></a>
-            </h3>
-          </div>
+  <!-- 首页默认取最最新文章集 -->
+  
+    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
+  <div class="post-entry">
+    <div class="feature">
+      <a href="/2018/12/09/算法——最长公共子序列/">
+        <div class="overlay">
+          <i class="iconfont icon-text">
+          </i>
         </div>
-        <hr>
-        <p><i class="iconfont icon-write"></i></p>
-      </section>
-    </main><!-- #main -->
-  </div><!-- #primary -->
+        <img width="150" height="150" src="" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
+      </a>
+    </div>
+    <h1 class="entry-title">
+    <a href="/2018/12/09/算法——最长公共子序列/">
+    算法——最长公共子序列</a>
+    </h1>
+    <div class="p-time">
+      <i class="iconfont icon-time">
+      </i>
+    2018-12-9</div>
+    <p>
+    </p>
+    <footer class="entry-footer">
+      <div class="post-more">
+        <a href="/2018/12/09/算法——最长公共子序列/">
+          <i class="iconfont icon-caidan">
+          </i>
+        </a>
+      </div>
+    </footer>
+  </div>
+  <hr>
+</article>
+  
+
+
+      <div class="clearer">
+      </div>
+    </main>
+    <!--  -->
+    
+  </div>
 </div>
 
+<!-- 
+  
+    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
+  <div class="post-entry">
+    <div class="feature">
+      <a href="/2018/12/09/算法——最长公共子序列/">
+        <div class="overlay">
+          <i class="iconfont icon-text">
+          </i>
+        </div>
+        <img width="150" height="150" src="" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
+      </a>
+    </div>
+    <h1 class="entry-title">
+    <a href="/2018/12/09/算法——最长公共子序列/">
+    算法——最长公共子序列</a>
+    </h1>
+    <div class="p-time">
+      <i class="iconfont icon-time">
+      </i>
+    2018-12-9</div>
+    <p>
+    </p>
+    <footer class="entry-footer">
+      <div class="post-more">
+        <a href="/2018/12/09/算法——最长公共子序列/">
+          <i class="iconfont icon-caidan">
+          </i>
+        </a>
+      </div>
+    </footer>
+  </div>
+  <hr>
+</article>
+  
 
-
+ -->
     </div>    
     <div class="ins-search">
     <div class="ins-search-mask"></div>

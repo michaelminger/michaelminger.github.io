@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">网络爬虫——前程无忧网数据获取及MYSQL存储 | Michaelming&#39;s Blog</title>
+  <title itemprop="name">Tag: 公共子序列 | Michaelming&#39;s Blog</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -347,248 +347,64 @@
   </div>
 </header>
 
-      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+      
 <div class="pattern-center-blank"></div>
-
+<div class="pattern-center ">
+  <div class="pattern-attachment-img">
+    <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="公共子序列.img" class="lazyload" onerror="imgError(this,3)" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+  </div>
+  <header class="pattern-header ">
+    <h1 class="cat-title">公共子序列</h1>
+  </header>
+</div>
 <div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
-        <div class="toc"></div>
-        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
-        
-          <header class="entry-header">
-            <h1 class="entry-title">网络爬虫——前程无忧网数据获取及MYSQL存储</h1>
-            <p class="entry-census">&nbsp;·&nbsp;2019-5-27&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
-
-            <hr>
-          </header>
-        
-        <div class="entry-content">
-          <h2 id="网络爬虫——前程无忧网数据获取及MYSQL存储"><a href="#网络爬虫——前程无忧网数据获取及MYSQL存储" class="headerlink" title="网络爬虫——前程无忧网数据获取及MYSQL存储"></a>网络爬虫——前程无忧网数据获取及MYSQL存储</h2><p>实验内容1<br>目标网站：前程无忧招聘网</p>
-<p>目标网址：<a href="https://search.51job.com/list/120000,000000,0000,00,9,99,Python,2,1.html" target="_blank" rel="noopener">https://search.51job.com/list/120000,000000,0000,00,9,99,Python,2,1.html</a></p>
-<p>目标数据：（1）职位名（2）公司名（3）工作地点（4）薪资 （5）发布时间</p>
-<p><img src="https://img-blog.csdnimg.cn/20200413221530218.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>要求</p>
-<p>（1）使用urllib或requests库实现该网站网页源代码的获取，并将源代码进行保存；</p>
-<p>（2）自主选择re、bs4、lxml中的一种解析方法对保存的的源代码读取并进行解析，成功找到目标数据所在的特定标签，进行网页结构的解析；</p>
-<p>（3）定义函数，将获取的目标数据保存到MYSQL库文件中。</p>
-<p>（4）使用框架式结构，通过参数传递实现整个特定数据的爬取。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
-import json
-import csv
-from requests.exceptions import RequestException
-from lxml import etree
-import pymysql 
-from PIL import Image
-import pytesseract
-import traceback  
-
-def connectMysql():
-    return pymysql.connect(host=&#39;localhost&#39;,user=&#39;root&#39;,password=&#39;123456&#39;,port=3306,db=&#39;spiders&#39;)
-
-def createMysqlTable():
-    db = connectMysql()
-    cursor = db.cursor()
-
-# （1）职位名（2）公司名（3）工作地点（4）薪资 （5）发布时间
-    sql = &#39;create table if not exists proStr (\
-    职位名 varchar(255) not null ,\
-    公司名 varchar(255) not null,\
-    工作地点 varchar(255) not null,\
-    薪资 varchar(255) not null,\
-    发布时间 varchar(255) not null,\
-    primary key(职位名))&#39;
-    cursor.execute(sql)
-
-    print(&#39;ok&#39;)
-    db.close()
-
-def getHtmlText(url):
-    headers = {
-        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
-    }
-    try:
-        result = requests.get(url,headers=headers,timeout=30)
-        result.raise_for_status()
-        result.encoding = result.apparent_encoding
-        return result.text
-    except:
-        return &quot;&quot;
-
-def parsePage(html):
-    ulist = []
-    clist = []
-    rlist = []
-    ilist = []
-
-    newhtml =etree.HTML(html,etree.HTMLParser())
-    result=newhtml.xpath(&#39;//*[@id=&quot;content&quot;]/div[2]/table/tbody/tr/td//text()&#39;)
-    imgs = newhtml.xpath(&#39;//*[@id=&quot;content&quot;]/div[2]/table/tbody/tr/td/a/img/@src&#39;, stream=True)
-    j = 0 
-
-    for img in imgs:
-        j=j+1
-        with open(str(j)+&#39;.png&#39;, &#39;wb&#39;) as fd:
-            picture=requests.get(img).content
-            fd.write(picture)  
-
-    for i in range(len(imgs)):  
-            str_ = str(i+1)+&#39;.png&#39;
-            text = pytesseract.image_to_string(Image.open(str_))
-            ilist.append(text.replace(&quot; &quot;,&quot;.&quot;).replace(&quot;M&quot;,&quot;亿&quot;).replace(&quot;a&quot;,&quot;亿&quot;))
-#     print(ilist)        
-    for i in range(len(result)):
-        ulist.append(result[i].replace(&quot; &quot;,&quot;&quot;).replace(&#39;\r&#39;,&quot;&quot;).replace(&quot;\n&quot;,&#39;&#39;))
-
-    while &#39;&#39; in ulist:
-        ulist.remove(&#39;&#39;)
-
-    length = len(ulist)
-    weight = int(length / 8 )
-
-    for i in range(weight):
-        for j in range(8):
-            clist.append(ulist[i*8+j])
-        clist.append(ilist[i])
-        rlist.append(clist)
-        clist = []
-
-    return rlist
-
-
-def mysqlData(datas):
-
-    table = &#39;movies&#39;
-    keys = &#39;名次,电影名称,日期,总场次,废场,人次,上座率,票价,票房&#39;
-
-    db = connectMysql()
-    cursor = db.cursor()
-
-    for data in datas:
-        values = &#39;,&#39;.join([&#39;%s&#39;]*len(data))
-        sql = &#39;INSERT INTO {table}({keys}) VALUES({values})&#39;.format(table=table,keys = keys ,values = values)
-        print(sql)
-        print(tuple(data))
-        try :
-            if cursor.execute(sql, tuple(data)):
-                print(&quot;Succcessful&quot;)
-                db.commit()
-        except:
-            traceback.print_exc()
-            print(&quot;Failed&quot;)
-            db.rollback()
-
-    db.close()
-
-def main():
-    createMysqlTable()
-
-    url=&quot;http://58921.com/daily/wangpiao&quot;
-    html=getHtmlText(url)
-    rlist=parsePage(html)
-    mysqlData(rlist)
-
-main()
-</code></pre><h3 id="结果输出效果："><a href="#结果输出效果：" class="headerlink" title="结果输出效果："></a>结果输出效果：</h3><p><img src="https://img-blog.csdnimg.cn/20200423213948381.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
-
-        </div>
-        <!-- .entry-content -->
-        <div class="single-reward">
-          <div class="reward-open">赏
-            <div class="reward-main">
-              <ul class="reward-row">
-                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.2/img/custom/donate/AliPayQR.jpg"></li>
-                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.2/img/custom/donate/WeChanQR.jpg"></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
-        <footer class="post-footer">
-          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
-          <div class="post-tags">
-          </div>
-          <div class="post-share">
-            <div class="social-share sharehidden share-component"></div>
-            <i class="iconfont show-share icon-forward"></i>
-          </div>
-        </footer><!-- .entry-footer -->
-      </article>
-      <!-- #post-## -->
-      <div class="toc" style="background: none;"></div>
-      <section class="post-squares nextprev">
-        
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/05/27/网络爬虫——二手房数据抓取及MYSQL存储/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                网络爬虫——二手房数据抓取及MYSQL存储</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-        
-          
-            <div class="post-nepre half next">
-          
-            <a href="/2019/05/27/网络爬虫——票房网数据抓取及MYSQL存储/" rel="next">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
-              </div>
-              <span class="label">
-              Next Post</span>
-              <div class="info">
-                <h3>
-                网络爬虫——票房网数据抓取及MYSQL存储</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-      </section>
       
-<div id="vcomments"></div>
-<script>
-  window.onload = function(){
-      var valine = new Valine();
-      valine.init({
-        el: '#vcomments',
-        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
-        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
-        path: window.location.pathname,
-        placeholder: "你是我一生只会遇见一次的惊喜 ..."
-      })
-  }
-</script>
-
-      <section class="author-profile">
-        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
-          <a href="" class="profile gravatar"><img src="" itemprop="image" alt="" height="70" width="70"></a>
-          <div class="meta">
-            <span class="title">Author</span>
-            <h3 itemprop="name">
-            <a href="" itemprop="url" rel="author"></a>
-            </h3>
-          </div>
+  <!-- 首页默认取最最新文章集 -->
+  
+    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
+  <div class="post-entry">
+    <div class="feature">
+      <a href="/2018/12/09/算法——最长公共子序列/">
+        <div class="overlay">
+          <i class="iconfont icon-text">
+          </i>
         </div>
-        <hr>
-        <p><i class="iconfont icon-write"></i></p>
-      </section>
-    </main><!-- #main -->
-  </div><!-- #primary -->
+        <img width="150" height="150" src="" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
+      </a>
+    </div>
+    <h1 class="entry-title">
+    <a href="/2018/12/09/算法——最长公共子序列/">
+    算法——最长公共子序列</a>
+    </h1>
+    <div class="p-time">
+      <i class="iconfont icon-time">
+      </i>
+    2018-12-9</div>
+    <p>
+    </p>
+    <footer class="entry-footer">
+      <div class="post-more">
+        <a href="/2018/12/09/算法——最长公共子序列/">
+          <i class="iconfont icon-caidan">
+          </i>
+        </a>
+      </div>
+    </footer>
+  </div>
+  <hr>
+</article>
+  
+
+
+      <div class="clearer">
+      </div>
+    </main>
+    <!--  -->
+    
+  </div>
 </div>
-
-
-
     </div>    
     <div class="ins-search">
     <div class="ins-search-mask"></div>
