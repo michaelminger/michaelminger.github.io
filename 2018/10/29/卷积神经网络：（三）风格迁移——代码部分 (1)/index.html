@@ -327,19 +327,36 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
 <div class="pattern-center-blank"></div>
 
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://img-blog.csdnimg.cn/20191222152856860.jpg);" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20191222152856860.jpg">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      风格迁移——代码部分</h1>
+      <p class="entry-census">
+        <span>
+          <a href="">
+            <img src="">
+          </a>
+        </span>
+        <span>
+          <a href=""></a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2018-10-29<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
+  </div>
+
 <div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
       <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
         <div class="toc"></div>
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
-        
-          <header class="entry-header">
-            <h1 class="entry-title">风格迁移——代码部分</h1>
-            <p class="entry-census">&nbsp;·&nbsp;2018-10-29&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
-
-            <hr>
-          </header>
         
         <div class="entry-content">
           <h1 id="卷积神经网络：（三）风格迁移——代码部分"><a href="#卷积神经网络：（三）风格迁移——代码部分" class="headerlink" title="卷积神经网络：（三）风格迁移——代码部分"></a>卷积神经网络：（三）风格迁移——代码部分</h1><h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><h4 id="本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）。"><a href="#本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）。" class="headerlink" title="本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）。"></a>本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）。</h4><h5 id="友情提示：风格迁移跑的时间会很长。有点耐心哦。"><a href="#友情提示：风格迁移跑的时间会很长。有点耐心哦。" class="headerlink" title="友情提示：风格迁移跑的时间会很长。有点耐心哦。"></a>友情提示：风格迁移跑的时间会很长。有点耐心哦。</h5><h5 id="若想查看环境配置步骤，请点击https-blog-csdn-net-weixin-41108515-article-details-103636284，"><a href="#若想查看环境配置步骤，请点击https-blog-csdn-net-weixin-41108515-article-details-103636284，" class="headerlink" title="若想查看环境配置步骤，请点击https://blog.csdn.net/weixin_41108515/article/details/103636284，"></a>若想查看环境配置步骤，请点击<a href="https://blog.csdn.net/weixin_41108515/article/details/103636284" target="_blank" rel="noopener">https://blog.csdn.net/weixin_41108515/article/details/103636284</a>，</h5><h5 id="想知道原理，请点击https-blog-csdn-net-weixin-41108515-article-details-103650964"><a href="#想知道原理，请点击https-blog-csdn-net-weixin-41108515-article-details-103650964" class="headerlink" title="想知道原理，请点击https://blog.csdn.net/weixin_41108515/article/details/103650964"></a>想知道原理，请点击<a href="https://blog.csdn.net/weixin_41108515/article/details/103650964" target="_blank" rel="noopener">https://blog.csdn.net/weixin_41108515/article/details/103650964</a></h5><p>&nbsp;<br>转载请注明出处：<a href="https://blog.csdn.net/weixin_41108515/article/details/103651784" target="_blank" rel="noopener">https://blog.csdn.net/weixin_41108515/article/details/103651784</a><br>&nbsp;<br>这里引用的是：<br><a href="https://blog.csdn.net/aaronjny/article/details/79681080" target="_blank" rel="noopener">https://blog.csdn.net/aaronjny/article/details/79681080</a><br><a href="http://zh.gluon.ai/chapter_computer-vision/neural-style.html" target="_blank" rel="noopener">http://zh.gluon.ai/chapter_computer-vision/neural-style.html</a><br>这两篇都非常详细，并且经调试可以使用，但是第二个并未使用tensorflow。<br>以及理论帮助的一篇<a href="https://juejin.im/post/5d29e818e51d454f73356de0" target="_blank" rel="noopener">https://juejin.im/post/5d29e818e51d454f73356de0</a></p>
@@ -652,7 +669,7 @@ TRAIN_STEPS = 3000  # 这里推荐几百次就行，确实时间太长。
           
             <a href="/2018/10/28/卷积神经网络：（二）风格迁移——原理部分/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20191222102628441.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://img-blog.csdnimg.cn/20191222102628441.jpg">
               </div>
               <span class="label">
               Next Post</span>

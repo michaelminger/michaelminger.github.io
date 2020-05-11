@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://ailous.top/"/>
-  <updated>2020-05-10T02:26:14.860Z</updated>
+  <updated>2020-05-11T12:40:38.101Z</updated>
   <id>http://ailous.top/</id>
   
   <author>
@@ -21,17 +21,11 @@
     <link href="http://ailous.top/2020/04/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E8%B6%85%E7%BA%A7%E9%B9%B0%E6%BA%90%E7%A0%81%E4%B8%8B%E8%BD%BD/"/>
     <id>http://ailous.top/2020/04/27/网络爬虫——超级鹰源码下载/</id>
     <published>2020-04-27T05:47:40.000Z</published>
-    <updated>2020-05-10T02:26:14.860Z</updated>
+    <updated>2020-05-11T12:40:38.101Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;网络爬虫——超级鹰源码下载&quot;&gt;&lt;a href=&quot;#网络爬虫——超级鹰源码下载&quot; class=&quot;headerlink&quot; title=&quot;网络爬虫——超级鹰源码下载&quot;&gt;&lt;/a&gt;网络爬虫——超级鹰源码下载&lt;/h2&gt;&lt;p&gt;超级鹰官方网址：&lt;a
-        
-      
+      超级鹰
     
     </summary>
     
@@ -47,17 +41,11 @@
     <link href="http://ailous.top/2020/02/20/%E6%B1%87%E7%BC%96%E9%A2%98%E2%80%94%E2%80%94CJNE/"/>
     <id>http://ailous.top/2020/02/20/汇编题——CJNE/</id>
     <published>2020-02-20T05:47:40.000Z</published>
-    <updated>2020-04-23T14:11:59.352Z</updated>
+    <updated>2020-05-11T12:32:04.884Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;汇编题——CJNE&quot;&gt;&lt;a href=&quot;#汇编题——CJNE&quot; class=&quot;headerlink&quot; title=&quot;汇编题——CJNE&quot;&gt;&lt;/a&gt;汇编题——CJNE&lt;/h2&gt;&lt;p&gt;&lt;img
-        
-      
+      看图，就懂》》》》》》》
     
     </summary>
     
@@ -103,17 +91,11 @@
     <link href="http://ailous.top/2019/06/02/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/"/>
     <id>http://ailous.top/2019/06/02/网络爬虫常见问题汇总/</id>
     <published>2019-06-02T05:47:40.000Z</published>
-    <updated>2020-04-14T06:05:21.521Z</updated>
+    <updated>2020-05-11T12:40:15.782Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;网络爬虫常见问题汇总&quot;&gt;&lt;a href=&quot;#网络爬虫常见问题汇总&quot; class=&quot;headerlink&quot; title=&quot;网络爬虫常见问题汇总&quot;&gt;&lt;/a&gt;网络爬虫常见问题汇总&lt;/h2&gt;&lt;h3
-        
-      
+      问题一：使用requests库或者urllib库获取源代码时无法正常显示中文。。。。。。
     
     </summary>
     
@@ -417,17 +399,11 @@
     <link href="http://ailous.top/2018/12/09/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E2%80%94%E2%80%94mnist%EF%BC%88%E6%89%8B%E5%86%99%E8%AF%86%E5%88%AB%EF%BC%89/"/>
     <id>http://ailous.top/2018/12/09/人工智能——mnist（手写识别）/</id>
     <published>2018-12-09T05:47:40.000Z</published>
-    <updated>2020-05-11T12:02:12.825Z</updated>
+    <updated>2020-05-11T12:39:15.662Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;人工智能——mnist（手写识别）&quot;&gt;&lt;a href=&quot;#人工智能——mnist（手写识别）&quot; class=&quot;headerlink&quot;
-        
-      
+      因为时间较久了，就不详细介绍了。简单的说，一开始对已有的大量数字图片进行训练生成模型。然后通过对一张手写的数字图片进行读取，进入模型匹配，输出结果。
     
     </summary>
     
@@ -445,17 +421,11 @@
     <link href="http://ailous.top/2018/12/09/%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/"/>
     <id>http://ailous.top/2018/12/09/算法——最长公共子序列/</id>
     <published>2018-12-09T05:47:40.000Z</published>
-    <updated>2020-05-10T17:22:43.656Z</updated>
+    <updated>2020-05-11T12:30:54.004Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;算法——最长公共子序列&quot;&gt;&lt;a href=&quot;#算法——最长公共子序列&quot; class=&quot;headerlink&quot; title=&quot;算法——最长公共子序列&quot;&gt;&lt;/a&gt;算法——最长公共子序列&lt;/h2&gt;&lt;p&gt;链接：&lt;a
-        
-      
+      字符序列的子序列是指从给定字符序列中随意地（不一定连续）去掉若干个字符（可能一个也不去掉）后所形成的字符序列。
     
     </summary>
     
@@ -499,17 +469,11 @@
     <link href="http://ailous.top/2018/10/29/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%9A%EF%BC%88%E4%B8%89%EF%BC%89%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E9%83%A8%E5%88%86%20(1)/"/>
     <id>http://ailous.top/2018/10/29/卷积神经网络：（三）风格迁移——代码部分 (1)/</id>
     <published>2018-10-29T05:47:40.000Z</published>
-    <updated>2020-04-14T06:03:07.247Z</updated>
+    <updated>2020-05-11T12:36:58.092Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h1 id=&quot;卷积神经网络：（三）风格迁移——代码部分&quot;&gt;&lt;a href=&quot;#卷积神经网络：（三）风格迁移——代码部分&quot; class=&quot;headerlink&quot;
-        
-      
+      所谓风格迁移就是两张图片，你有你的风格，我有我的内容。你用你的油画风格将我的内容进行绘画一遍。
     
     </summary>
     
@@ -527,17 +491,11 @@
     <link href="http://ailous.top/2018/10/28/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%9A%EF%BC%88%E4%BA%8C%EF%BC%89%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB%E2%80%94%E2%80%94%E5%8E%9F%E7%90%86%E9%83%A8%E5%88%86/"/>
     <id>http://ailous.top/2018/10/28/卷积神经网络：（二）风格迁移——原理部分/</id>
     <published>2018-10-28T05:47:40.000Z</published>
-    <updated>2020-04-14T06:03:00.771Z</updated>
+    <updated>2020-05-11T12:35:18.648Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h1 id=&quot;卷积神经网络：（二）风格迁移——原理部分&quot;&gt;&lt;a href=&quot;#卷积神经网络：（二）风格迁移——原理部分&quot; class=&quot;headerlink&quot;
-        
-      
+      本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）
     
     </summary>
     
