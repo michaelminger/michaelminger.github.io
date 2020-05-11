@@ -3946,11 +3946,36 @@ li.feature-2 {
         height: 100px !important;
     }
     .header-info {
-        width: 90% !important;
+        width: 63%;
+        margin: auto;
+        font-size: 16px;
+        color: #eaeadf;
+        background: rgba(255,255,255,.8);
+        padding: 15px;
+        margin-top: 22px;
+        letter-spacing: 0;
+        line-height: 30px;
+        border-radius: 10px;
+        box-sizing: initial;
+        white-space: nowrap;
     }
     .header-info:before {
-        top: 98px !important;
+       content: "";
+       position: absolute;
+       top: 127.5px;
+       left: 50%;
+       margin-left: -15px;
+       border-width: 15px;
+       border-style: solid;
+       border-color: transparent transparent rgba(255,255,255,.8) transparent;
     }
+    .header-info p {
+       margin:0;
+       color: #605f5f;
+       font-family:'Ubuntu',sans-serif;
+       font-weight:700
+   }
+
     .top-social_v2 li {
         margin-right: 0px !important; 
         cursor: url(https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/cursor/ayuda.cur),auto !important;
