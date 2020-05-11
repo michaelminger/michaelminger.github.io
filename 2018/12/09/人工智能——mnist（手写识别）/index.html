@@ -11,6 +11,7 @@
   <meta http-equiv="x-dns-prefetch-control" content="on">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
   <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yremp/yremp-css@1.3/gitalk.css">
   <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
   <link rel="stylesheet" href="/css/lib.min.css" media="all">
   <link rel="stylesheet" href="/css/font.css" media="all">
@@ -547,19 +548,20 @@ with tf.Session() as sess:
         
       </section>
       
-<div id="vcomments"></div>
-<script>
-  window.onload = function(){
-      var valine = new Valine();
-      valine.init({
-        el: '#vcomments',
-        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
-        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
-        path: window.location.pathname,
-        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+  <script src="https://cdn.jsdelivr.net/gh/yremp/yremp-js@1.1/gitalk.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yremp/yremp-css@1.3/gitalk.css">
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+      var gitalk = new Gitalk({
+          clientID: '6228d2f5fa297a392a50',
+          clientSecret: '125d58876839025e9bca5343598f3ab7e209cc9a',
+          id: window.location.pathname,
+          repo: 'michaelminger.github.io',
+          owner: 'michaelminger',
+          admin: 'michaelminger'
       })
-  }
-</script>
+      gitalk.render('gitalk-container')
+    </script>
 
       <section class="author-profile">
         <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
@@ -700,6 +702,11 @@ $(document).ready(function() {
   }
 });
 </script>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.jsdelivr.net/gh/yremp/yremp-js@1.1/gitalk.js"></script>
+
+
 
 <!--浏览器搞笑标题-->
 <!-- <script src="https://cdn.jsdelivr.net/gh/wallleap/cdn@latest/js/hititle.js"></script> -->
