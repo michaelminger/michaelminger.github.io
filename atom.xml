@@ -63,17 +63,11 @@
     <link href="http://ailous.top/2019/09/03/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E5%89%8D%E7%A8%8B%E6%97%A0%E5%BF%A7%E7%BD%91%E6%95%B0%E6%8D%AE%E8%8E%B7%E5%8F%96%E5%8F%8A%E5%AD%98%E5%82%A8(%E9%AB%98%E7%BA%A7)/"/>
     <id>http://ailous.top/2019/09/03/网络爬虫——前程无忧网数据获取及存储(高级)/</id>
     <published>2019-09-03T05:47:40.000Z</published>
-    <updated>2020-04-14T06:07:53.533Z</updated>
+    <updated>2020-05-11T12:56:51.947Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;网络爬虫——前程无忧网数据获取及存储（高级）&quot;&gt;&lt;a href=&quot;#网络爬虫——前程无忧网数据获取及存储（高级）&quot; class=&quot;headerlink&quot;
-        
-      
+      目标数据：（1）职位名（2）公司名（3）工作地点（4）薪资 （5）发布时间
     
     </summary>
     
@@ -111,17 +105,11 @@
     <link href="http://ailous.top/2019/05/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E4%BA%8C%E6%89%8B%E6%88%BF%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%E5%8F%8AMYSQL%E5%AD%98%E5%82%A8/"/>
     <id>http://ailous.top/2019/05/27/网络爬虫——二手房数据抓取及MYSQL存储/</id>
     <published>2019-05-27T05:47:40.000Z</published>
-    <updated>2020-04-23T14:07:12.879Z</updated>
+    <updated>2020-05-11T12:49:08.583Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;网络爬虫——二手房数据抓取及MYSQL存储&quot;&gt;&lt;a href=&quot;#网络爬虫——二手房数据抓取及MYSQL存储&quot; class=&quot;headerlink&quot;
-        
-      
+      标题 + 链接地址 + 厅室+ 面积+ 层数+建造时间 + 地址 + 单价（或总价）
     
     </summary>
     
@@ -139,17 +127,11 @@
     <link href="http://ailous.top/2019/05/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E5%89%8D%E7%A8%8B%E6%97%A0%E5%BF%A7%E7%BD%91%E6%95%B0%E6%8D%AE%E8%8E%B7%E5%8F%96%E5%8F%8AMYSQL%E5%AD%98%E5%82%A8/"/>
     <id>http://ailous.top/2019/05/27/网络爬虫——前程无忧网数据获取及MYSQL存储/</id>
     <published>2019-05-27T05:47:40.000Z</published>
-    <updated>2020-04-23T13:41:19.059Z</updated>
+    <updated>2020-05-11T12:55:44.280Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;网络爬虫——前程无忧网数据获取及MYSQL存储&quot;&gt;&lt;a href=&quot;#网络爬虫——前程无忧网数据获取及MYSQL存储&quot; class=&quot;headerlink&quot;
-        
-      
+      目标数据：（1）职位名（2）公司名（3）工作地点（4）薪资 （5）发布时间
     
     </summary>
     
@@ -163,21 +145,35 @@
   </entry>
   
   <entry>
+    <title>网络爬虫——票房网数据抓取及存储（初级）</title>
+    <link href="http://ailous.top/2019/05/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E7%A5%A8%E6%88%BF%E7%BD%91%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%E5%8F%8A%E5%AD%98%E5%82%A8/"/>
+    <id>http://ailous.top/2019/05/27/网络爬虫——票房网数据抓取及存储/</id>
+    <published>2019-05-27T05:47:40.000Z</published>
+    <updated>2020-05-11T12:55:08.750Z</updated>
+    
+    <summary type="html">
+    
+      目标数据：（1）名次（2）电影名称 （3）日期（4）票房 （5）总场次（6）废场（7）人次（8）上座率（9）票价
+    
+    </summary>
+    
+      <category term="网络爬虫" scheme="http://ailous.top/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/"/>
+    
+    
+      <category term="票房" scheme="http://ailous.top/tags/%E7%A5%A8%E6%88%BF/"/>
+    
+  </entry>
+  
+  <entry>
     <title>网络爬虫——票房网数据抓取及MYSQL存储</title>
     <link href="http://ailous.top/2019/05/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E7%A5%A8%E6%88%BF%E7%BD%91%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%E5%8F%8AMYSQL%E5%AD%98%E5%82%A8/"/>
     <id>http://ailous.top/2019/05/27/网络爬虫——票房网数据抓取及MYSQL存储/</id>
     <published>2019-05-27T05:47:40.000Z</published>
-    <updated>2020-04-23T13:55:45.835Z</updated>
+    <updated>2020-05-11T12:54:21.861Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;网络爬虫——票房网数据抓取及MYSQL存储&quot;&gt;&lt;a href=&quot;#网络爬虫——票房网数据抓取及MYSQL存储&quot; class=&quot;headerlink&quot;
-        
-      
+      目标数据：（1）名次（2）电影名称 （3）日期（4）票房 （5）总场次（6）废场（7）人次（8）上座率（9）票价
     
     </summary>
     
@@ -191,47 +187,15 @@
   </entry>
   
   <entry>
-    <title>网络爬虫——票房网数据抓取及存储（初级）</title>
-    <link href="http://ailous.top/2019/05/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E7%A5%A8%E6%88%BF%E7%BD%91%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%E5%8F%8A%E5%AD%98%E5%82%A8/"/>
-    <id>http://ailous.top/2019/05/27/网络爬虫——票房网数据抓取及存储/</id>
-    <published>2019-05-27T05:47:40.000Z</published>
-    <updated>2020-04-23T13:51:58.996Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h2 id=&quot;网络爬虫——票房网数据抓取及存储&quot;&gt;&lt;a href=&quot;#网络爬虫——票房网数据抓取及存储&quot; class=&quot;headerlink&quot; title=&quot;网络爬虫——票房网数据抓取及存储&quot;&gt;&lt;/a&gt;网络爬虫——票房网数据抓取及存储&lt;/h2&gt;&lt;h4 id=&quot;实验内容&quot;&gt;&lt;a
-        
-      
-    
-    </summary>
-    
-      <category term="网络爬虫" scheme="http://ailous.top/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/"/>
-    
-    
-      <category term="票房" scheme="http://ailous.top/tags/%E7%A5%A8%E6%88%BF/"/>
-    
-  </entry>
-  
-  <entry>
     <title>网络爬虫——搜狐最新时政新闻数据爬取——BS4</title>
     <link href="http://ailous.top/2019/05/21/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E6%90%9C%E7%8B%90%E6%9C%80%E6%96%B0%E6%97%B6%E6%94%BF%E6%96%B0%E9%97%BB%E6%95%B0%E6%8D%AE%E7%88%AC%E5%8F%96/"/>
     <id>http://ailous.top/2019/05/21/网络爬虫——搜狐最新时政新闻数据爬取/</id>
     <published>2019-05-21T05:47:40.000Z</published>
-    <updated>2020-04-14T06:05:05.658Z</updated>
+    <updated>2020-05-11T12:57:42.114Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;网络爬虫——搜狐最新时政新闻数据爬取&quot;&gt;&lt;a href=&quot;#网络爬虫——搜狐最新时政新闻数据爬取&quot; class=&quot;headerlink&quot;
-        
-      
+      目标数据描述：（1）标题 （2）链接地址
     
     </summary>
     
@@ -247,17 +211,11 @@
     <link href="http://ailous.top/2019/05/04/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1%E6%8E%92%E8%A1%8C%E6%A6%9C%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%EF%BC%88%E9%AB%98%E7%BA%A7%EF%BC%89/"/>
     <id>http://ailous.top/2019/05/04/网络爬虫——豆瓣电影排行榜数据抓取（高级）/</id>
     <published>2019-05-04T05:47:40.000Z</published>
-    <updated>2020-04-14T06:04:42.456Z</updated>
+    <updated>2020-05-11T12:47:33.084Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;网络爬虫——豆瓣电影排行榜数据抓取（高级）&quot;&gt;&lt;a href=&quot;#网络爬虫——豆瓣电影排行榜数据抓取（高级）&quot; class=&quot;headerlink&quot;
-        
-      
+      目标数据增加导演、主演、评价人数等信息，将尽可能多的数据抓取保存。
     
     </summary>
     
@@ -273,17 +231,11 @@
     <link href="http://ailous.top/2019/05/03/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E8%B1%86%E7%93%A3%E7%94%B5%E5%BD%B1%E6%8E%92%E8%A1%8C%E6%A6%9C%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96%EF%BC%88%E5%88%9D%E7%BA%A7%EF%BC%89/"/>
     <id>http://ailous.top/2019/05/03/网络爬虫——豆瓣电影排行榜数据抓取（初级）/</id>
     <published>2019-05-03T05:47:40.000Z</published>
-    <updated>2020-04-14T06:04:27.346Z</updated>
+    <updated>2020-05-11T12:46:35.982Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;网络爬虫——豆瓣电影排行榜数据抓取（初级）&quot;&gt;&lt;a href=&quot;#网络爬虫——豆瓣电影排行榜数据抓取（初级）&quot; class=&quot;headerlink&quot;
-        
-      
+      目标数据增加导演、主演、评价人数等信息，将尽可能多的数据抓取保存。
     
     </summary>
     
@@ -299,17 +251,11 @@
     <link href="http://ailous.top/2019/04/27/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E6%8A%93%E5%8F%96TIOBE%E6%8C%87%E6%95%B0%E5%89%8D20%E5%90%8D%E6%8E%92%E8%A1%8C%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80/"/>
     <id>http://ailous.top/2019/04/27/网络爬虫——抓取TIOBE指数前20名排行开发语言/</id>
     <published>2019-04-27T05:47:40.000Z</published>
-    <updated>2020-04-14T06:07:27.821Z</updated>
+    <updated>2020-05-11T12:59:07.355Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;网络爬虫——抓取TIOBE指数前20名排行开发语言&quot;&gt;&lt;a href=&quot;#网络爬虫——抓取TIOBE指数前20名排行开发语言&quot; class=&quot;headerlink&quot;
-        
-      
+      TIOBE排行榜是根据互联网上有经验的程序员、课程和第三方厂商的数量，并使用搜索引擎（如Google、Bing、Yahoo!）以及Wikipedia、Amazon、YouTube统计出排名数据，只是反映某个编程语言的热门程度，并不能说明一门编程语言好不好，或者一门语言所编写的代码数量多少。
     
     </summary>
     
@@ -327,17 +273,11 @@
     <link href="http://ailous.top/2019/04/20/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E6%8E%92%E5%90%8D%E6%95%B0%E6%8D%AE%E6%8A%93%E5%8F%96/"/>
     <id>http://ailous.top/2019/04/20/网络爬虫——中国大学排名数据抓取/</id>
     <published>2019-04-20T05:47:40.000Z</published>
-    <updated>2020-04-14T06:04:05.787Z</updated>
+    <updated>2020-05-11T12:58:24.681Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;网络爬虫——中国大学排名数据抓取&quot;&gt;&lt;a href=&quot;#网络爬虫——中国大学排名数据抓取&quot; class=&quot;headerlink&quot; title=&quot;网络爬虫——中国大学排名数据抓取&quot;&gt;&lt;/a&gt;网络爬虫——中国大学排名数据抓取&lt;/h2&gt;&lt;h3 id=&quot;目标网址&quot;&gt;&lt;a
-        
-      
+      全球有很多份大学排名，这里以上海交通大学研发的“软科中国最好大学排名2019”为例，，编写“大学排名爬虫”，从网络上获取数据 。拟从该网址爬取该名单上310 所国内大学的排名数据，并将它们打印出来。
     
     </summary>
     
@@ -353,17 +293,11 @@
     <link href="http://ailous.top/2019/04/10/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E5%89%8D%E7%A8%8B%E6%97%A0%E5%BF%A7%E7%BD%91%E6%95%B0%E6%8D%AE%E8%8E%B7%E5%8F%96%E5%8F%8A%E5%AD%98%E5%82%A8%EF%BC%88%E4%BD%8E%E7%BA%A7%EF%BC%89/"/>
     <id>http://ailous.top/2019/04/10/网络爬虫——前程无忧网数据获取及存储（低级）/</id>
     <published>2019-04-10T05:47:40.000Z</published>
-    <updated>2020-04-14T06:03:41.985Z</updated>
+    <updated>2020-05-11T12:56:17.099Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;网络爬虫——前程无忧网数据获取及存储（低级）&quot;&gt;&lt;a href=&quot;#网络爬虫——前程无忧网数据获取及存储（低级）&quot; class=&quot;headerlink&quot;
-        
-      
+      目标数据：（1）职位名（2）公司名（3）工作地点（4）薪资 （5）发布时间
     
     </summary>
     
@@ -441,17 +375,11 @@
     <link href="http://ailous.top/2018/12/09/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E5%8F%A4%E8%AF%97%E6%96%87%E7%BD%91%E4%B8%AD%E9%AA%8C%E8%AF%81%E7%A0%81%EF%BC%88%E8%B6%85%E7%BA%A7%E9%B9%B0%EF%BC%89/"/>
     <id>http://ailous.top/2018/12/09/网络爬虫——古诗文网中验证码（超级鹰）/</id>
     <published>2018-12-09T05:47:40.000Z</published>
-    <updated>2020-05-10T17:30:19.583Z</updated>
+    <updated>2020-05-11T12:52:44.668Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;h2 id=&quot;网络爬虫——古诗文网中验证码（超级鹰）&quot;&gt;&lt;a href=&quot;#网络爬虫——古诗文网中验证码（超级鹰）&quot; class=&quot;headerlink&quot; title=&quot;网络爬虫——古诗文网中验证码（超级鹰）&quot;&gt;&lt;/a&gt;网络爬虫——古诗文网中验证码（超级鹰）&lt;/h2&gt;&lt;h4
-        
-      
+      通过selenium的方式模拟该网站的登录，并成功输入用户名和密码；
     
     </summary>
     
