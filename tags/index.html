@@ -296,65 +296,384 @@
   </div>
 </header>
 
-        <div class="pattern-center-blank"></div>
-  
-  <div id="content" class="site-content">
-    <article class="post-item post-301 page type-page status-publish has-post-thumbnail hentry">
-      
-      <!-- .entry-content -->
-      
-  <script src="https://cdn.jsdelivr.net/gh/yremp/yremp-js@1.1/gitalk.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yremp/yremp-css@1.3/gitalk.css">
-  <div id="gitalk-container"></div>
-  <script type="text/javascript">
-      var gitalk = new Gitalk({
-          clientID: '6228d2f5fa297a392a50',
-          clientSecret: '125d58876839025e9bca5343598f3ab7e209cc9a',
-          id: window.location.pathname,
-          repo: 'michaelminger.github.io',
-          owner: 'michaelminger',
-          admin: 'michaelminger'
-      })
-      gitalk.render('gitalk-container')
-    </script>
-
-      <div class="single-reward">
-        <div class="reward-open">赏
-          <div class="reward-main">
-            <ul class="reward-row">
-              <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/custom/donate/AliPayQR.jpg"></li>
-              <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/custom/donate/WeChanQR.jpg"></li>
-            </ul>
-          </div>
-        </div>
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono"></span>
+            <span class="shironeko">Michaelming&#39;s Blog</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
       </div>
-      <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
-      <footer class="post-footer">
-        <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
-        <div class="post-tags">
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    分类
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories/人工智能/">
+                          <i class="fa fa-code" aria-hidden="true"></i>
+                          人工智能
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/网络爬虫/">
+                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                          网络爬虫
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/算法/">
+                          <i class="fa fa-cloud-download" aria-hidden="true"></i>
+                          算法分析
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/汇编/">
+                          <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                          汇编
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="javascript:;">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+                    爱好
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/bangumi/">
+                          <i class="fa fa-film faa-vertical" aria-hidden="true"></i>
+                          番组
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/music/">
+                          <i class="fa fa-headphones" aria-hidden="true"></i>
+                          歌单
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags/">
+                          <i class="fa fa-photo" aria-hidden="true"></i>
+                          图集
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/donate/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-heart faa-pulse" aria-hidden="true"></i>
+                    赞赏
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/about/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<main class="content">
+
+    
+
+<div id="tags" class="container chip-container">
+    <div class="card">
+        <div class="card-content">
+            <div class="tag-title center-align">
+                <i class="fa fa-tags"></i>&nbsp;&nbsp;文章标签
+            </div>
+            <div class="tag-chips">
+                
+                
+                <a href="/tags/xx/" title="xx: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="xx" style="background-color: #F9EBEA;">xx
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/卷积神经网络/" title="卷积神经网络: 3">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="卷积神经网络" style="background-color: #F5EEF8;">卷积神经网络
+                        <span class="tag-length">3</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/风格迁移/" title="风格迁移: 3">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="风格迁移" style="background-color: #D5F5E3;">风格迁移
+                        <span class="tag-length">3</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/手写识别/" title="手写识别: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="手写识别" style="background-color: #E8F8F5;">手写识别
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/mnist/" title="mnist: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="mnist" style="background-color: #FEF9E7;">mnist
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/CJNE/" title="CJNE: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="CJNE" style="background-color: #F8F9F9;">CJNE
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/DJNE/" title="DJNE: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="DJNE" style="background-color: #82E0AA;">DJNE
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/公共子序列/" title="公共子序列: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="公共子序列" style="background-color: #D7BDE2;">公共子序列
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/BS4/" title="BS4: 4">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="BS4" style="background-color: #A3E4D7;">BS4
+                        <span class="tag-length">4</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/前程无忧/" title="前程无忧: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="前程无忧" style="background-color: #85C1E9;">前程无忧
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/MYSQL/" title="MYSQL: 3">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="MYSQL" style="background-color: #F8C471;">MYSQL
+                        <span class="tag-length">3</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/二手房/" title="二手房: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="二手房" style="background-color: #F9E79F;">二手房
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/Xpath/" title="Xpath: 3">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="Xpath" style="background-color: #F9E79F;">Xpath
+                        <span class="tag-length">3</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/CSV/" title="CSV: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="CSV" style="background-color: #F8F9F9;">CSV
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/古诗文网/" title="古诗文网: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="古诗文网" style="background-color: #FFF;">古诗文网
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/超级鹰/" title="超级鹰: 2">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="超级鹰" style="background-color: #D7BDE2;">超级鹰
+                        <span class="tag-length">2</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/TIOBE指数/" title="TIOBE指数: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="TIOBE指数" style="background-color: #D7BDE2;">TIOBE指数
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/RE（正则表达式）/" title="RE（正则表达式）: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="RE（正则表达式）" style="background-color: #FEF9E7;">RE（正则表达式）
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/票房/" title="票房: 2">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="票房" style="background-color: #D7BDE2;">票房
+                        <span class="tag-length">2</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/RE（正则表达式/" title="RE（正则表达式: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="RE（正则表达式" style="background-color: #D5F5E3;">RE（正则表达式
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/问题/" title="问题: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="问题" style="background-color: #E8F8F5;">问题
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+            </div>
         </div>
-        <div class="post-share">
-          <div class="social-share sharehidden share-component"></div>
-          <i class="iconfont show-share icon-forward"></i>
-        </div>
-      </footer><!-- .entry-footer -->
-    </article>
-      <!-- #post-## -->
-      <section class="author-profile">
-        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
-          <a href="/about/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/custom/avatar.jpg" itemprop="image" alt="Michaelming's Blog" height="70" width="70"></a>
-          <div class="meta">
-            <span class="title">Author</span>
-            <h3 itemprop="name">
-            <a href="http://ailous.top" itemprop="url" rel="author">Michaelming's Blog</a>
-            </h3>
-          </div>
-        </div>
-        <hr>
-        <p><i class="iconfont icon-write"></i>待到秋来九月八，我花开遍百花杀。</p>
-      </section>
-  </div><!-- #primary -->
+    </div>
 </div>
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/wallleap/cdn/css/jqcloud.css">
+<style type="text/css">
+    #tag-wordcloud {
+        width: 100%;
+        height: 300px;
+    }
+</style>
+
+<div class="container" data-aos="fade-up">
+    <div class="card">
+        <div id="tag-wordcloud" class="card-content"></div>
+    </div>
+</div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/wallleap/cdn/js/jqcloud-1.0.4.js"></script>
+<script type="text/javascript">
+    
+
+    $('#tag-wordcloud').jQCloud([{"text":"xx","weight":1,"link":"http://ailous.top/tags/xx/"},{"text":"卷积神经网络","weight":3,"link":"http://ailous.top/tags/卷积神经网络/"},{"text":"风格迁移","weight":3,"link":"http://ailous.top/tags/风格迁移/"},{"text":"手写识别","weight":1,"link":"http://ailous.top/tags/手写识别/"},{"text":"mnist","weight":1,"link":"http://ailous.top/tags/mnist/"},{"text":"CJNE","weight":1,"link":"http://ailous.top/tags/CJNE/"},{"text":"DJNE","weight":1,"link":"http://ailous.top/tags/DJNE/"},{"text":"公共子序列","weight":1,"link":"http://ailous.top/tags/公共子序列/"},{"text":"BS4","weight":4,"link":"http://ailous.top/tags/BS4/"},{"text":"前程无忧","weight":1,"link":"http://ailous.top/tags/前程无忧/"},{"text":"MYSQL","weight":3,"link":"http://ailous.top/tags/MYSQL/"},{"text":"二手房","weight":1,"link":"http://ailous.top/tags/二手房/"},{"text":"Xpath","weight":3,"link":"http://ailous.top/tags/Xpath/"},{"text":"CSV","weight":1,"link":"http://ailous.top/tags/CSV/"},{"text":"古诗文网","weight":1,"link":"http://ailous.top/tags/古诗文网/"},{"text":"超级鹰","weight":2,"link":"http://ailous.top/tags/超级鹰/"},{"text":"TIOBE指数","weight":1,"link":"http://ailous.top/tags/TIOBE指数/"},{"text":"RE（正则表达式）","weight":1,"link":"http://ailous.top/tags/RE（正则表达式）/"},{"text":"票房","weight":2,"link":"http://ailous.top/tags/票房/"},{"text":"RE（正则表达式","weight":1,"link":"http://ailous.top/tags/RE（正则表达式/"},{"text":"问题","weight":1,"link":"http://ailous.top/tags/问题/"}], {
+        autoResize: true
+    });
+</script>
+
+
+</main>
+
+
     </div>    
     <div class="ins-search">
     <div class="ins-search-mask"></div>
