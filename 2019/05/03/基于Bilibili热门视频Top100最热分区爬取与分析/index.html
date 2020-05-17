@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">网络爬虫——豆瓣读书数据抓取——RE（正则表达式） | Michaelming&#39;s Blog</title>
+  <title itemprop="name">基于Bilibili热门视频Top100最热分区爬取与分析 | Michaelming&#39;s Blog</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -296,11 +296,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://img-blog.csdnimg.cn/20200413220242245.jpg);" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20200413220242245.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://img-blog.csdnimg.cn/20200518052631531.png);" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20200518052631531.png">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      网络爬虫——豆瓣读书数据抓取——RE（正则表达式）</h1>
+      基于Bilibili热门视频Top100最热分区爬取与分析</h1>
       <p class="entry-census">
         <span>
           <a href="https://user.qzone.qq.com/1980300447/main">
@@ -312,7 +312,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2018-6-9<span class="bull">
+        2019-5-3<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -326,44 +326,167 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h2 id="网络爬虫——豆瓣读书数据抓取——RE（正则表达式）"><a href="#网络爬虫——豆瓣读书数据抓取——RE（正则表达式）" class="headerlink" title="网络爬虫——豆瓣读书数据抓取——RE（正则表达式）"></a>网络爬虫——豆瓣读书数据抓取——RE（正则表达式）</h2><p>目标网址：<a href="https://book.douban.com/" target="_blank" rel="noopener">https://book.douban.com/</a></p>
-<p>目标数据：（1）书名（2）书的链接地址（3）作者（4）发行时间（5）出版社<br><img src="https://img-blog.csdnimg.cn/20200413214442366.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>分析网页结构，通过获取网页源代码，使用re库解析网页结构，完成豆瓣读书项目中目标数据的爬取。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
+          <h2 id="网络爬虫——基于Bilibili热门视频Top100最热分区爬取与分析"><a href="#网络爬虫——基于Bilibili热门视频Top100最热分区爬取与分析" class="headerlink" title="网络爬虫——基于Bilibili热门视频Top100最热分区爬取与分析"></a>网络爬虫——基于Bilibili热门视频Top100最热分区爬取与分析</h2><p>这个主要是配合之前报告使用的，这里就不多赘述了。<br>先爬地址，再爬取地址里的分区，最后整合。csv存储。</p>
+<h4 id="实验内容"><a href="#实验内容" class="headerlink" title="实验内容"></a>实验内容</h4><p>目标网站：Bilibili热门视频Top100</p>
+<p>目标网址：<br><a href="https://www.bilibili.com/ranking?" target="_blank" rel="noopener">https://www.bilibili.com/ranking?</a>（每过几天都会变的哦）</p>
+<pre><code>from lxml import etree
+import time
+import jieba
+import numpy as np
+from PIL import Image
+import requests
 import re
+from requests.exceptions import RequestException
+from wordcloud import WordCloud as wc
+import csv
+class getUrl ():
+    def __init__(self,url):
+        self.url = url
 
-def getcode(url):
-    url = url
-    headers = {
-        &#39;User-Agent&#39;:&#39;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3756.400 QQBrowser/10.5.4039.400&#39;
-    }
-    response = requests.get(url,headers=headers)
-    response.encoding = &#39;utf_8&#39;
-    code = response.text
-    return code
+    def getTxt(self):
+        self.headers = {
+            &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
+        }
+        try:
+            result = requests.get(self.url,headers=self.headers,timeout=30)
+            result.raise_for_status()
+            result.encoding = result.apparent_encoding
+            return result.text
+        except:
+            return &quot;&quot;    
 
-def parse_page(code):
-    ulist = []
-    pattern = re.compile(&#39;&lt;div class=&quot;cover&quot;&gt;.*?&lt;a href=&quot;(.*?)&quot; title=&quot;(.*?)&quot;&gt;.*?&lt;div class=&quot;author&quot;&gt;(.*?)&lt;/div&gt;.*?&lt;span class=&quot;year&quot;&gt;(.*?)&lt;/span&gt;.*?&lt;span class=&quot;publisher&quot;&gt;(.*?)&lt;/span&gt;&#39;,re.S)
-    items = re.findall(pattern,code)
-# print(items)
-    for item in items:
-        ulist.append([item[1],item[0].strip(),item[2].strip(),item[3].strip(),item[4].strip()])
+    def parsePage(self):
+        res = self.getTxt()
+        newhtml =etree.HTML(res,etree.HTMLParser())
 
-    return (ulist)
+        result=newhtml.xpath(&#39;//*[@id=&quot;app&quot;]/div[1]/div/div[1]/div[2]/div[3]/ul/li/div[2]/div[1]/a//@href&#39;)
+
+        return  result
+
+
+class getAvNum():
+    def __init__(self,url):
+        self.url = url
+
+    def getTxt(self):
+        self.headers = {
+            &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
+        }
+        try:
+            result = requests.get(self.url,headers=self.headers,timeout=30)
+            result.raise_for_status()
+            result.encoding = result.apparent_encoding
+            return result.text
+        except:
+            return &quot;&quot;
+
+    def parsePage(self):
+        res = self.getTxt()
+        newhtml =etree.HTML(res,etree.HTMLParser())
+        rlist=newhtml.xpath(&#39;//*[@id=&quot;viewbox_report&quot;]/div[1]/span[1]/a[1]//text()&#39;)
+
+        return  rlist
+
+class Bilibili():
+
+    def __init__(self,oid):
+        self.headers={
+        &#39;Host&#39;: &#39;api.bilibili.com&#39;,
+        &#39;Connection&#39;: &#39;keep-alive&#39;,
+        &#39;Cache-Control&#39;: &#39;max-age=0&#39;,
+        &#39;Upgrade-Insecure-Requests&#39;: &#39;1&#39;,
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36&#39;,
+        &#39;Accept&#39;: &#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8&#39;,
+        &#39;Accept-Encoding&#39;: &#39;gzip, deflate, br&#39;,
+        &#39;Accept-Language&#39;: &#39;zh-CN,zh;q=0.9&#39;,
+        &#39;Cookie&#39;: &#39;finger=edc6ecda; LIVE_BUVID=AUTO1415378023816310; stardustvideo=1; CURRENT_FNVAL=8; buvid3=0D8F3D74-987D-442D-99CF-42BC9A967709149017infoc; rpdid=olwimklsiidoskmqwipww; fts=1537803390&#39;
+
+        }
+        self.url=&#39;https://api.bilibili.com/x/v1/dm/list.so?oid=&#39;+str(oid)
+        self.barrage_reault=self.get_page()
+
+    def get_page(self):
+        try:
+            time.sleep(0.5)
+            response=requests.get(self.url,headers=self.headers)
+        except Exception as e:
+            print(&#39;获取xml内容失败,%s&#39; % e)
+            return False
+        else:
+            if response.status_code == 200:
+                with open(&#39;bilibili.xml&#39;,&#39;wb&#39;) as f:
+                    f.write(response.content)
+                return True
+            else:
+                return False
+
+    def param_page(self):
+        time.sleep(1)
+        if  self.barrage_reault:
+            html=etree.parse(&#39;bilibili.xml&#39;,etree.HTMLParser())
+            results=html.xpath(&#39;//d//text()&#39;)
+            return results
+
+def remove_double_barrage(resultlist):
+
+    double_barrage=[]
+    results=[]
+    barrage=set()
+    for result in resultlist:
+        if result not in results:
+            results.append(result)
+        else:
+            double_barrage.append(result)
+            barrage.add(result)
+    return double_barrage,results,barrage
+
+def make_wordCould(resultlist):
+    double_barrages,results,barrages=remove_double_barrage(resultlist)
+    with open(&#39;barrages.txt&#39;,&#39;w&#39;, -1, &#39;utf-8&#39;, None, None) as f:
+        for barrage in barrages:
+            amount=double_barrages.count(barrage)
+            stt = barrage+&#39;:&#39;+str(amount+1)+&#39;\n&#39;
+            f.write(stt)
+
+    stop_words=[&#39;【&#39;,&#39;】&#39;,&#39;,&#39;,&#39;.&#39;,&#39;?&#39;,&#39;!&#39;,&#39;。&#39;]
+    words=[]
+    if results:
+        for result in results:
+            for stop in stop_words:
+                result=&#39;&#39;.join(result.split(stop))
+            words.append(result)
+        # 列表拼接成字符串
+        words=&#39;&#39;.join(words)
+        words=jieba.cut(words)
+        words=&#39;&#39;.join(words)
+        luo=np.array(Image.open(&#39;洛天依.jpg&#39;))    
+        w=wc(font_path=&#39;‪C:/Windows/Fonts/SIMYOU.TTF&#39;,background_color=&#39;white&#39;,width=1600,height=1600,max_words=2000,mask=luo)
+        w.generate(words)
+        w.to_file(&#39;luo.jpg&#39;)
+
+def csvdata(data):
+    with open(&#39;top20.csv&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;,newline=&#39;&#39;)as csvfile:
+        fieldnames = [&#39;分类&#39;]
+        writer = csv.DictWriter(csvfile,fieldnames=fieldnames)
+        writer.writeheader()
+        for i in data:
+            writer.writerow({&#39;分类&#39;:i[0]})
+        print(&#39;ok&#39;)           
 
 def main():
-    ulist = []
-    url = &quot;https://book.douban.com/&quot;
-    code = getcode(url)
-    ulist = parse_page(code)
+    url=&quot;https://www.bilibili.com/ranking?spm_id_from=333.851.b_7072696d61727950616765546162.3&quot;
+    urls = getUrl(url)
+    strUrl = urls.parsePage()
+    ress = []
+    for i in strUrl:
+        AV = getAvNum(i)
+        oid = AV.parsePage()
+        ress.append(oid)
+    csvdata(ress)
 
-    print(len(ulist))
-    print()
-    for i in range(len(ulist)):
-        print(ulist[i])
-main()
-</code></pre><p>输出如下：<br><img src="https://img-blog.csdnimg.cn/20200413220242245.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
-
+if __name__ == &#39;__main__&#39;:
+    main()
+</code></pre>
         </div>
         <!-- .entry-content -->
         <div class="single-reward">
@@ -405,15 +528,15 @@ main()
           
             <div class="post-nepre half previous">
           
-            <a href="/2018/10/27/卷积神经网络：（一）风格迁移——环境配置 (1)/" rel="prev">
+            <a href="/2019/05/04/网络爬虫——豆瓣电影排行榜数据抓取（高级）/" rel="prev">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20191221235345841.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://img-blog.csdnimg.cn/20191221235345841.png">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/2020041321124824.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://img-blog.csdnimg.cn/2020041321124824.jpg">
               </div>
               <span class="label">
               Previous Post</span>
               <div class="info">
                 <h3>
-                风格迁移——环境配置</h3>
+                豆瓣电影排行榜数据抓取（高级）——BS4</h3>
                 <hr>
               </div>
             </a>
@@ -423,15 +546,15 @@ main()
           
             <div class="post-nepre half next">
           
-            <a href="/2018/05/29/网络爬虫——猫眼电影数据抓取——RE（正则表达式）/" rel="next">
+            <a href="/2019/05/03/基于Bilibili热门视频Top100弹幕的数据爬取与分析（报告版）/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20200413213540934.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://img-blog.csdnimg.cn/20200413213540934.jpg">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20200518061152313.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://img-blog.csdnimg.cn/20200518061152313.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                网络爬虫——猫眼电影数据抓取——RE（正则表达式）</h3>
+                基于Bilibili热门视频Top100最热分区爬取与分析（报告）</h3>
                 <hr>
               </div>
             </a>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">网络爬虫——豆瓣读书数据抓取——RE（正则表达式） | Michaelming&#39;s Blog</title>
+  <title itemprop="name">基于Bilibili热门视频Top100最热分区爬取与分析（报告） | Michaelming&#39;s Blog</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -296,11 +296,11 @@
 
   <div class="pattern-center single-center">
     <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://img-blog.csdnimg.cn/20200413220242245.jpg);" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20200413220242245.jpg">
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://img-blog.csdnimg.cn/20200518061152313.png);" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20200518061152313.png">
     </div>
     <header class="pattern-header single-header">
       <h1 class="entry-title">
-      网络爬虫——豆瓣读书数据抓取——RE（正则表达式）</h1>
+      基于Bilibili热门视频Top100最热分区爬取与分析（报告）</h1>
       <p class="entry-census">
         <span>
           <a href="https://user.qzone.qq.com/1980300447/main">
@@ -312,7 +312,7 @@
         </span>
         <span class="bull">
         ·</span>
-        2018-6-9<span class="bull">
+        2019-5-3<span class="bull">
         ·</span>
       <span id="busuanzi_value_page_pv"></span>次阅读</p>
     </header>
@@ -326,43 +326,10 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
         <div class="entry-content">
-          <h2 id="网络爬虫——豆瓣读书数据抓取——RE（正则表达式）"><a href="#网络爬虫——豆瓣读书数据抓取——RE（正则表达式）" class="headerlink" title="网络爬虫——豆瓣读书数据抓取——RE（正则表达式）"></a>网络爬虫——豆瓣读书数据抓取——RE（正则表达式）</h2><p>目标网址：<a href="https://book.douban.com/" target="_blank" rel="noopener">https://book.douban.com/</a></p>
-<p>目标数据：（1）书名（2）书的链接地址（3）作者（4）发行时间（5）出版社<br><img src="https://img-blog.csdnimg.cn/20200413214442366.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>分析网页结构，通过获取网页源代码，使用re库解析网页结构，完成豆瓣读书项目中目标数据的爬取。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
-import re
-
-def getcode(url):
-    url = url
-    headers = {
-        &#39;User-Agent&#39;:&#39;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3756.400 QQBrowser/10.5.4039.400&#39;
-    }
-    response = requests.get(url,headers=headers)
-    response.encoding = &#39;utf_8&#39;
-    code = response.text
-    return code
-
-def parse_page(code):
-    ulist = []
-    pattern = re.compile(&#39;&lt;div class=&quot;cover&quot;&gt;.*?&lt;a href=&quot;(.*?)&quot; title=&quot;(.*?)&quot;&gt;.*?&lt;div class=&quot;author&quot;&gt;(.*?)&lt;/div&gt;.*?&lt;span class=&quot;year&quot;&gt;(.*?)&lt;/span&gt;.*?&lt;span class=&quot;publisher&quot;&gt;(.*?)&lt;/span&gt;&#39;,re.S)
-    items = re.findall(pattern,code)
-# print(items)
-    for item in items:
-        ulist.append([item[1],item[0].strip(),item[2].strip(),item[3].strip(),item[4].strip()])
-
-    return (ulist)
-
-def main():
-    ulist = []
-    url = &quot;https://book.douban.com/&quot;
-    code = getcode(url)
-    ulist = parse_page(code)
-
-    print(len(ulist))
-    print()
-    for i in range(len(ulist)):
-        print(ulist[i])
-main()
-</code></pre><p>输出如下：<br><img src="https://img-blog.csdnimg.cn/20200413220242245.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+          <p>一、研究背景<br>能够在观看视频的过程中发表自己的评论，并且评论可以在你所希望的时间点、位置以滑行或停留的方式出现在视频中，所有观看视频的人都可以看见评论，这样一类的评论叫做弹幕，此类网站叫弹幕网站。<br>弹幕视频系统源自日本弹幕视频分享网站（niconico动画），国内首先引进为AcFun以及后来的bilibili。大量吐槽评论从屏幕飘过时效果看上去像是飞行射击游戏里的弹幕，所以NICO网民将这种有大量的吐槽评论出现时的效果做弹幕。在中国，本来只有大量评论同时出现才能叫弹幕，但是随着误用单条评论也能叫弹幕了。在国内通常被认为本意是军事用语中密集的炮火射击，过于密集以至于像一张幕布一样。英文称“Bullet Hell”（子弹地狱）或“Bullet Curtain”（弹幕）<br>弹幕可以给观众一种“实时互动”的错觉，虽然不同弹幕的发送时间有所区别，但是其只会在视频中特定的一个时间点出现，因此在相同时刻发送的弹幕基本上也具有相同的主题，在参与评论时就会有与其他观众同时评论的错觉。而传统的播放器评论系统是独立于播放器之外的，因此评论的内容大多围绕在整个视频上，话题性不强，也没有“实时互动”的感觉。</p>
+<p>二、研究目的及意义<br>在视频软件层出不穷的当下。除了优质的视频内容，对于社区文化如何探索成为当下各个公司极力探索的目标。新时期自媒体盛行，BiliBili相较于同类软件，其社区文化呈现欣欣向荣之势，拥有较高的日活跃量。而弹幕文化俨然成为其不可或缺的一部分。<br>2019年年末，Bilibili曾发布年度十大热词，‘AWSL’夺得头筹。紧随其后的是‘名场面’，‘逮虾户’……，这些我们日常生活中耳熟能详的‘新词汇’。<br>由于互联网屏蔽了用户的设备差异，因此网络视频服务商可以获得格式统一、更加规范的用户使用数据，根据不同用户的使用数据完成视频推荐。美国著名电子商务企业亚马逊很早就开始探索推荐算法在电子商务中的应用，并已经取得了显著的成果。发表弹幕、观看弹幕，本身就有一种实时互动的错觉，完成着实实在在的、直接的互动。网站会根据用户的点击量进行视频推荐，参与热烈讨论的视频会出现在主页，受众能最快时间地看到页面。将来也许还可以通过搜索引擎的优化，把热门话题，热门词语，热门搜索等作为视频推荐的依据，让受众观看到与自己兴趣最相符的视频。<br>通过对于当前时间段热门排名TOP100中弹幕进行分析，将数据进行可视化处理，得到最热词汇，既可以知道在这一时间段网络舆论流行的大体趋势，把握用户心里态度，加强受众的互动反馈。还可以激发用户对于弹幕文化的探索的兴趣。使得用户保持新鲜度，延长软件寿命。<br>三、实验环境及技术介绍<br>1.爬虫技术简介<br>网络爬虫是一种按照一定的规则，自动地抓取万维网信息的程序或者脚本，其实通俗的讲就是通过程序去获取web页面上自己想要的数据，也就是自动抓取数据。爬虫的目地在于将目标网页数据下载至本地，以便进行后续的数据分析.爬虫技术的兴起源于海量网络数据的可用性,通过爬虫技术,能够较为容易的获取网络数据，并通过对数据的分析,得出有具有价值的结论。<br>Python语言简单易用,现成的爬虫框架和工具包降低了使用门槛,具体使用时配合正则表达式的运用,使得数据抓取工作变得生动有趣。<br>2.所用到的python库<br>2.1requests<br>Requests 是用Python语言编写，基于 urllib，采用Apache2 Licensed 开源协议的HTTP库。Requests 继承了urllib的所有特性。Requests支持HTTP连接保持和连接池，支持使用cookie保持会话，支持文件上传，支持自动确定响应内容的编码，支持国际化的URL和POST 数据自动编码。主要用于请求URL，获取返回信息，打印输出响应头，和重定向等。在爬取数据过程中，使用了request库的get方法来发送请求。Request请求方式有：<br>GET:请求指定的页面信息，并返回实体主体。<br>HEAD:只请求页面的首部。<br>POST:请求服务器接受所指定的文档作为对所标识的URI的新的从属实体。<br>PUT:从客户端向服务器传送的数据取代指定的文档的内容。<br>DELETE:请求服务器删除指定的页面。<br>get和post比较常见GET请求将提交的数据放置在HTTP请求协议头中<br>POST提交的数据则放在实体数据中<br>2.2XPath<br>XPath 是一门在 XML文档中查找信息的语言。用于在 XML文档中通过元素和属性进行导航，选取XML文档中的节点或者节点集。这些路径表达式和在常规的电脑文件系统中看到的表达式非常相似。在爬取豆瓣TOP250的过程中，使用xpath查找歌曲名、歌手、评分等信息。<br><img src="https://img-blog.csdnimg.cn/20200518052326681.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>图2-2 Xpath路径表达式图<br>2.3lxml<br>lxml 是一个HTML/XML的解析器，主要的功能是如何解析和提取 HTML /XML数据。lxml和正则一样，也是用C实现的，是一款高性能的Python HTML /XML 解析器，可以利用之前学习的XPath语法，来快速的定位特定元素以及节点信息。<br>使用lxml.etree处理XML文档。简要讲述ElementTree API的主要要概念，和一些简单的增强，让处理XML更简单。<br>2.4Jieba<br> jieba是优秀的中文分词第三方库。通过分词的方式从中文文本获得单个的词语，但是属于拓展库，需要额外安装。其拥有三种分词模式，最简单只需掌握一个函数。jieba分词的原理： 其依靠中文词库，利用一个中文词库，确定汉字之间的关联概率， 将汉字间相邻概率大的组成词组，形成分词结果， 除了分词，用户还可以添加自定义的词组。<br>2.5WordCloud<br>wordcloud库，可以说是python非常优秀的词云展示第三方库。词云以词语为基本单位更加直观和艺术的展示文本，也叫文字云，对文本中出现频率较高的“关键词”予以视觉化的展现，过滤掉大量的低频低质的文本信息，使得浏览者只要一眼扫过文本就可领略文本的主旨。<br>3.数据分析工具<br>3.1Jupyter Notebook<br>Notebooks是Donald Knuth 1984年提出的文本化编程的一种形式。Jupyter Notebook 的本质是一个 Web 应用程序，结合文本化编程，文本和代码交错在一起，而不是分成两个独立地本分。是个集成文本，数学公式，代码和可视化的可分享文本。便于创建和共享文学化程序文档，支持实时代码，数学方程，可视化和 markdown。<br>用途包括：数据清理和转换，数值模拟，统计建模，机器学习等等。Notebooks 很快已经成为了数据操作不可或缺的工具。它在 大数据清理和探究,可视化,机器学习, 和 大数据分析中都有广泛运用。并且Notebooks 可以直接在github直接被读取. 这是一个非常有用的功能，可以方便地分享。<br>3.2Excel<br>Excel不仅是一个数据存储工具，还是一个简单的数据分析工具，添加EXCEL数据分析插件后，可以做一些简单相关、回归等分析。而Excel可以说是万能但又不是万能的，学习Excel就是为了用来统计数据分析数据的，大而复杂的数据和分析有时候用Excel处理并不是最佳选择。Excel和数据库之间可以进行数据转换，但是当Excel的数据量过大的时候，它的查询和计算的速度会明显下降。<br>Excel提供了有限的安全性，它只能限制用户访问和修改的权限，但是无法对用户进行角色的管理，也不能对数据进行行级的访问限制。<br>当然Excel也有自身的的优势之处：<br>1、数据透视功能。<br>2、统计分析，非常独特，常用的检验方式一键搞定。<br>3、图表功能， Excel拥有各种丰富的可开发的图表形式的独门武工。<br>4、自动汇总功能，这个功能其他程序都有，但是Excel简便灵活。<br>总地来说，Excel适合于开发单机版、访问量与开发维护量都不是很大、对数据有分析建模功能的应用程序。<br>四、数据爬取<br>4.1抓取Bilibili热门视频Top100的网址<br>本实验在浏览器搜索Bilibili热门视频Top100的网址,就能得到要采集数据的页面，它的URL为<a href="https://www.bilibili.com/ranking，页面如下图4-1所示。" target="_blank" rel="noopener">https://www.bilibili.com/ranking，页面如下图4-1所示。</a><br><img src="https://img-blog.csdnimg.cn/20200518052544165.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>图4-1Bilibili热门视频Top100排行图<br>4.2对网址进行转化，获得Oid号码<br>通过对网页源代码的处理，将网页源地址中的地址数据转换成AV地址样式，再通过正则表达式’cid=(.*?)&amp;aid’，获取其Cid码，最后再转化成Oid码。获取Oid码的源代码如下图4-2所示。<br><img src="https://img-blog.csdnimg.cn/20200518052548949.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>图4-2 Oid码源代码获取图<br>获取Oid码的代码运行结果如下图4-2所示。<br><img src="https://img-blog.csdnimg.cn/20200518052552794.png" alt="在这里插入图片描述"><br>图4-3代码运行结果<br>4.3抓取弹幕信息lxml文件<br>首先，导入requests包，利用requests构建一个简单地的GET请求，把网页的headers（其中包含了User-Agent字段信息，是浏览器的标识信息）输入，这时网站会判断如果是客户端发起的GET请求，它会返回相应的请求信息。通过Oid码才能得到弹幕存储所在的lxml文件。Lxml代码如下图4-3所示。<br><img src="https://img-blog.csdnimg.cn/20200518052558600.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>图4-4 Lxml获取代码<br><img src="https://img-blog.csdnimg.cn/20200518052602894.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>图4-5 Lxml文件图<br>4.4抓取所有弹幕信息存储并处理<br>将所得到的lxml文件，通过xpath进行抓取并且存储到数组results中。<br><img src="https://img-blog.csdnimg.cn/20200518052611594.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>图4-6 弹幕信息爬取代码<br>通过append方法将所有弹幕信息存储，以待处理，如下所示：<br><img src="https://img-blog.csdnimg.cn/20200518052614189.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>图4-7 所有弹幕整合代码<br>通过自定义的remove_double_barrage（）方法将弹幕信息进行去重处理，如下所示：<br><img src="https://img-blog.csdnimg.cn/20200518052617565.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>图4-8 弹幕信息去重代码<br>4.5存储数据<br>利用lxml库采集视频的弹幕内容信息。将弹幕内容barrage，及弹幕出现次数amount进行存储，具体代码如下图4-3所示。<br><img src="https://img-blog.csdnimg.cn/20200518052622401.png" alt="在这里插入图片描述"><br>图4-9存储数据图<br>4.6数据展示<br>将采集的数据合并在一起,将采集的数据存入txt中，从文件中可以看出，收集的信息字段为‘弹幕内容’，‘出现次数’。进行数据分析就是对这两字段进行数据分析和可视化展示。部分数据展示如下图4-4所示：<br><img src="https://img-blog.csdnimg.cn/20200518052625874.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>图4-10数据展示图</p>
+<p>五、数据分析<br>利用wordCloud对爬取的数据进行分析来进一步呈现。<br>5.1最热弹幕分析<br>对Bilibili热门视频Top100弹幕进行分析，选取榜上所有弹幕进行针对性分析：<br>从图中可以明显看出，统计期间最热的弹幕要数“奔涌吧，后浪”。其后是：“狗头”“后浪，奔涌吧”“doge”……<br><img src="https://img-blog.csdnimg.cn/20200518052631531.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>图5-1 最热弹幕词云<br>5.2最热区分析<br>Bilibili包括有动画、番剧、音乐、舞蹈、游戏、科技、生活、鬼畜、时尚、广告、娱乐、影视等多个分区，通过Top100上榜分区处理分析得到当前最热分区。<br><img src="https://img-blog.csdnimg.cn/20200518052700838.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>图5-2 数据统计样本<br>·<img src="https://img-blog.csdnimg.cn/20200518052704174.png" alt="在这里插入图片描述"><br>图5-3 样本分析</p>
+<p>六、总结<br>从定义上来说，爬虫就是模拟用户自动浏览并且保存网络数据的程序，当然，大部分的爬虫都是爬取网页信息（文本，图片，媒体流）。无论是动态还是静态网页，所有的用户可以直观看到的，都有爬取下来的可能。<br>最简单的流程：获取网页源代码，分析源码，存储数据。<br>即从功能上来讲的，数据采集，处理，储存三个部分。传统爬虫从一个或若干初始网页的URL开始，获得初始网页上的URL，在抓取网页的过程中，不断从当前页面上抽取新的URL放入队列,直到满足系统的一定停止条件。聚焦爬虫的工作流程较为复杂，需要根据一定的网页分析算法过滤与主题无关的链接，保留有用的链接并将其放入等待抓取的URL队列。然后，它将根据一定的搜索策略从队列中选择下一步要抓取的网页URL，并重复上述过程，直到达到系统的某一条件时停止。另外，所有被爬虫抓取的网页将会被系统存贮，进行一定的分析、过滤，并建立索引，以便之后的查询和检索；对于聚焦爬虫来说，这一过程所得到的分析结果还可能对以后的抓取过程给出反馈和指导。<br>发起请求：通过HTTP库向目标站点发起请求，即发送一个Request，请求可以包含额外的headers等信息，等待服务器响应。<br>获取响应内容：如果服务器能正常响应，会得到一个Response，Response的内容便是所要获取的页面内容，类型可能有HTML，Json字符串，二进制数据（如图片视频）等类型。<br>解析内容：得到的内容可能是HTML，可以用正则表达式、网页解析库进行解析。可能是Json，可以直接转为Json对象解析，可能是二进制数据，可以做保存或者进一步的处理。<br>保存数据：保存形式多样，可以存为文本，也可以保存至数据库，或者保存特定格式的文件。<br>七、附录<br>源代码请看下一篇</p>
 
         </div>
         <!-- .entry-content -->
@@ -405,15 +372,15 @@ main()
           
             <div class="post-nepre half previous">
           
-            <a href="/2018/10/27/卷积神经网络：（一）风格迁移——环境配置 (1)/" rel="prev">
+            <a href="/2019/05/03/基于Bilibili热门视频Top100最热分区爬取与分析/" rel="prev">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20191221235345841.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://img-blog.csdnimg.cn/20191221235345841.png">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20200518052631531.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://img-blog.csdnimg.cn/20200518052631531.png">
               </div>
               <span class="label">
               Previous Post</span>
               <div class="info">
                 <h3>
-                风格迁移——环境配置</h3>
+                基于Bilibili热门视频Top100最热分区爬取与分析</h3>
                 <hr>
               </div>
             </a>
@@ -423,15 +390,15 @@ main()
           
             <div class="post-nepre half next">
           
-            <a href="/2018/05/29/网络爬虫——猫眼电影数据抓取——RE（正则表达式）/" rel="next">
+            <a href="/2019/05/03/基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）/" rel="next">
               <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20200413213540934.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://img-blog.csdnimg.cn/20200413213540934.jpg">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20200518052704174.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://img-blog.csdnimg.cn/20200518052704174.png">
               </div>
               <span class="label">
               Next Post</span>
               <div class="info">
                 <h3>
-                网络爬虫——猫眼电影数据抓取——RE（正则表达式）</h3>
+                基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）</h3>
                 <hr>
               </div>
             </a>
