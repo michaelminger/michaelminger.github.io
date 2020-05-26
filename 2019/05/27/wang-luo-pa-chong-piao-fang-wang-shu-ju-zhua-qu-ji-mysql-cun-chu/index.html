@@ -461,8 +461,127 @@
 <p>（2）自主选择re、bs4、lxml中的一种解析方法对保存的的源代码读取并进行解析，成功找到目标数据所在的特定标签，进行网页结构的解析；</p>
 <p>（3）定义函数，将获取的目标数据保存到MYSQL库文件中。</p>
 <p>（4）使用框架式结构，通过参数传递实现整个特定数据的爬取。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> csv</span><br><span class="line">from requests.exceptions <span class="keyword">import</span> RequestException</span><br><span class="line">from lxml <span class="keyword">import</span> etree</span><br><span class="line"><span class="keyword">import</span> pymysql </span><br><span class="line">from PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">import</span> pytesseract</span><br><span class="line"><span class="keyword">import</span> traceback  </span><br><span class="line"></span><br><span class="line">def connectMysql():</span><br><span class="line">    <span class="keyword">return</span> pymysql.connect(host=<span class="string">'localhost'</span>,user=<span class="string">'root'</span>,password=<span class="string">'123456'</span>,port=<span class="number">3306</span>,db=<span class="string">'spiders'</span>)</span><br><span class="line"></span><br><span class="line">def createMysqlTable():</span><br><span class="line">    db = connectMysql()</span><br><span class="line">    <span class="built_in">cursor</span> = db.<span class="built_in">cursor</span>()</span><br><span class="line"></span><br><span class="line"># fieldnames = [<span class="string">'名次'</span>,<span class="string">'电影名称'</span>,<span class="string">'日期'</span>,<span class="string">'票房'</span>,<span class="string">'总场次'</span>,<span class="string">'废场'</span>,<span class="string">'人次'</span>,<span class="string">'上座率'</span>,<span class="string">'票价'</span>]</span><br><span class="line">    sql = <span class="string">'create table if not exists movies (\</span></span><br><span class="line"><span class="string">    名次 int not null ,\</span></span><br><span class="line"><span class="string">    电影名称 varchar(255) not null ,\</span></span><br><span class="line"><span class="string">    日期 varchar(255) not null,\</span></span><br><span class="line"><span class="string">    总场次 varchar(255) not null,\</span></span><br><span class="line"><span class="string">    废场 varchar(255) not null,\</span></span><br><span class="line"><span class="string">    人次 varchar(255) not null,\</span></span><br><span class="line"><span class="string">    上座率 varchar(255) not null,\</span></span><br><span class="line"><span class="string">    票价 varchar(255) not null,\</span></span><br><span class="line"><span class="string">    票房 varchar(255) not null,\</span></span><br><span class="line"><span class="string">    primary key(名次))'</span></span><br><span class="line">    <span class="built_in">cursor</span>.execute(sql)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'ok'</span>)</span><br><span class="line">    db.close()</span><br><span class="line"></span><br><span class="line">def getHtmlText(url):</span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69'</span>        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = requests.<span class="built_in">get</span>(url,headers=headers,timeout=<span class="number">30</span>)</span><br><span class="line">        result.raise_for_status()</span><br><span class="line">        result.encoding = result.apparent_encoding</span><br><span class="line">        <span class="keyword">return</span> result.<span class="built_in">text</span></span><br><span class="line">    except:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line"></span><br><span class="line">def parsePage(html):</span><br><span class="line">    ulist = []</span><br><span class="line">    clist = []</span><br><span class="line">    rlist = []</span><br><span class="line">    ilist = []</span><br><span class="line">    </span><br><span class="line">    newhtml =etree.HTML(html,etree.HTMLParser())</span><br><span class="line">    result=newhtml.xpath(<span class="string">'//*[@id="content"]/div[2]/table/tbody/tr/td//text()'</span>)</span><br><span class="line">    imgs = newhtml.xpath(<span class="string">'//*[@id="content"]/div[2]/table/tbody/tr/td/a/img/@src'</span>, stream=True)</span><br><span class="line">    j = <span class="number">0</span> </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> img in imgs:</span><br><span class="line">        j=j+<span class="number">1</span></span><br><span class="line">        with <span class="built_in">open</span>(<span class="built_in">str</span>(j)+<span class="string">'.png'</span>, <span class="string">'wb'</span>) as fd:</span><br><span class="line">            picture=requests.<span class="built_in">get</span>(img).content</span><br><span class="line">            fd.write(picture)  </span><br><span class="line">      </span><br><span class="line">    <span class="keyword">for</span> i in range(len(imgs)):  </span><br><span class="line">            str_ = <span class="built_in">str</span>(i+<span class="number">1</span>)+<span class="string">'.png'</span></span><br><span class="line">            <span class="built_in">text</span> = pytesseract.image_to_string(Image.<span class="built_in">open</span>(str_))</span><br><span class="line">            ilist.<span class="built_in">append</span>(<span class="built_in">text</span>.replace(<span class="string">" "</span>,<span class="string">"."</span>).replace(<span class="string">"M"</span>,<span class="string">"亿"</span>).replace(<span class="string">"a"</span>,<span class="string">"亿"</span>))</span><br><span class="line">#     <span class="built_in">print</span>(ilist)        </span><br><span class="line">    <span class="keyword">for</span> i in range(len(result)):</span><br><span class="line">        ulist.<span class="built_in">append</span>(result[i].replace(<span class="string">" "</span>,<span class="string">""</span>).replace(<span class="string">'\r'</span>,<span class="string">""</span>).replace(<span class="string">"\n"</span>,<span class="string">''</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="string">''</span> in ulist:</span><br><span class="line">        ulist.remove(<span class="string">''</span>)</span><br><span class="line">    </span><br><span class="line">    length = len(ulist)</span><br><span class="line">    weight = <span class="built_in">int</span>(length / <span class="number">8</span> )</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i in range(weight):</span><br><span class="line">        <span class="keyword">for</span> j in range(<span class="number">8</span>):</span><br><span class="line">            clist.<span class="built_in">append</span>(ulist[i*<span class="number">8</span>+j])</span><br><span class="line">        clist.<span class="built_in">append</span>(ilist[i])</span><br><span class="line">        rlist.<span class="built_in">append</span>(clist)</span><br><span class="line">        clist = []</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> rlist</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def mysqlData(datas):</span><br><span class="line">    </span><br><span class="line">    table = <span class="string">'movies'</span></span><br><span class="line">    keys = <span class="string">'名次,电影名称,日期,总场次,废场,人次,上座率,票价,票房'</span></span><br><span class="line">    </span><br><span class="line">    db = connectMysql()</span><br><span class="line">    <span class="built_in">cursor</span> = db.<span class="built_in">cursor</span>()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> data in datas:</span><br><span class="line">        values = <span class="string">','</span>.<span class="built_in">join</span>([<span class="string">'%s'</span>]*len(data))</span><br><span class="line">        sql = <span class="string">'INSERT INTO &#123;table&#125;(&#123;keys&#125;) VALUES(&#123;values&#125;)'</span>.format(table=table,keys = keys ,values = values)</span><br><span class="line">        <span class="built_in">print</span>(sql)</span><br><span class="line">        <span class="built_in">print</span>(tuple(data))</span><br><span class="line">        <span class="keyword">try</span> :</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">cursor</span>.execute(sql, tuple(data)):</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">"Succcessful"</span>)</span><br><span class="line">                db.commit()</span><br><span class="line">        except:</span><br><span class="line">            traceback.print_exc()</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"Failed"</span>)</span><br><span class="line">            db.rollback()</span><br><span class="line">    </span><br><span class="line">    db.close()</span><br><span class="line">    </span><br><span class="line">def main():</span><br><span class="line">    createMysqlTable()</span><br><span class="line"></span><br><span class="line">    url=<span class="string">"http://58921.com/daily/wangpiao"</span></span><br><span class="line">    html=getHtmlText(url)</span><br><span class="line">    rlist=parsePage(html)</span><br><span class="line">    mysqlData(rlist)</span><br><span class="line">                          </span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
-<h3 id="结果输出效果："><a href="#结果输出效果：" class="headerlink" title="结果输出效果："></a>结果输出效果：</h3><p><img src="https://img-blog.csdnimg.cn/20200423215438570.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
+import json
+import csv
+from requests.exceptions import RequestException
+from lxml import etree
+import pymysql 
+from PIL import Image
+import pytesseract
+import traceback  
+
+def connectMysql():
+    return pymysql.connect(host=&#39;localhost&#39;,user=&#39;root&#39;,password=&#39;123456&#39;,port=3306,db=&#39;spiders&#39;)
+
+def createMysqlTable():
+    db = connectMysql()
+    cursor = db.cursor()
+
+# fieldnames = [&#39;名次&#39;,&#39;电影名称&#39;,&#39;日期&#39;,&#39;票房&#39;,&#39;总场次&#39;,&#39;废场&#39;,&#39;人次&#39;,&#39;上座率&#39;,&#39;票价&#39;]
+    sql = &#39;create table if not exists movies (\
+    名次 int not null ,\
+    电影名称 varchar(255) not null ,\
+    日期 varchar(255) not null,\
+    总场次 varchar(255) not null,\
+    废场 varchar(255) not null,\
+    人次 varchar(255) not null,\
+    上座率 varchar(255) not null,\
+    票价 varchar(255) not null,\
+    票房 varchar(255) not null,\
+    primary key(名次))&#39;
+    cursor.execute(sql)
+
+    print(&#39;ok&#39;)
+    db.close()
+
+def getHtmlText(url):
+    headers = {
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
+    }
+    try:
+        result = requests.get(url,headers=headers,timeout=30)
+        result.raise_for_status()
+        result.encoding = result.apparent_encoding
+        return result.text
+    except:
+        return &quot;&quot;
+
+def parsePage(html):
+    ulist = []
+    clist = []
+    rlist = []
+    ilist = []
+
+    newhtml =etree.HTML(html,etree.HTMLParser())
+    result=newhtml.xpath(&#39;//*[@id=&quot;content&quot;]/div[2]/table/tbody/tr/td//text()&#39;)
+    imgs = newhtml.xpath(&#39;//*[@id=&quot;content&quot;]/div[2]/table/tbody/tr/td/a/img/@src&#39;, stream=True)
+    j = 0 
+
+    for img in imgs:
+        j=j+1
+        with open(str(j)+&#39;.png&#39;, &#39;wb&#39;) as fd:
+            picture=requests.get(img).content
+            fd.write(picture)  
+
+    for i in range(len(imgs)):  
+            str_ = str(i+1)+&#39;.png&#39;
+            text = pytesseract.image_to_string(Image.open(str_))
+            ilist.append(text.replace(&quot; &quot;,&quot;.&quot;).replace(&quot;M&quot;,&quot;亿&quot;).replace(&quot;a&quot;,&quot;亿&quot;))
+#     print(ilist)        
+    for i in range(len(result)):
+        ulist.append(result[i].replace(&quot; &quot;,&quot;&quot;).replace(&#39;\r&#39;,&quot;&quot;).replace(&quot;\n&quot;,&#39;&#39;))
+
+    while &#39;&#39; in ulist:
+        ulist.remove(&#39;&#39;)
+
+    length = len(ulist)
+    weight = int(length / 8 )
+
+    for i in range(weight):
+        for j in range(8):
+            clist.append(ulist[i*8+j])
+        clist.append(ilist[i])
+        rlist.append(clist)
+        clist = []
+
+    return rlist
+
+
+def mysqlData(datas):
+
+    table = &#39;movies&#39;
+    keys = &#39;名次,电影名称,日期,总场次,废场,人次,上座率,票价,票房&#39;
+
+    db = connectMysql()
+    cursor = db.cursor()
+
+    for data in datas:
+        values = &#39;,&#39;.join([&#39;%s&#39;]*len(data))
+        sql = &#39;INSERT INTO {table}({keys}) VALUES({values})&#39;.format(table=table,keys = keys ,values = values)
+        print(sql)
+        print(tuple(data))
+        try :
+            if cursor.execute(sql, tuple(data)):
+                print(&quot;Succcessful&quot;)
+                db.commit()
+        except:
+            traceback.print_exc()
+            print(&quot;Failed&quot;)
+            db.rollback()
+
+    db.close()
+
+def main():
+    createMysqlTable()
+
+    url=&quot;http://58921.com/daily/wangpiao&quot;
+    html=getHtmlText(url)
+    rlist=parsePage(html)
+    mysqlData(rlist)
+
+main()
+</code></pre><h3 id="结果输出效果："><a href="#结果输出效果：" class="headerlink" title="结果输出效果："></a>结果输出效果：</h3><p><img src="https://img-blog.csdnimg.cn/20200423215438570.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 
             </div>
             <hr/>

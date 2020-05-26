@@ -452,8 +452,163 @@
                 <h2 id="网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析"><a href="#网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析" class="headerlink" title="网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析"></a>网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析</h2><h4 id="实验内容"><a href="#实验内容" class="headerlink" title="实验内容"></a>实验内容</h4><p>目标网站：Bilibili热门视频Top100</p>
 <p>目标网址：<br><a href="https://www.bilibili.com/ranking?" target="_blank" rel="noopener">https://www.bilibili.com/ranking?</a>（每过几天都会变的哦）<br><img src="https://img-blog.csdnimg.cn/20200518053212353.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h4 id="任务要求"><a href="#任务要求" class="headerlink" title="任务要求"></a>任务要求</h4><p>实现对于Bilibili热门视频Top100弹幕的数据爬取与分析</p>
-<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> requests.exceptions <span class="keyword">import</span> RequestException</span><br><span class="line"><span class="keyword">from</span> wordcloud <span class="keyword">import</span> WordCloud <span class="keyword">as</span> wc</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">getUrl</span> <span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,url)</span>:</span></span><br><span class="line">        self.url = url</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getTxt</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.headers = &#123;</span><br><span class="line">            <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69'</span>        </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            result = requests.get(self.url,headers=self.headers,timeout=<span class="number">30</span>)</span><br><span class="line">            result.raise_for_status()</span><br><span class="line">            result.encoding = result.apparent_encoding</span><br><span class="line">            <span class="keyword">return</span> result.text</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">""</span>    </span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parsePage</span><span class="params">(self)</span>:</span></span><br><span class="line">        res = self.getTxt()</span><br><span class="line">        newhtml =etree.HTML(res,etree.HTMLParser())</span><br><span class="line">        </span><br><span class="line">        result=newhtml.xpath(<span class="string">'//*[@id="app"]/div[1]/div/div[1]/div[2]/div[3]/ul/li/div[2]/div[1]/a//@href'</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span>  result</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">getAvNum</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,url)</span>:</span></span><br><span class="line">        self.url = url</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getTxt</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.headers = &#123;</span><br><span class="line">            <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69'</span>        </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            result = requests.get(self.url,headers=self.headers,timeout=<span class="number">30</span>)</span><br><span class="line">            result.raise_for_status()</span><br><span class="line">            result.encoding = result.apparent_encoding</span><br><span class="line">            <span class="keyword">return</span> result.text</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parsePage</span><span class="params">(self)</span>:</span></span><br><span class="line">        res = self.getTxt()</span><br><span class="line">        newhtml =etree.HTML(res,etree.HTMLParser())</span><br><span class="line">        rlist=newhtml.xpath(<span class="string">'/html/head/meta[10]//@content'</span>)</span><br><span class="line">        </span><br><span class="line">        resp = requests.get(rlist[<span class="number">0</span>],headers=self.headers)</span><br><span class="line">        match_rule = <span class="string">r'cid=(.*?)&amp;aid'</span></span><br><span class="line">        oid = re.search(match_rule,resp.text).group().replace(<span class="string">'cid='</span>,<span class="string">''</span>).replace(<span class="string">'&amp;aid'</span>,<span class="string">''</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span>  oid</span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bilibili</span><span class="params">()</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,oid)</span>:</span></span><br><span class="line">        self.headers=&#123;</span><br><span class="line">        <span class="string">'Host'</span>: <span class="string">'api.bilibili.com'</span>,</span><br><span class="line">        <span class="string">'Connection'</span>: <span class="string">'keep-alive'</span>,</span><br><span class="line">        <span class="string">'Cache-Control'</span>: <span class="string">'max-age=0'</span>,</span><br><span class="line">        <span class="string">'Upgrade-Insecure-Requests'</span>: <span class="string">'1'</span>,</span><br><span class="line">        <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36'</span>,</span><br><span class="line">        <span class="string">'Accept'</span>: <span class="string">'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'</span>,</span><br><span class="line">        <span class="string">'Accept-Encoding'</span>: <span class="string">'gzip, deflate, br'</span>,</span><br><span class="line">        <span class="string">'Accept-Language'</span>: <span class="string">'zh-CN,zh;q=0.9'</span>,</span><br><span class="line">        <span class="string">'Cookie'</span>: <span class="string">'finger=edc6ecda; LIVE_BUVID=AUTO1415378023816310; stardustvideo=1; CURRENT_FNVAL=8; buvid3=0D8F3D74-987D-442D-99CF-42BC9A967709149017infoc; rpdid=olwimklsiidoskmqwipww; fts=1537803390'</span></span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        self.url=<span class="string">'https://api.bilibili.com/x/v1/dm/list.so?oid='</span>+str(oid)</span><br><span class="line">        self.barrage_reault=self.get_page()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_page</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            time.sleep(<span class="number">0.5</span>)</span><br><span class="line">            response=requests.get(self.url,headers=self.headers)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            print(<span class="string">'获取xml内容失败,%s'</span> % e)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">if</span> response.status_code == <span class="number">200</span>:</span><br><span class="line">                <span class="keyword">with</span> open(<span class="string">'bilibili.xml'</span>,<span class="string">'wb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">                    f.write(response.content)</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">param_page</span><span class="params">(self)</span>:</span></span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">if</span>  self.barrage_reault:</span><br><span class="line">            html=etree.parse(<span class="string">'bilibili.xml'</span>,etree.HTMLParser())</span><br><span class="line">            results=html.xpath(<span class="string">'//d//text()'</span>)</span><br><span class="line">            <span class="keyword">return</span> results</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">remove_double_barrage</span><span class="params">(resultlist)</span>:</span></span><br><span class="line">    </span><br><span class="line">    double_barrage=[]</span><br><span class="line">    results=[]</span><br><span class="line">    barrage=set()</span><br><span class="line">    <span class="keyword">for</span> result <span class="keyword">in</span> resultlist:</span><br><span class="line">        <span class="keyword">if</span> result <span class="keyword">not</span> <span class="keyword">in</span> results:</span><br><span class="line">            results.append(result)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            double_barrage.append(result)</span><br><span class="line">            barrage.add(result)</span><br><span class="line">    <span class="keyword">return</span> double_barrage,results,barrage</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_wordCould</span><span class="params">(resultlist)</span>:</span></span><br><span class="line">    double_barrages,results,barrages=remove_double_barrage(resultlist)</span><br><span class="line">    <span class="comment"># 重词计数</span></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">'barrages.txt'</span>,<span class="string">'w'</span>, <span class="number">-1</span>, <span class="string">'utf-8'</span>, <span class="literal">None</span>, <span class="literal">None</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">for</span> barrage <span class="keyword">in</span> barrages:</span><br><span class="line">            amount=double_barrages.count(barrage)</span><br><span class="line">            stt = barrage+<span class="string">':'</span>+str(amount+<span class="number">1</span>)+<span class="string">'\n'</span></span><br><span class="line">            f.write(stt)</span><br><span class="line">                </span><br><span class="line">    <span class="comment"># 设置停用词</span></span><br><span class="line">    stop_words=[<span class="string">'【'</span>,<span class="string">'】'</span>,<span class="string">','</span>,<span class="string">'.'</span>,<span class="string">'?'</span>,<span class="string">'!'</span>,<span class="string">'。'</span>]</span><br><span class="line">    words=[]</span><br><span class="line">    <span class="keyword">if</span> results:</span><br><span class="line">        <span class="keyword">for</span> result <span class="keyword">in</span> results:</span><br><span class="line">            <span class="keyword">for</span> stop <span class="keyword">in</span> stop_words:</span><br><span class="line">                result=<span class="string">''</span>.join(result.split(stop))</span><br><span class="line">            words.append(result)</span><br><span class="line">        <span class="comment"># 列表拼接成字符串</span></span><br><span class="line">        words=<span class="string">''</span>.join(words)</span><br><span class="line">        words=jieba.cut(words)</span><br><span class="line">        words=<span class="string">''</span>.join(words)</span><br><span class="line">        luo=np.array(Image.open(<span class="string">'洛天依.jpg'</span>))    </span><br><span class="line">        w=wc(font_path=<span class="string">'‪C:/Windows/Fonts/SIMYOU.TTF'</span>,background_color=<span class="string">'white'</span>,width=<span class="number">1600</span>,height=<span class="number">1600</span>,max_words=<span class="number">2000</span>,mask=luo)</span><br><span class="line">        w.generate(words)</span><br><span class="line">        w.to_file(<span class="string">'luo.jpg'</span>)</span><br><span class="line">            </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    url=<span class="string">"https://www.bilibili.com/ranking?spm_id_from=333.851.b_7072696d61727950616765546162.3"</span></span><br><span class="line">    urls = getUrl(url)</span><br><span class="line">    strUrl = urls.parsePage()</span><br><span class="line">    ress = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> strUrl:</span><br><span class="line">        AV = getAvNum(i)</span><br><span class="line">        oid = AV.parsePage()</span><br><span class="line">        b=Bilibili(oid)</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> b.param_page():</span><br><span class="line">            ress.append(j)</span><br><span class="line">    make_wordCould(ress)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-<p>具体文件可以到我的<a href="https://github.com/michaelminger/Bilibili" target="_blank" rel="noopener">github</a>上面下载</p>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><pre><code>from lxml import etree
+import time
+import jieba
+import numpy as np
+from PIL import Image
+import requests
+import re
+from requests.exceptions import RequestException
+from wordcloud import WordCloud as wc
+
+class getUrl ():
+    def __init__(self,url):
+        self.url = url
+
+    def getTxt(self):
+        self.headers = {
+            &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
+        }
+        try:
+            result = requests.get(self.url,headers=self.headers,timeout=30)
+            result.raise_for_status()
+            result.encoding = result.apparent_encoding
+            return result.text
+        except:
+            return &quot;&quot;    
+
+    def parsePage(self):
+        res = self.getTxt()
+        newhtml =etree.HTML(res,etree.HTMLParser())
+
+        result=newhtml.xpath(&#39;//*[@id=&quot;app&quot;]/div[1]/div/div[1]/div[2]/div[3]/ul/li/div[2]/div[1]/a//@href&#39;)
+
+        return  result
+
+
+class getAvNum():
+    def __init__(self,url):
+        self.url = url
+
+    def getTxt(self):
+        self.headers = {
+            &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
+        }
+        try:
+            result = requests.get(self.url,headers=self.headers,timeout=30)
+            result.raise_for_status()
+            result.encoding = result.apparent_encoding
+            return result.text
+        except:
+            return &quot;&quot;
+
+    def parsePage(self):
+        res = self.getTxt()
+        newhtml =etree.HTML(res,etree.HTMLParser())
+        rlist=newhtml.xpath(&#39;/html/head/meta[10]//@content&#39;)
+
+        resp = requests.get(rlist[0],headers=self.headers)
+        match_rule = r&#39;cid=(.*?)&amp;aid&#39;
+        oid = re.search(match_rule,resp.text).group().replace(&#39;cid=&#39;,&#39;&#39;).replace(&#39;&amp;aid&#39;,&#39;&#39;)
+
+        return  oid
+
+class Bilibili():
+
+    def __init__(self,oid):
+        self.headers={
+        &#39;Host&#39;: &#39;api.bilibili.com&#39;,
+        &#39;Connection&#39;: &#39;keep-alive&#39;,
+        &#39;Cache-Control&#39;: &#39;max-age=0&#39;,
+        &#39;Upgrade-Insecure-Requests&#39;: &#39;1&#39;,
+        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36&#39;,
+        &#39;Accept&#39;: &#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8&#39;,
+        &#39;Accept-Encoding&#39;: &#39;gzip, deflate, br&#39;,
+        &#39;Accept-Language&#39;: &#39;zh-CN,zh;q=0.9&#39;,
+        &#39;Cookie&#39;: &#39;finger=edc6ecda; LIVE_BUVID=AUTO1415378023816310; stardustvideo=1; CURRENT_FNVAL=8; buvid3=0D8F3D74-987D-442D-99CF-42BC9A967709149017infoc; rpdid=olwimklsiidoskmqwipww; fts=1537803390&#39;
+
+        }
+        self.url=&#39;https://api.bilibili.com/x/v1/dm/list.so?oid=&#39;+str(oid)
+        self.barrage_reault=self.get_page()
+
+    def get_page(self):
+        try:
+            time.sleep(0.5)
+            response=requests.get(self.url,headers=self.headers)
+        except Exception as e:
+            print(&#39;获取xml内容失败,%s&#39; % e)
+            return False
+        else:
+            if response.status_code == 200:
+                with open(&#39;bilibili.xml&#39;,&#39;wb&#39;) as f:
+                    f.write(response.content)
+                return True
+            else:
+                return False
+
+    def param_page(self):
+        time.sleep(1)
+        if  self.barrage_reault:
+            html=etree.parse(&#39;bilibili.xml&#39;,etree.HTMLParser())
+            results=html.xpath(&#39;//d//text()&#39;)
+            return results
+
+def remove_double_barrage(resultlist):
+
+    double_barrage=[]
+    results=[]
+    barrage=set()
+    for result in resultlist:
+        if result not in results:
+            results.append(result)
+        else:
+            double_barrage.append(result)
+            barrage.add(result)
+    return double_barrage,results,barrage
+
+def make_wordCould(resultlist):
+    double_barrages,results,barrages=remove_double_barrage(resultlist)
+    # 重词计数
+    with open(&#39;barrages.txt&#39;,&#39;w&#39;, -1, &#39;utf-8&#39;, None, None) as f:
+        for barrage in barrages:
+            amount=double_barrages.count(barrage)
+            stt = barrage+&#39;:&#39;+str(amount+1)+&#39;\n&#39;
+            f.write(stt)
+
+    # 设置停用词
+    stop_words=[&#39;【&#39;,&#39;】&#39;,&#39;,&#39;,&#39;.&#39;,&#39;?&#39;,&#39;!&#39;,&#39;。&#39;]
+    words=[]
+    if results:
+        for result in results:
+            for stop in stop_words:
+                result=&#39;&#39;.join(result.split(stop))
+            words.append(result)
+        # 列表拼接成字符串
+        words=&#39;&#39;.join(words)
+        words=jieba.cut(words)
+        words=&#39;&#39;.join(words)
+        luo=np.array(Image.open(&#39;洛天依.jpg&#39;))    
+        w=wc(font_path=&#39;‪C:/Windows/Fonts/SIMYOU.TTF&#39;,background_color=&#39;white&#39;,width=1600,height=1600,max_words=2000,mask=luo)
+        w.generate(words)
+        w.to_file(&#39;luo.jpg&#39;)
+
+def main():
+    url=&quot;https://www.bilibili.com/ranking?spm_id_from=333.851.b_7072696d61727950616765546162.3&quot;
+    urls = getUrl(url)
+    strUrl = urls.parsePage()
+    ress = []
+    for i in strUrl:
+        AV = getAvNum(i)
+        oid = AV.parsePage()
+        b=Bilibili(oid)
+        for j in b.param_page():
+            ress.append(j)
+    make_wordCould(ress)
+
+if __name__ == &#39;__main__&#39;:
+    main()
+</code></pre><p>具体文件可以到我的<a href="https://github.com/michaelminger/Bilibili" target="_blank" rel="noopener">github</a>上面下载</p>
 
             </div>
             <hr/>
