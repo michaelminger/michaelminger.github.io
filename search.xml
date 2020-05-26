@@ -72,9 +72,9 @@
       
         <tags>
             
-            <tag> Xpath </tag>
-            
             <tag> CSV </tag>
+            
+            <tag> Xpath </tag>
             
         </tags>
       
@@ -162,31 +162,6 @@
     
     
     <entry>
-      <title>网络爬虫——票房网数据抓取及存储（初级）</title>
-      <link href="/2019/05/27/wang-luo-pa-chong-piao-fang-wang-shu-ju-zhua-qu-ji-cun-chu/"/>
-      <url>/2019/05/27/wang-luo-pa-chong-piao-fang-wang-shu-ju-zhua-qu-ji-cun-chu/</url>
-      
-        <content type="html"><![CDATA[<h2 id="网络爬虫——票房网数据抓取及存储"><a href="#网络爬虫——票房网数据抓取及存储" class="headerlink" title="网络爬虫——票房网数据抓取及存储"></a>网络爬虫——票房网数据抓取及存储</h2><h4 id="实验内容"><a href="#实验内容" class="headerlink" title="实验内容"></a>实验内容</h4><p>目标网站：电影票房网</p><p>目标网址：<a href="http://58921.com/daily/wangpiao" target="_blank" rel="noopener">http://58921.com/daily/wangpiao</a></p><h4 id="任务要求"><a href="#任务要求" class="headerlink" title="任务要求"></a>任务要求</h4><p>目标数据：（1）名次（2）电影名称 （3）日期（4）票房 （5）总场次（6）废场（7）人次（8）上座率（9）票价</p><p><img src="https://img-blog.csdnimg.cn/20200423214801795.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p><p>（1）使用urllib或requests库实现该网站网页源代码的获取，并将源代码进行保存；</p><p>（2）自主选择re、bs4、lxml中的一种解析方法对保存的的源代码读取并进行解析，成功找到目标数据所在的特定标签，进行网页结构的解析；</p><p>（3）定义函数，将获取的目标数据保存到csv文件中。</p><p>（4）使用框架式结构，通过参数传递实现整个特定数据的爬取。</p><h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requestsimport jsonimport csvfrom requests.exceptions import RequestExceptionfrom lxml import etreedef getHtmlText(url):    headers = {        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;            }    try:        result = requests.get(url,headers=headers,timeout=30)        result.raise_for_status()        result.encoding = result.apparent_encoding        return result.text    except:        return &quot;&quot;def parsePage(html):    ulist = []    clist = []    rlist = []    ilist = []    newhtml =etree.HTML(html,etree.HTMLParser())    result=newhtml.xpath(&#39;//*[@id=&quot;content&quot;]/div[2]/table/tbody/tr/td//text()&#39;)    imgs = newhtml.xpath(&#39;//*[@id=&quot;content&quot;]/div[2]/table/tbody/tr/td/a/img/@src&#39;, stream=True)    j = 0     for img in imgs:        j=j+1        with open(str(j)+&#39;.png&#39;, &#39;wb&#39;) as fd:            picture=requests.get(img).content            fd.write(picture)      for i in range(len(imgs)):              str_ = str(i+1)+&#39;.png&#39;            text = pytesseract.image_to_string(Image.open(str_))            ilist.append(text.replace(&quot; &quot;,&quot;.&quot;).replace(&quot;M&quot;,&quot;亿&quot;).replace(&quot;a&quot;,&quot;亿&quot;))#     print(ilist)            for i in range(len(result)):        ulist.append(result[i].replace(&quot; &quot;,&quot;&quot;).replace(&#39;\r&#39;,&quot;&quot;).replace(&quot;\n&quot;,&#39;&#39;))    while &#39;&#39; in ulist:        ulist.remove(&#39;&#39;)    length = len(ulist)    weight = int(length / 8 )    for i in range(weight):        for j in range(8):            clist.append(ulist[i*8+j])        clist.append(ilist[i])        rlist.append(clist)        clist = []    return rlist# def txtdata(data):#     with open(&#39;top20.txt&#39;,&#39;w&#39;)as file:#         for i in data:#             for j in i:#                 print(j)#         print(&#39;successful&#39;)def storedata(data):    with open(&#39;top20.txt&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;)as file:        for i in data:            file.write(json.dumps(i,ensure_ascii=False)+&#39;\n&#39;)        print(&#39;ok&#39;)def csvdata(data):    with open(&#39;top20.csv&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;,newline=&#39;&#39;)as csvfile:        fieldnames = [&#39;名次&#39;,&#39;电影名称&#39;,&#39;日期&#39;,&#39;票房&#39;,&#39;总场次&#39;,&#39;废场&#39;,&#39;人次&#39;,&#39;上座率&#39;,&#39;票价（元）&#39;]        writer = csv.DictWriter(csvfile,fieldnames=fieldnames)        writer.writeheader()        for i in data:            writer.writerow({&#39;名次&#39;:i[0],&#39;电影名称&#39;:i[1],&#39;日期&#39;:i[2],&#39;票房&#39;:i[8],&#39;总场次&#39;:i[3],&#39;废场&#39;:i[4],&#39;人次&#39;:i[5],&#39;上座率&#39;:i[6],&#39;票价（元）&#39;:i[7]})        print(&#39;ok&#39;)def main():    url=&quot;http://58921.com/daily/wangpiao&quot;    html=getHtmlText(url)    rlist=parsePage(html)#     txtdata(rlist)    storedata(rlist)    csvdata(rlist)main()</code></pre><h3 id="结果输出："><a href="#结果输出：" class="headerlink" title="结果输出："></a>结果输出：</h3><p><img src="https://img-blog.csdnimg.cn/20200413222149472.jpg#pic_center" alt="在这里插入图片描述"></p><p><img src="https://img-blog.csdnimg.cn/20200423215045899.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200423215045907.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>]]></content>
-      
-      
-      <categories>
-          
-          <category> 网络爬虫 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 票房 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>网络爬虫——票房网数据抓取及MYSQL存储</title>
       <link href="/2019/05/27/wang-luo-pa-chong-piao-fang-wang-shu-ju-zhua-qu-ji-mysql-cun-chu/"/>
       <url>/2019/05/27/wang-luo-pa-chong-piao-fang-wang-shu-ju-zhua-qu-ji-mysql-cun-chu/</url>
@@ -204,6 +179,31 @@
         <tags>
             
             <tag> MYSQL </tag>
+            
+            <tag> 票房 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>网络爬虫——票房网数据抓取及存储（初级）</title>
+      <link href="/2019/05/27/wang-luo-pa-chong-piao-fang-wang-shu-ju-zhua-qu-ji-cun-chu/"/>
+      <url>/2019/05/27/wang-luo-pa-chong-piao-fang-wang-shu-ju-zhua-qu-ji-cun-chu/</url>
+      
+        <content type="html"><![CDATA[<h2 id="网络爬虫——票房网数据抓取及存储"><a href="#网络爬虫——票房网数据抓取及存储" class="headerlink" title="网络爬虫——票房网数据抓取及存储"></a>网络爬虫——票房网数据抓取及存储</h2><h4 id="实验内容"><a href="#实验内容" class="headerlink" title="实验内容"></a>实验内容</h4><p>目标网站：电影票房网</p><p>目标网址：<a href="http://58921.com/daily/wangpiao" target="_blank" rel="noopener">http://58921.com/daily/wangpiao</a></p><h4 id="任务要求"><a href="#任务要求" class="headerlink" title="任务要求"></a>任务要求</h4><p>目标数据：（1）名次（2）电影名称 （3）日期（4）票房 （5）总场次（6）废场（7）人次（8）上座率（9）票价</p><p><img src="https://img-blog.csdnimg.cn/20200423214801795.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p><p>（1）使用urllib或requests库实现该网站网页源代码的获取，并将源代码进行保存；</p><p>（2）自主选择re、bs4、lxml中的一种解析方法对保存的的源代码读取并进行解析，成功找到目标数据所在的特定标签，进行网页结构的解析；</p><p>（3）定义函数，将获取的目标数据保存到csv文件中。</p><p>（4）使用框架式结构，通过参数传递实现整个特定数据的爬取。</p><h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requestsimport jsonimport csvfrom requests.exceptions import RequestExceptionfrom lxml import etreedef getHtmlText(url):    headers = {        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;            }    try:        result = requests.get(url,headers=headers,timeout=30)        result.raise_for_status()        result.encoding = result.apparent_encoding        return result.text    except:        return &quot;&quot;def parsePage(html):    ulist = []    clist = []    rlist = []    ilist = []    newhtml =etree.HTML(html,etree.HTMLParser())    result=newhtml.xpath(&#39;//*[@id=&quot;content&quot;]/div[2]/table/tbody/tr/td//text()&#39;)    imgs = newhtml.xpath(&#39;//*[@id=&quot;content&quot;]/div[2]/table/tbody/tr/td/a/img/@src&#39;, stream=True)    j = 0     for img in imgs:        j=j+1        with open(str(j)+&#39;.png&#39;, &#39;wb&#39;) as fd:            picture=requests.get(img).content            fd.write(picture)      for i in range(len(imgs)):              str_ = str(i+1)+&#39;.png&#39;            text = pytesseract.image_to_string(Image.open(str_))            ilist.append(text.replace(&quot; &quot;,&quot;.&quot;).replace(&quot;M&quot;,&quot;亿&quot;).replace(&quot;a&quot;,&quot;亿&quot;))#     print(ilist)            for i in range(len(result)):        ulist.append(result[i].replace(&quot; &quot;,&quot;&quot;).replace(&#39;\r&#39;,&quot;&quot;).replace(&quot;\n&quot;,&#39;&#39;))    while &#39;&#39; in ulist:        ulist.remove(&#39;&#39;)    length = len(ulist)    weight = int(length / 8 )    for i in range(weight):        for j in range(8):            clist.append(ulist[i*8+j])        clist.append(ilist[i])        rlist.append(clist)        clist = []    return rlist# def txtdata(data):#     with open(&#39;top20.txt&#39;,&#39;w&#39;)as file:#         for i in data:#             for j in i:#                 print(j)#         print(&#39;successful&#39;)def storedata(data):    with open(&#39;top20.txt&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;)as file:        for i in data:            file.write(json.dumps(i,ensure_ascii=False)+&#39;\n&#39;)        print(&#39;ok&#39;)def csvdata(data):    with open(&#39;top20.csv&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;,newline=&#39;&#39;)as csvfile:        fieldnames = [&#39;名次&#39;,&#39;电影名称&#39;,&#39;日期&#39;,&#39;票房&#39;,&#39;总场次&#39;,&#39;废场&#39;,&#39;人次&#39;,&#39;上座率&#39;,&#39;票价（元）&#39;]        writer = csv.DictWriter(csvfile,fieldnames=fieldnames)        writer.writeheader()        for i in data:            writer.writerow({&#39;名次&#39;:i[0],&#39;电影名称&#39;:i[1],&#39;日期&#39;:i[2],&#39;票房&#39;:i[8],&#39;总场次&#39;:i[3],&#39;废场&#39;:i[4],&#39;人次&#39;:i[5],&#39;上座率&#39;:i[6],&#39;票价（元）&#39;:i[7]})        print(&#39;ok&#39;)def main():    url=&quot;http://58921.com/daily/wangpiao&quot;    html=getHtmlText(url)    rlist=parsePage(html)#     txtdata(rlist)    storedata(rlist)    csvdata(rlist)main()</code></pre><h3 id="结果输出："><a href="#结果输出：" class="headerlink" title="结果输出："></a>结果输出：</h3><p><img src="https://img-blog.csdnimg.cn/20200413222149472.jpg#pic_center" alt="在这里插入图片描述"></p><p><img src="https://img-blog.csdnimg.cn/20200423215045899.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200423215045907.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 网络爬虫 </category>
+          
+      </categories>
+      
+      
+        <tags>
             
             <tag> 票房 </tag>
             
