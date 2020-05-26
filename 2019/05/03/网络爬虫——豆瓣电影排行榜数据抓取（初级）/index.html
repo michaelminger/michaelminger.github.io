@@ -1,332 +1,384 @@
-
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang=zh>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">豆瓣电影排行榜数据抓取（初级）——BS4 | Michaelming&#39;s Blog</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
   
-    <link rel="shortcut icon" href="/images/favicon.ico">
   
-  <meta http-equiv="x-dns-prefetch-control" content="on">
-  <link rel="stylesheet" href="https://flymc.top/css/0font.css" media="all">
-  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yremp/yremp-css@1.3/gitalk.css">
-  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/lib.min.css" media="all">
-  <link rel="stylesheet" href="/css/font.css" media="all">
-  <link rel="stylesheet" href="/css/insight.css" media="all">
-  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
-  <link rel="stylesheet" href="/css/zoom.css" media="all">
-  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
-<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
-" type="text/css" media="all"> -->
-  <script>
-  /*Initial Variables*/
-  var mashiro_option = new Object();
-  var mashiro_global = new Object();
-  mashiro_option.NProgressON = true;
-  /* 
-   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
-   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
-   */
-  mashiro_option.email_domain = "";
-  mashiro_option.email_name = "";
-  mashiro_option.cookie_version_control = "";
-  mashiro_option.qzone_autocomplete = false;
-  mashiro_option.site_name = "Michaelming's Blog";
-  mashiro_option.author_name = "Michaelming's Blog";
-  mashiro_option.site_url = "http://ailous.top";
-  mashiro_option.v_appId = "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz";
-  mashiro_option.v_appKey = "mgOpfzbkHYqU92CV4IDlAUHQ";
-  mashiro_option.mathjax = "0";
-  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
-  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
-
-  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
-  // mashiro_option.float_player_on = true;
-
-  /*End of Initial Variables*/
-  </script>
-  <script type="text/javascript">
-  var bg = "https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/cover/(1).jpg.webp,https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/cover/(2).jpg.webp,https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/cover/(3).jpg.webp,https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/cover/(4).jpg.webp,https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/cover/(5).jpg.webp,https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/cover/(6).jpg.webp,https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/cover/(7).jpg.webp,https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/cover/(8).jpg.webp".split(",");
-  var bgindex = Math.floor(Math.random()*bg.length);
-  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
-    alert('朋友，IE浏览器未适配哦~');
-  }
-  </script>
-  <style type="text/css">
-  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
-  </style>
-  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
-  </style>
+  <title>豆瓣电影排行榜数据抓取（初级）——BS4 | Hexo</title>
+  <meta name="description" content="目标数据增加导演、主演、评价人数等信息，将尽可能多的数据抓取保存。">
+<meta name="keywords" content="豆瓣电影排行榜数据抓取（初级）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="豆瓣电影排行榜数据抓取（初级）——BS4">
+<meta property="og:url" content="http://ailous.top/2019/05/03/网络爬虫——豆瓣电影排行榜数据抓取（初级）/index.html">
+<meta property="og:site_name" content="Michaelming&#39;s Blog">
+<meta property="og:description" content="目标数据增加导演、主演、评价人数等信息，将尽可能多的数据抓取保存。">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200413210616682.jpg">
+<meta property="og:updated_time" content="2020-05-11T14:55:23.897Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="豆瓣电影排行榜数据抓取（初级）——BS4">
+<meta name="twitter:description" content="目标数据增加导演、主演、评价人数等信息，将尽可能多的数据抓取保存。">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200413210616682.jpg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://ailous.top/2019/05/03/网络爬虫——豆瓣电影排行榜数据抓取（初级）/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Michaelming&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+  
 </head>
-</html>
-<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
-  <div class="scrollbar" id="bar">
-  </div>
-  <a href="#" class="cd-top faa-float animated"></a>
-  <section id="main-container">
-    <div class="headertop ">
-  <div id="banner_wave_1"></div>
-  <div id="banner_wave_2"></div>
-  <figure id="centerbg" class="centerbg">
-    <div class="focusinfo no-select">
-      <div class="header-tou">
-        <a href="http://ailous.top">
-          <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/custom/avatar.jpg">
-        </a>
-      </div>
-      <div class="header-info">
-        <!-- <p>待到秋来九月八，我花开遍百花杀。</p> -->
-		
-        <p id="jinrishici-sentence">正在加载今日诗词....</p>
-        <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
 
-        <div class="top-social_v2">
-          <li id="bg-pre">
-            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
-          </li>
-          
-            
-              
-                <li>
-                  <a href="https://github.com/michaelminger" target="_blank" class="social-github" title="github">
-                    <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/social/github.png">
-                  </a>
-                </li>
-              
-            
-              
-                <li>
-                  <a href="https://music.163.com/#/user/home?id=1574390214" target="_blank" class="social-github" title="wangyiyun">
-                    <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/social/wangyiyun.png">
-                  </a>
-                </li>
-              
-            
-              
-                <li class="wechat">
-                  <a href="/#">
-                    <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/social/wechat.png">
-                  </a>
-                  <div class="wechatInner">
-                    <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/custom/wechat.jpg">
-                  </div>
-                </li>
-              
-            
-              
-                <li class="wechat">
-                  <a href="/#">
-                    <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/social/qq.png">
-                  </a>
-                  <div class="wechatInner">
-                    <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/custom/qq.jpg">
-                  </div>
-                </li>
-              
-            
-          
-          <li id="bg-next">
-            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
-          </li>
-        </div>
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/cofess" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">昵称</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Designer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shenzhen, China</small>
       </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
     </div>
-  </figure>
-  <div id="video-container" style="">
-    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
-    </video>
-    <div id="video-btn" class="loadvideo videolive">
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
     </div>
-    <div id="video-add">
-    </div>
-    <div class="video-stu">
-    </div>
-  </div>
-  <div class="headertop-down faa-float animated" onclick="headertop_down()">
-    <span>
-      <i class="fa fa-chevron-down" aria-hidden="true">
-      </i>
-    </span>
   </div>
 </div>
-    <div id="page" class="site wrapper">
-      <header class="site-header no-select gizle sabit" role="banner">
-  <div class="site-top">
-    <div class="site-branding">
-      <span class="site-title">
-        <span class="logolink moe-mashiro">
-          <a href="/">
-            <span class="sakurasono"></span>
-            <span class="shironeko">Michaelming&#39;s Blog</span>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
           </a>
-        </span>
-      </span>
-    </div>
-    <div class="searchbox search-form-submit">
-      <i class="iconfont js-toggle-search iconsearch icon-search">
-      </i>
-    </div>
-    <div id="show-nav" class="showNav mobile-fit">
-      <div class="line line1">
-      </div>
-      <div class="line line2">
-      </div>
-      <div class="line line3">
-      </div>
-    </div>
-    <div class="lower-cantiner">
-      <div class="lower">
-        <nav class="mobile-fit-control hide">
-          <ul id="menu-new" class="menu">
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
             
-              <li>
-                <a href="/">
-                  <span class="faa-parent animated-hover">
-                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
-                    首页
-                  </span>
-                </a>
-                
-              </li>
+            <i class="icon icon-archives-fill"></i>
             
-              <li>
-                <a href="/categories/">
-                  <span class="faa-parent animated-hover">
-                    <i class="fa  fa-bookmark" aria-hidden="true"></i>
-                    分类
-                  </span>
-                </a>
-                
-                  <ul class="sub-menu">
-                    
-                      <li>
-                        <a href="/categories/人工智能/">
-                          <i class="fa fa-code" aria-hidden="true"></i>
-                          人工智能
-                        </a>
-                      </li>
-                    
-                      <li>
-                        <a href="/categories/网络爬虫/">
-                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                          网络爬虫
-                        </a>
-                      </li>
-                    
-                      <li>
-                        <a href="/categories/算法/">
-                          <i class="fa fa-cloud-download" aria-hidden="true"></i>
-                          算法分析
-                        </a>
-                      </li>
-                    
-                      <li>
-                        <a href="/categories/汇编/">
-                          <i class="fa fa-commenting-o" aria-hidden="true"></i>
-                          汇编
-                        </a>
-                      </li>
-                    
-                  </ul>
-                
-              </li>
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
             
-              <li>
-                <a href="/tags/">
-                  <span class="faa-parent animated-hover">
-                    <i class="fa  fa-tag" aria-hidden="true"></i>
-                    标签
-                  </span>
-                </a>
-                
-              </li>
+            <i class="icon icon-folder"></i>
             
-              <li>
-                <a href="/archives">
-                  <span class="faa-parent animated-hover">
-                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
-                    时间轴
-                  </span>
-                </a>
-                
-              </li>
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
             
-              <li>
-                <a href="javascript:;">
-                  <span class="faa-parent animated-hover">
-                    <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
-                    爱好
-                  </span>
-                </a>
-                
-                  <ul class="sub-menu">
-                    
-                      <li>
-                        <a href="/bangumi/">
-                          <i class="fa fa-film faa-vertical" aria-hidden="true"></i>
-                          视频
-                        </a>
-                      </li>
-                    
-                      <li>
-                        <a href="/music/">
-                          <i class="fa fa-headphones" aria-hidden="true"></i>
-                          歌单
-                        </a>
-                      </li>
-                    
-                  </ul>
-                
-              </li>
+            <i class="icon icon-tags"></i>
             
-          </ul>
-        </nav>
-      </div>
-    </div>
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
   </div>
 </header>
 
-      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
-<div class="pattern-center-blank"></div>
-
-  <div class="pattern-center single-center">
-    <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://img-blog.csdnimg.cn/20200413210616682.jpg);" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20200413210616682.jpg">
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
     </div>
-    <header class="pattern-header single-header">
-      <h1 class="entry-title">
-      豆瓣电影排行榜数据抓取（初级）——BS4</h1>
-      <p class="entry-census">
-        <span>
-          <a href="https://user.qzone.qq.com/1980300447/main">
-            <img src="https://qlogo4.store.qq.com/qzone/1980300447/1980300447/100?1567639060">
-          </a>
-        </span>
-        <span>
-          <a href="https://user.qzone.qq.com/1980300447/main">michaelming</a>
-        </span>
-        <span class="bull">
-        ·</span>
-        2019-5-3<span class="bull">
-        ·</span>
-      <span id="busuanzi_value_page_pv"></span>次阅读</p>
-    </header>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/人工智能/">人工智能</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/汇编/">汇编</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络爬虫/">网络爬虫</a><span class="category-list-count">19</span></li></ul>
+    </div>
   </div>
 
-<div id="content" class="site-content">
-  <div id="primary" class="content-area">
-    <main id="main" class="site-main" role="main">
-      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
-        <div class="toc"></div>
-        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BS4/">BS4</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CJNE/">CJNE</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSV/">CSV</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DJNE/">DJNE</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MYSQL/">MYSQL</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RE（正则表达式/">RE（正则表达式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RE（正则表达式）/">RE（正则表达式）</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TIOBE指数/">TIOBE指数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Xpath/">Xpath</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mnist/">mnist</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xpath/">xpath</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xx/">xx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/二手房/">二手房</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/公共子序列/">公共子序列</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前程无忧/">前程无忧</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/卷积神经网络/">卷积神经网络</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/古诗文网/">古诗文网</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/手写识别/">手写识别</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文章/">文章</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/票房/">票房</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/超级鹰/">超级鹰</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/问题/">问题</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/风格迁移/">风格迁移</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/BS4/" style="font-size: 14px;">BS4</a> <a href="/tags/CJNE/" style="font-size: 13px;">CJNE</a> <a href="/tags/CSV/" style="font-size: 13px;">CSV</a> <a href="/tags/DJNE/" style="font-size: 13px;">DJNE</a> <a href="/tags/MYSQL/" style="font-size: 13.67px;">MYSQL</a> <a href="/tags/RE（正则表达式/" style="font-size: 13px;">RE（正则表达式</a> <a href="/tags/RE（正则表达式）/" style="font-size: 13px;">RE（正则表达式）</a> <a href="/tags/TIOBE指数/" style="font-size: 13px;">TIOBE指数</a> <a href="/tags/Xpath/" style="font-size: 13.67px;">Xpath</a> <a href="/tags/mnist/" style="font-size: 13px;">mnist</a> <a href="/tags/xpath/" style="font-size: 13.33px;">xpath</a> <a href="/tags/xx/" style="font-size: 13px;">xx</a> <a href="/tags/二手房/" style="font-size: 13px;">二手房</a> <a href="/tags/公共子序列/" style="font-size: 13px;">公共子序列</a> <a href="/tags/前程无忧/" style="font-size: 13px;">前程无忧</a> <a href="/tags/卷积神经网络/" style="font-size: 13.67px;">卷积神经网络</a> <a href="/tags/古诗文网/" style="font-size: 13px;">古诗文网</a> <a href="/tags/手写识别/" style="font-size: 13px;">手写识别</a> <a href="/tags/文章/" style="font-size: 13px;">文章</a> <a href="/tags/票房/" style="font-size: 13.33px;">票房</a> <a href="/tags/超级鹰/" style="font-size: 13.33px;">超级鹰</a> <a href="/tags/问题/" style="font-size: 13px;">问题</a> <a href="/tags/风格迁移/" style="font-size: 13.67px;">风格迁移</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
         
-        <div class="entry-content">
-          <h2 id="网络爬虫——豆瓣电影排行榜数据抓取（初级）"><a href="#网络爬虫——豆瓣电影排行榜数据抓取（初级）" class="headerlink" title="网络爬虫——豆瓣电影排行榜数据抓取（初级）"></a>网络爬虫——豆瓣电影排行榜数据抓取（初级）</h2><h3 id="目标网址："><a href="#目标网址：" class="headerlink" title="目标网址："></a>目标网址：</h3><p>豆瓣电影排行：<a href="https://movie.douban.com/top250?start=" target="_blank" rel="noopener">https://movie.douban.com/top250?start=</a></p>
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/网络爬虫/">网络爬虫</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/27/网络爬虫——超级鹰源码下载/" class="title">网络爬虫——超级鹰源码下载</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-27T05:47:40.000Z" itemprop="datePublished">2020-04-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/汇编/">汇编</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/02/20/汇编题——CJNE/" class="title">汇编题——CJNE</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-02-20T05:47:40.000Z" itemprop="datePublished">2020-02-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/网络爬虫/">网络爬虫</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/03/网络爬虫——前程无忧网数据获取及存储(高级)/" class="title">网络爬虫——前程无忧网数据获取及存储（高级）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-03T05:47:40.000Z" itemprop="datePublished">2019-09-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/网络爬虫/">网络爬虫</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/06/02/网络爬虫常见问题汇总/" class="title">网络爬虫常见问题汇总</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-06-02T05:47:40.000Z" itemprop="datePublished">2019-06-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/网络爬虫/">网络爬虫</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/05/27/网络爬虫——二手房数据抓取及MYSQL存储/" class="title">网络爬虫——二手房数据抓取及MYSQL存储</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-05-27T05:47:40.000Z" itemprop="datePublished">2019-05-27</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-网络爬虫——豆瓣电影排行榜数据抓取（初级）" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://img-blog.csdnimg.cn/20200413210616682.jpg" rel="gallery_ckana7xrs001xrov79xv3994y">
+        <img src="https://img-blog.csdnimg.cn/20200413210616682.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      豆瓣电影排行榜数据抓取（初级）——BS4
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2019/05/03/网络爬虫——豆瓣电影排行榜数据抓取（初级）/" class="article-date">
+	  <time datetime="2019-05-03T05:47:40.000Z" itemprop="datePublished">2019-05-03</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/网络爬虫/">网络爬虫</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/BS4/">BS4</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/05/03/网络爬虫——豆瓣电影排行榜数据抓取（初级）/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="网络爬虫——豆瓣电影排行榜数据抓取（初级）"><a href="#网络爬虫——豆瓣电影排行榜数据抓取（初级）" class="headerlink" title="网络爬虫——豆瓣电影排行榜数据抓取（初级）"></a>网络爬虫——豆瓣电影排行榜数据抓取（初级）</h2><h3 id="目标网址："><a href="#目标网址：" class="headerlink" title="目标网址："></a>目标网址：</h3><p>豆瓣电影排行：<a href="https://movie.douban.com/top250?start=" target="_blank" rel="noopener">https://movie.douban.com/top250?start=</a></p>
 <p>目标数据描述：（1）排名（2）电影名称<br><img src="https://img-blog.csdnimg.cn/20200413210123780.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>任务明细：</p>
 <p>（1）使用requests库实现该网站网页源代码的获取；</p>
 <p>（2）使用BeautifulSoup对获取的源代码进行解析，并成功找到目标数据所在的特定标签，进行网页结构的解析；</p>
@@ -380,136 +432,174 @@ main()
 
 </code></pre><p>输出如下：<br><img src="https://img-blog.csdnimg.cn/20200413210616682.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 
-        </div>
-        <!-- .entry-content -->
-        <div class="single-reward">
-          <div class="reward-open">赏
-            <div class="reward-main">
-              <ul class="reward-row">
-                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/custom/donate/AliPayQR.jpg"></li>
-                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/custom/donate/WeChanQR.jpg"></li>
-              </ul>
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://ailous.top/2019/05/03/网络爬虫——豆瓣电影排行榜数据抓取（初级）/" title="豆瓣电影排行榜数据抓取（初级）——BS4" target="_blank" rel="external">http://ailous.top/2019/05/03/网络爬虫——豆瓣电影排行榜数据抓取（初级）/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/cofess" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/cofess" target="_blank"><span class="text-dark">昵称</span><small class="ml-1x">Web Developer &amp; Designer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2019/05/03/基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）/" title="基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/04/27/网络爬虫——抓取TIOBE指数前20名排行开发语言/" title="网络爬虫——抓取TIOBE指数前20名排行开发语言"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
             </div>
           </div>
-        </div>
-		
-
-        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
-        <footer class="post-footer">
-          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
-          <div class="post-tags">
-		  
-          </div>
-		  				<div class="tag-cloud">
-                  <div class="tag-cloud-title">
-                  </div>
-                  <div class="tag-cloud-tags">
-                  <a href="/tags/BS4/" style="font-size: 20px; color: #95e1d3">BS4</a> <a href="/tags/CJNE/" style="font-size: 10px; color: #f38181">CJNE</a> <a href="/tags/CSV/" style="font-size: 10px; color: #f38181">CSV</a> <a href="/tags/DJNE/" style="font-size: 10px; color: #f38181">DJNE</a> <a href="/tags/MYSQL/" style="font-size: 16.67px; color: #b4c1b8">MYSQL</a> <a href="/tags/RE（正则表达式/" style="font-size: 10px; color: #f38181">RE（正则表达式</a> <a href="/tags/RE（正则表达式）/" style="font-size: 10px; color: #f38181">RE（正则表达式）</a> <a href="/tags/TIOBE指数/" style="font-size: 10px; color: #f38181">TIOBE指数</a> <a href="/tags/Xpath/" style="font-size: 16.67px; color: #b4c1b8">Xpath</a> <a href="/tags/mnist/" style="font-size: 10px; color: #f38181">mnist</a> <a href="/tags/xpath/" style="font-size: 13.33px; color: #d4a19c">xpath</a> <a href="/tags/xx/" style="font-size: 10px; color: #f38181">xx</a> <a href="/tags/二手房/" style="font-size: 10px; color: #f38181">二手房</a> <a href="/tags/公共子序列/" style="font-size: 10px; color: #f38181">公共子序列</a> <a href="/tags/前程无忧/" style="font-size: 10px; color: #f38181">前程无忧</a> <a href="/tags/卷积神经网络/" style="font-size: 16.67px; color: #b4c1b8">卷积神经网络</a> <a href="/tags/古诗文网/" style="font-size: 10px; color: #f38181">古诗文网</a> <a href="/tags/手写识别/" style="font-size: 10px; color: #f38181">手写识别</a> <a href="/tags/文章/" style="font-size: 10px; color: #f38181">文章</a> <a href="/tags/票房/" style="font-size: 13.33px; color: #d4a19c">票房</a> <a href="/tags/超级鹰/" style="font-size: 13.33px; color: #d4a19c">超级鹰</a> <a href="/tags/问题/" style="font-size: 10px; color: #f38181">问题</a> <a href="/tags/风格迁移/" style="font-size: 16.67px; color: #b4c1b8">风格迁移</a>
-                  </div>
-                </div>
-
-          <div class="post-share">
-            <div class="social-share sharehidden share-component"></div>
-            <i class="iconfont show-share icon-forward"></i>
-          </div>
-        </footer><!-- .entry-footer -->
-      </article>
-      <!-- #post-## -->
-      <div class="toc" style="background: none;"></div>
-      <section class="post-squares nextprev">
-        
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2019/05/03/基于Bilibili热门视频Top100弹幕的数据爬取与分析（报告版）/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20200518061152313.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://img-blog.csdnimg.cn/20200518061152313.png">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                基于Bilibili热门视频Top100最热分区爬取与分析（报告）</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-        
-          
-            <div class="post-nepre half next">
-          
-            <a href="/2019/04/27/网络爬虫——抓取TIOBE指数前20名排行开发语言/" rel="next">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20200413220913662.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://img-blog.csdnimg.cn/20200413220913662.jpg">
-              </div>
-              <span class="label">
-              Next Post</span>
-              <div class="info">
-                <h3>
-                网络爬虫——抓取TIOBE指数前20名排行开发语言</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-      </section>
-      
-  <script src="https://cdn.jsdelivr.net/gh/yremp/yremp-js@1.1/gitalk.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yremp/yremp-css@1.3/gitalk.css">
-  <div id="gitalk-container"></div>
-  <script type="text/javascript">
-      var gitalk = new Gitalk({
-          clientID: '6228d2f5fa297a392a50',
-          clientSecret: '125d58876839025e9bca5343598f3ab7e209cc9a',
-          id: window.location.pathname,
-          repo: 'michaelminger.github.io',
-          owner: 'michaelminger',
-          admin: 'michaelminger'
-      })
-      gitalk.render('gitalk-container')
-    </script>
-
-      <section class="author-profile">
-        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
-          <a href="https://user.qzone.qq.com/1980300447/main" class="profile gravatar"><img src="https://qlogo4.store.qq.com/qzone/1980300447/1980300447/100?1567639060" itemprop="image" alt="michaelming" height="70" width="70"></a>
-          <div class="meta">
-            <span class="title">Author</span>
-            <h3 itemprop="name">
-            <a href="https://user.qzone.qq.com/1980300447/main" itemprop="url" rel="author">michaelming</a>
-            </h3>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
           </div>
         </div>
-        <hr>
-        <p><i class="iconfont icon-write"></i></p>
-      </section>
-    </main><!-- #main -->
-  </div><!-- #primary -->
+      </div>
+    </div>
+  </div>
 </div>
 
 
 
-    </div>    
-    <div class="ins-search">
-    <div class="ins-search-mask"></div>
-    <div class="ins-search-container">
-        <div class="ins-input-wrapper">
-            <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
-            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="ins-section-wrapper">
-            <div class="ins-section-container"></div>
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
         </div>
     </div>
-</div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
 (function (window) {
     var INSIGHT_CONFIG = {
         TRANSLATION: {
-            POSTS: '文章',
-            // PAGES: '页面',
-            CATEGORIES: '分类',
-            TAGS: '标签',
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
         },
         ROOT_URL: '/',
         CONTENT_URL: '/content.json',
@@ -517,359 +607,48 @@ main()
     window.INSIGHT_CONFIG = INSIGHT_CONFIG;
 })(window);
 </script>
-    <!-- <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2020 Michaelming<br>
-      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer> -->
-
-<footer id="colophon" class="site-footer" role="contentinfo">
-  <div class="site-info">
-    <div class="footertext">
-      。。。。。
-    </div>
-    <div class="footer-device">
-    <p style="font-family: 'Ubuntu', sans-serif;">
-        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> by <a href="https://2heng.xin/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Mashiro</a>&<a href="https://www.hojun.cn/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Hojun</a>, Powered by Hexo, Hosted by Coding Pages</a>
-        </span>
-      </p>
-    </div>
-    <!-- <i class="fa fa-fire" aria-hidden="true"></i> -->
-    <span style="color: #ccc;padding-left: 20px;">
-      <i class="fa fa-clock-o" aria-hidden="true"></i>
-      <span id="time" align="center">载入时间中...</span>
-      <script>
-        var now = new Date(); 
-        function createtime() { 
-          var grt= new Date("2020-02-11 17:20:00");//在此处修改你的建站时间
-          now.setTime(now.getTime()+250); 
-          days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
-          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
-          if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
-          mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
-          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
-          snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
-          document.getElementById("time").innerHTML = "小站已经苟活 "+ dnum +" 天 "+hnum + " 小时 " + mnum + " 分 " + snum + " 秒";      
-       } 
-       setInterval("createtime()",250);
-      </script>
-      <!--不蒜子网页计数器-->
-      <span style="color:#ccc;padding-left: 20px;"><i class="fa fa-eye" aria-hidden="true"></i>访问量: <span id="busuanzi_value_site_pv"></span>次</span>
-    </span>
-  </div><!-- .site-info -->
-</footer>
-
-
-<!-- <script src="/js/tocbot.js"></script> -->
-<script type="text/javascript" src="/js/lib.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
-<script type="text/javascript" src="/js/InsightSearch.js"></script>
-<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
-<script type="text/javascript" src="/js/zoom.min.js"></script>
-<script type="text/javascript" src="/js/sakura-app.js"></script>
-<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
-<script src="/js/botui.js"></script>
-<!-- 不蒜子 网页计数器 -->
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
-
-<!-- <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
-<script type="text/javascript">
-/* <![CDATA[ */
-if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/michaelminger/CDN@","name":"Unbroken.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
-} else {
-  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/michaelminger/CDN@","name":"Unbroken.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
-}
-/* ]]> */
-
-</script>
-
-
-<script>
-$(document).ready(function() {
-  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
-    if ($(".pattern-center").length > 0) { //有图的情况
-      tocbot.init({
-          // Where to render the table of contents.
-          tocSelector: '.toc', // 放置目录的容器
-          // Where to grab the headings to build the table of contents.
-          contentSelector: '.entry-content', // 正文内容所在
-          // Which headings to grab inside of the contentSelector element.
-          scrollSmooth: true,
-          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
-          headingsOffset: -400,
-          scrollSmoothOffset: -85
-      });
-    } else {
-      tocbot.init({
-          // Where to render the table of contents.
-          tocSelector: '.toc', // 放置目录的容器
-          // Where to grab the headings to build the table of contents.
-          contentSelector: '.entry-content', // 正文内容所在
-          // Which headings to grab inside of the contentSelector element.
-          scrollSmooth: true,
-          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
-          headingsOffset: -85,
-          scrollSmoothOffset: -85
-      });
-    }
-    var offsetTop = $('.toc').offset().top - 95;
-    window.onscroll = function() {
-      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-      if (scrollTop >= offsetTop) {
-        $('.toc').addClass('toc-fixed');
-      } else {
-        $('.toc').removeClass('toc-fixed');
-      }
-    }
-  }
-});
-</script>
-
-<div id="gitalk-container"></div>
-<script src="https://cdn.jsdelivr.net/gh/yremp/yremp-js@1.1/gitalk.js"></script>
+<script src="/js/insight.js"></script>
 
 
 
-<!--浏览器搞笑标题-->
-<script src="https://cdn.jsdelivr.net/gh/wallleap/cdn@latest/js/hititle.js"></script>
-<!-- 🌸飘落 -->
-<script src="https://cdn.jsdelivr.net/gh/wallleap/cdn@latest/js/sakura.js"></script>
-<!-- 雪花飘落 -->
-<!-- <script src="https://cdn.jsdelivr.net/gh/Yafine/cdn@2.5/source/js/snow1.js"></script> -->
-    <div class="openNav no-select" style="height: 50px;">
-      <div class="iconflat no-select" style="width: 50px; height: 50px;">
-        <div class="icon"></div>
-      </div>
-      <div class="site-branding search-form-submit">
-        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
-      </div>
-    </div>
-  </section>
-  <!-- 实现换肤功能 -->
-  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
- <div class="theme-controls row-container">
-  <ul class="menu-list">
-   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
-   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
-   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
-   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
-   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
-   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
-   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
-   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
-  </ul>
- </div>
-</div>
-<canvas id="night-mode-cover"></canvas> 
-  <div class="changeSkin-gear no-select">
-  <div class="keys" id="setbtn"> 
-   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
-     <i class="iconfont icon-gear inline-block rotating"></i> 
-   </span>
-  </div>
-</div>
-  
-  <div id="mo-nav" class="">
-  <div class="m-avatar">
-    <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/custom/avatar.jpg">
-  </div>
-  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Michaelming's Blog</p>
-  <p style="text-align: center; word-spacing: 20px;">
+
+
+   
+
+
+
+
+   
     
-      
-        <a href="https://github.com/michaelminger" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
-      
-        <a href="http://weibo.com/mashirozx?is_all=1" class="fa fa-weibo" target="_blank" style="color: #dd4b39; margin-left:20px"></a>
-      
-    
-  </p>
-  <ul id="menu-new-1" class="menu">
-    
-      <li>
-        <a href="/">
-          <span class="faa-parent animated-hover">
-            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
-            首页
-          </span>
-        </a>
-        
-      </li>
-    
-      <li>
-        <a href="/categories/">
-          <span class="faa-parent animated-hover">
-            <i class="fa  fa-bookmark" aria-hidden="true"></i>
-            分类
-          </span>
-        </a>
-        
-          <ul class="sub-menu">
-            
-              <li>
-                <a href="/categories/人工智能/">
-                  <i class="fa fa-code" aria-hidden="true"></i>
-                  人工智能
-                </a>
-              </li>
-            
-              <li>
-                <a href="/categories/网络爬虫/">
-                  <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                  网络爬虫
-                </a>
-              </li>
-            
-              <li>
-                <a href="/categories/算法/">
-                  <i class="fa fa-cloud-download" aria-hidden="true"></i>
-                  算法分析
-                </a>
-              </li>
-            
-              <li>
-                <a href="/categories/汇编/">
-                  <i class="fa fa-commenting-o" aria-hidden="true"></i>
-                  汇编
-                </a>
-              </li>
-            
-          </ul>
-        
-      </li>
-    
-      <li>
-        <a href="/tags/">
-          <span class="faa-parent animated-hover">
-            <i class="fa  fa-tag" aria-hidden="true"></i>
-            标签
-          </span>
-        </a>
-        
-      </li>
-    
-      <li>
-        <a href="/archives">
-          <span class="faa-parent animated-hover">
-            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
-            时间轴
-          </span>
-        </a>
-        
-      </li>
-    
-      <li>
-        <a href="javascript:;">
-          <span class="faa-parent animated-hover">
-            <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
-            爱好
-          </span>
-        </a>
-        
-          <ul class="sub-menu">
-            
-              <li>
-                <a href="/bangumi/">
-                  <i class="fa fa-film faa-vertical" aria-hidden="true"></i>
-                  视频
-                </a>
-              </li>
-            
-              <li>
-                <a href="/music/">
-                  <i class="fa fa-headphones" aria-hidden="true"></i>
-                  歌单
-                </a>
-              </li>
-            
-          </ul>
-        
-      </li>
-    
-  </ul>
-  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
-</div>
-<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
-<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
-<!-- require MetingJS -->
-<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
-<style>
-  .aplayer .aplayer-lrc {
-    height: 35px;
-  }
-  .aplayer .aplayer-lrc p{
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 18px !important;
-  }
-  .aplayer .aplayer-lrc p.aplayer-lrc-current{
-    color: #FF1493;
-  }
-  .aplayer.aplayer-narrow .aplayer-body{
-    left: -66px !important;
-  }
-  .aplayer.aplayer-fixed .aplayer-lrc {
-    display: none;
-  }
-  .aplayer .aplayer-lrc.aplayer-lrc-hide {
-      display:none !important;
-  }
-  .aplayer.aplayer-fixed .lrc-show {
-    display: block;
-    background: rgba(255, 255, 255, 0.8);
-  }
-</style>
-<meting-js
-
-    id="3100100114"
-
-    server="netease"
-
-    type="playlist"
-
-    fixed="true"
-
-    autoplay="false"
-
-    loop="all"
-
-    order="random"
-
-    preload="auto"
-
-    volume="0.7"
-
-    mutex="true"
-
-</meting-js>
-<script>
-  $(function(){
-    $('body').on('click', '.aplayer', function(){
-      if($('.aplayer-button').hasClass('aplayer-play')) {
-        $('.aplayer-lrc').removeClass('lrc-show');
-      } else {
-        $('.aplayer-lrc').addClass('lrc-show');
-      }
-    })
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
   });
-</script>
-  <!-- 点击出现社会主义彩色文字 -->
-  <script src="https://cdn.jsdelivr.net/gh/wallleap/cdn/js/shehuizhuyi.js"></script>
-  <!-- 点击出现爱心 -->
-  <!-- <script src="https://cdn.jsdelivr.net/gh/wallleap/cdn/js/love.js"></script> -->
-  <!-- 滑动特效 -->
-  <script src="https://cdn.jsdelivr.net/gh/wallleap/cdn/js/xuehua.js"></script>
-  <!-- 鼠标键盘 -->
-  <script src="https://cdn.jsdelivr.net/gh/wallleap/cdn/js/noSomeKey.js"></script>
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
 
 </body>
 </html>

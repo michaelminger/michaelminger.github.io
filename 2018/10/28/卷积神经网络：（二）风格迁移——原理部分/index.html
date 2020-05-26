@@ -1,332 +1,384 @@
-
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang=zh>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">风格迁移——原理部分 | Michaelming&#39;s Blog</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
   
-    <link rel="shortcut icon" href="/images/favicon.ico">
   
-  <meta http-equiv="x-dns-prefetch-control" content="on">
-  <link rel="stylesheet" href="https://flymc.top/css/0font.css" media="all">
-  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yremp/yremp-css@1.3/gitalk.css">
-  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/lib.min.css" media="all">
-  <link rel="stylesheet" href="/css/font.css" media="all">
-  <link rel="stylesheet" href="/css/insight.css" media="all">
-  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
-  <link rel="stylesheet" href="/css/zoom.css" media="all">
-  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
-<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
-" type="text/css" media="all"> -->
-  <script>
-  /*Initial Variables*/
-  var mashiro_option = new Object();
-  var mashiro_global = new Object();
-  mashiro_option.NProgressON = true;
-  /* 
-   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
-   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
-   */
-  mashiro_option.email_domain = "";
-  mashiro_option.email_name = "";
-  mashiro_option.cookie_version_control = "";
-  mashiro_option.qzone_autocomplete = false;
-  mashiro_option.site_name = "Michaelming's Blog";
-  mashiro_option.author_name = "Michaelming's Blog";
-  mashiro_option.site_url = "http://ailous.top";
-  mashiro_option.v_appId = "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz";
-  mashiro_option.v_appKey = "mgOpfzbkHYqU92CV4IDlAUHQ";
-  mashiro_option.mathjax = "0";
-  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
-  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
-
-  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
-  // mashiro_option.float_player_on = true;
-
-  /*End of Initial Variables*/
-  </script>
-  <script type="text/javascript">
-  var bg = "https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/cover/(1).jpg.webp,https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/cover/(2).jpg.webp,https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/cover/(3).jpg.webp,https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/cover/(4).jpg.webp,https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/cover/(5).jpg.webp,https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/cover/(6).jpg.webp,https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/cover/(7).jpg.webp,https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/cover/(8).jpg.webp".split(",");
-  var bgindex = Math.floor(Math.random()*bg.length);
-  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
-    alert('朋友，IE浏览器未适配哦~');
-  }
-  </script>
-  <style type="text/css">
-  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
-  </style>
-  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
-  </style>
+  <title>风格迁移——原理部分 | Hexo</title>
+  <meta name="description" content="本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）">
+<meta name="keywords" content="原理部分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="风格迁移——原理部分">
+<meta property="og:url" content="http://ailous.top/2018/10/28/卷积神经网络：（二）风格迁移——原理部分/index.html">
+<meta property="og:site_name" content="Michaelming&#39;s Blog">
+<meta property="og:description" content="本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191222102628441.jpg">
+<meta property="og:updated_time" content="2020-05-11T14:54:51.694Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="风格迁移——原理部分">
+<meta name="twitter:description" content="本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20191222102628441.jpg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://ailous.top/2018/10/28/卷积神经网络：（二）风格迁移——原理部分/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Michaelming&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+  
 </head>
-</html>
-<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
-  <div class="scrollbar" id="bar">
-  </div>
-  <a href="#" class="cd-top faa-float animated"></a>
-  <section id="main-container">
-    <div class="headertop ">
-  <div id="banner_wave_1"></div>
-  <div id="banner_wave_2"></div>
-  <figure id="centerbg" class="centerbg">
-    <div class="focusinfo no-select">
-      <div class="header-tou">
-        <a href="http://ailous.top">
-          <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/custom/avatar.jpg">
-        </a>
-      </div>
-      <div class="header-info">
-        <!-- <p>待到秋来九月八，我花开遍百花杀。</p> -->
-		
-        <p id="jinrishici-sentence">正在加载今日诗词....</p>
-        <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
 
-        <div class="top-social_v2">
-          <li id="bg-pre">
-            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
-          </li>
-          
-            
-              
-                <li>
-                  <a href="https://github.com/michaelminger" target="_blank" class="social-github" title="github">
-                    <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/social/github.png">
-                  </a>
-                </li>
-              
-            
-              
-                <li>
-                  <a href="https://music.163.com/#/user/home?id=1574390214" target="_blank" class="social-github" title="wangyiyun">
-                    <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/social/wangyiyun.png">
-                  </a>
-                </li>
-              
-            
-              
-                <li class="wechat">
-                  <a href="/#">
-                    <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/social/wechat.png">
-                  </a>
-                  <div class="wechatInner">
-                    <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/custom/wechat.jpg">
-                  </div>
-                </li>
-              
-            
-              
-                <li class="wechat">
-                  <a href="/#">
-                    <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/social/qq.png">
-                  </a>
-                  <div class="wechatInner">
-                    <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/custom/qq.jpg">
-                  </div>
-                </li>
-              
-            
-          
-          <li id="bg-next">
-            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
-          </li>
-        </div>
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/cofess" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">昵称</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Designer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shenzhen, China</small>
       </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
     </div>
-  </figure>
-  <div id="video-container" style="">
-    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
-    </video>
-    <div id="video-btn" class="loadvideo videolive">
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
     </div>
-    <div id="video-add">
-    </div>
-    <div class="video-stu">
-    </div>
-  </div>
-  <div class="headertop-down faa-float animated" onclick="headertop_down()">
-    <span>
-      <i class="fa fa-chevron-down" aria-hidden="true">
-      </i>
-    </span>
   </div>
 </div>
-    <div id="page" class="site wrapper">
-      <header class="site-header no-select gizle sabit" role="banner">
-  <div class="site-top">
-    <div class="site-branding">
-      <span class="site-title">
-        <span class="logolink moe-mashiro">
-          <a href="/">
-            <span class="sakurasono"></span>
-            <span class="shironeko">Michaelming&#39;s Blog</span>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
           </a>
-        </span>
-      </span>
-    </div>
-    <div class="searchbox search-form-submit">
-      <i class="iconfont js-toggle-search iconsearch icon-search">
-      </i>
-    </div>
-    <div id="show-nav" class="showNav mobile-fit">
-      <div class="line line1">
-      </div>
-      <div class="line line2">
-      </div>
-      <div class="line line3">
-      </div>
-    </div>
-    <div class="lower-cantiner">
-      <div class="lower">
-        <nav class="mobile-fit-control hide">
-          <ul id="menu-new" class="menu">
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
             
-              <li>
-                <a href="/">
-                  <span class="faa-parent animated-hover">
-                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
-                    首页
-                  </span>
-                </a>
-                
-              </li>
+            <i class="icon icon-archives-fill"></i>
             
-              <li>
-                <a href="/categories/">
-                  <span class="faa-parent animated-hover">
-                    <i class="fa  fa-bookmark" aria-hidden="true"></i>
-                    分类
-                  </span>
-                </a>
-                
-                  <ul class="sub-menu">
-                    
-                      <li>
-                        <a href="/categories/人工智能/">
-                          <i class="fa fa-code" aria-hidden="true"></i>
-                          人工智能
-                        </a>
-                      </li>
-                    
-                      <li>
-                        <a href="/categories/网络爬虫/">
-                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                          网络爬虫
-                        </a>
-                      </li>
-                    
-                      <li>
-                        <a href="/categories/算法/">
-                          <i class="fa fa-cloud-download" aria-hidden="true"></i>
-                          算法分析
-                        </a>
-                      </li>
-                    
-                      <li>
-                        <a href="/categories/汇编/">
-                          <i class="fa fa-commenting-o" aria-hidden="true"></i>
-                          汇编
-                        </a>
-                      </li>
-                    
-                  </ul>
-                
-              </li>
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
             
-              <li>
-                <a href="/tags/">
-                  <span class="faa-parent animated-hover">
-                    <i class="fa  fa-tag" aria-hidden="true"></i>
-                    标签
-                  </span>
-                </a>
-                
-              </li>
+            <i class="icon icon-folder"></i>
             
-              <li>
-                <a href="/archives">
-                  <span class="faa-parent animated-hover">
-                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
-                    时间轴
-                  </span>
-                </a>
-                
-              </li>
+            <span class="menu-title">Categories</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
             
-              <li>
-                <a href="javascript:;">
-                  <span class="faa-parent animated-hover">
-                    <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
-                    爱好
-                  </span>
-                </a>
-                
-                  <ul class="sub-menu">
-                    
-                      <li>
-                        <a href="/bangumi/">
-                          <i class="fa fa-film faa-vertical" aria-hidden="true"></i>
-                          视频
-                        </a>
-                      </li>
-                    
-                      <li>
-                        <a href="/music/">
-                          <i class="fa fa-headphones" aria-hidden="true"></i>
-                          歌单
-                        </a>
-                      </li>
-                    
-                  </ul>
-                
-              </li>
+            <i class="icon icon-tags"></i>
             
-          </ul>
-        </nav>
-      </div>
-    </div>
+            <span class="menu-title">Tags</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">Repository</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">About</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
   </div>
 </header>
 
-      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
-<div class="pattern-center-blank"></div>
-
-  <div class="pattern-center single-center">
-    <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://img-blog.csdnimg.cn/20191222102628441.jpg);" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20191222102628441.jpg">
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
     </div>
-    <header class="pattern-header single-header">
-      <h1 class="entry-title">
-      风格迁移——原理部分</h1>
-      <p class="entry-census">
-        <span>
-          <a href="https://user.qzone.qq.com/1980300447/main">
-            <img src="https://qlogo4.store.qq.com/qzone/1980300447/1980300447/100?1567639060">
-          </a>
-        </span>
-        <span>
-          <a href="https://user.qzone.qq.com/1980300447/main">michaelming</a>
-        </span>
-        <span class="bull">
-        ·</span>
-        2018-10-28<span class="bull">
-        ·</span>
-      <span id="busuanzi_value_page_pv"></span>次阅读</p>
-    </header>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/人工智能/">人工智能</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/汇编/">汇编</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络爬虫/">网络爬虫</a><span class="category-list-count">19</span></li></ul>
+    </div>
   </div>
 
-<div id="content" class="site-content">
-  <div id="primary" class="content-area">
-    <main id="main" class="site-main" role="main">
-      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
-        <div class="toc"></div>
-        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BS4/">BS4</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CJNE/">CJNE</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSV/">CSV</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DJNE/">DJNE</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MYSQL/">MYSQL</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RE（正则表达式/">RE（正则表达式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RE（正则表达式）/">RE（正则表达式）</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TIOBE指数/">TIOBE指数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Xpath/">Xpath</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mnist/">mnist</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xpath/">xpath</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xx/">xx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/二手房/">二手房</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/公共子序列/">公共子序列</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前程无忧/">前程无忧</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/卷积神经网络/">卷积神经网络</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/古诗文网/">古诗文网</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/手写识别/">手写识别</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文章/">文章</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/票房/">票房</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/超级鹰/">超级鹰</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/问题/">问题</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/风格迁移/">风格迁移</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/BS4/" style="font-size: 14px;">BS4</a> <a href="/tags/CJNE/" style="font-size: 13px;">CJNE</a> <a href="/tags/CSV/" style="font-size: 13px;">CSV</a> <a href="/tags/DJNE/" style="font-size: 13px;">DJNE</a> <a href="/tags/MYSQL/" style="font-size: 13.67px;">MYSQL</a> <a href="/tags/RE（正则表达式/" style="font-size: 13px;">RE（正则表达式</a> <a href="/tags/RE（正则表达式）/" style="font-size: 13px;">RE（正则表达式）</a> <a href="/tags/TIOBE指数/" style="font-size: 13px;">TIOBE指数</a> <a href="/tags/Xpath/" style="font-size: 13.67px;">Xpath</a> <a href="/tags/mnist/" style="font-size: 13px;">mnist</a> <a href="/tags/xpath/" style="font-size: 13.33px;">xpath</a> <a href="/tags/xx/" style="font-size: 13px;">xx</a> <a href="/tags/二手房/" style="font-size: 13px;">二手房</a> <a href="/tags/公共子序列/" style="font-size: 13px;">公共子序列</a> <a href="/tags/前程无忧/" style="font-size: 13px;">前程无忧</a> <a href="/tags/卷积神经网络/" style="font-size: 13.67px;">卷积神经网络</a> <a href="/tags/古诗文网/" style="font-size: 13px;">古诗文网</a> <a href="/tags/手写识别/" style="font-size: 13px;">手写识别</a> <a href="/tags/文章/" style="font-size: 13px;">文章</a> <a href="/tags/票房/" style="font-size: 13.33px;">票房</a> <a href="/tags/超级鹰/" style="font-size: 13.33px;">超级鹰</a> <a href="/tags/问题/" style="font-size: 13px;">问题</a> <a href="/tags/风格迁移/" style="font-size: 13.67px;">风格迁移</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
         
-        <div class="entry-content">
-          <h1 id="卷积神经网络：（二）风格迁移——原理部分"><a href="#卷积神经网络：（二）风格迁移——原理部分" class="headerlink" title="卷积神经网络：（二）风格迁移——原理部分"></a>卷积神经网络：（二）风格迁移——原理部分</h1><h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><h4 id="本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）。若想查看环境配置步骤，请点击https-blog-csdn-net-weixin-41108515-article-details-103636284，因原理部分篇幅较多，所以将所有代码，知识部分移到第三篇博客上，若是对于该原理了解熟悉，或只想操作不需深入的，可以直接跳过。所有操作都在第三篇上。"><a href="#本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）。若想查看环境配置步骤，请点击https-blog-csdn-net-weixin-41108515-article-details-103636284，因原理部分篇幅较多，所以将所有代码，知识部分移到第三篇博客上，若是对于该原理了解熟悉，或只想操作不需深入的，可以直接跳过。所有操作都在第三篇上。" class="headerlink" title="本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）。若想查看环境配置步骤，请点击https://blog.csdn.net/weixin_41108515/article/details/103636284，因原理部分篇幅较多，所以将所有代码，知识部分移到第三篇博客上，若是对于该原理了解熟悉，或只想操作不需深入的，可以直接跳过。所有操作都在第三篇上。"></a>本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）。若想查看环境配置步骤，请点击<a href="https://blog.csdn.net/weixin_41108515/article/details/103636284" target="_blank" rel="noopener">https://blog.csdn.net/weixin_41108515/article/details/103636284</a>，因原理部分篇幅较多，所以将所有代码，知识部分移到第三篇博客上，若是对于该原理了解熟悉，或只想操作不需深入的，可以直接跳过。所有操作都在第三篇上。</h4><p>&nbsp;<br>转载请注明出处：<a href="https://blog.csdn.net/weixin_41108515/article/details/103650964" target="_blank" rel="noopener">https://blog.csdn.net/weixin_41108515/article/details/103650964</a><br>&nbsp;<br>这里引用的是：<br><a href="http://zh.gluon.ai/chapter_computer-vision/neural-style.html" target="_blank" rel="noopener">http://zh.gluon.ai/chapter_computer-vision/neural-style.html</a><br><a href="https://blog.csdn.net/aaronjny/article/details/79681080" target="_blank" rel="noopener">https://blog.csdn.net/aaronjny/article/details/79681080</a><br>这两篇都非常详细，并且经调试可以使用。</p>
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/网络爬虫/">网络爬虫</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/27/网络爬虫——超级鹰源码下载/" class="title">网络爬虫——超级鹰源码下载</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-27T05:47:40.000Z" itemprop="datePublished">2020-04-27</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/汇编/">汇编</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/02/20/汇编题——CJNE/" class="title">汇编题——CJNE</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-02-20T05:47:40.000Z" itemprop="datePublished">2020-02-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/网络爬虫/">网络爬虫</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/03/网络爬虫——前程无忧网数据获取及存储(高级)/" class="title">网络爬虫——前程无忧网数据获取及存储（高级）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-03T05:47:40.000Z" itemprop="datePublished">2019-09-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/网络爬虫/">网络爬虫</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/06/02/网络爬虫常见问题汇总/" class="title">网络爬虫常见问题汇总</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-06-02T05:47:40.000Z" itemprop="datePublished">2019-06-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/网络爬虫/">网络爬虫</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/05/27/网络爬虫——二手房数据抓取及MYSQL存储/" class="title">网络爬虫——二手房数据抓取及MYSQL存储</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-05-27T05:47:40.000Z" itemprop="datePublished">2019-05-27</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-卷积神经网络：（二）风格迁移——原理部分" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://img-blog.csdnimg.cn/20191222102628441.jpg" rel="gallery_ckana7xqm0008rov7i8icydzg">
+        <img src="https://img-blog.csdnimg.cn/20191222102628441.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      风格迁移——原理部分
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2018/10/28/卷积神经网络：（二）风格迁移——原理部分/" class="article-date">
+	  <time datetime="2018-10-28T05:47:40.000Z" itemprop="datePublished">2018-10-28</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/人工智能/">人工智能</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/卷积神经网络/">卷积神经网络</a>, <a class="article-tag-link" href="/tags/风格迁移/">风格迁移</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/10/28/卷积神经网络：（二）风格迁移——原理部分/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="卷积神经网络：（二）风格迁移——原理部分"><a href="#卷积神经网络：（二）风格迁移——原理部分" class="headerlink" title="卷积神经网络：（二）风格迁移——原理部分"></a>卷积神经网络：（二）风格迁移——原理部分</h1><h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><h4 id="本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）。若想查看环境配置步骤，请点击https-blog-csdn-net-weixin-41108515-article-details-103636284，因原理部分篇幅较多，所以将所有代码，知识部分移到第三篇博客上，若是对于该原理了解熟悉，或只想操作不需深入的，可以直接跳过。所有操作都在第三篇上。"><a href="#本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）。若想查看环境配置步骤，请点击https-blog-csdn-net-weixin-41108515-article-details-103636284，因原理部分篇幅较多，所以将所有代码，知识部分移到第三篇博客上，若是对于该原理了解熟悉，或只想操作不需深入的，可以直接跳过。所有操作都在第三篇上。" class="headerlink" title="本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）。若想查看环境配置步骤，请点击https://blog.csdn.net/weixin_41108515/article/details/103636284，因原理部分篇幅较多，所以将所有代码，知识部分移到第三篇博客上，若是对于该原理了解熟悉，或只想操作不需深入的，可以直接跳过。所有操作都在第三篇上。"></a>本文是在第一步配置完环境后基础上运行的。使用的为系统直装的python环境（在anaconda环境下一样适用，后面注意的点会提示的。）。若想查看环境配置步骤，请点击<a href="https://blog.csdn.net/weixin_41108515/article/details/103636284" target="_blank" rel="noopener">https://blog.csdn.net/weixin_41108515/article/details/103636284</a>，因原理部分篇幅较多，所以将所有代码，知识部分移到第三篇博客上，若是对于该原理了解熟悉，或只想操作不需深入的，可以直接跳过。所有操作都在第三篇上。</h4><p>&nbsp;<br>转载请注明出处：<a href="https://blog.csdn.net/weixin_41108515/article/details/103650964" target="_blank" rel="noopener">https://blog.csdn.net/weixin_41108515/article/details/103650964</a><br>&nbsp;<br>这里引用的是：<br><a href="http://zh.gluon.ai/chapter_computer-vision/neural-style.html" target="_blank" rel="noopener">http://zh.gluon.ai/chapter_computer-vision/neural-style.html</a><br><a href="https://blog.csdn.net/aaronjny/article/details/79681080" target="_blank" rel="noopener">https://blog.csdn.net/aaronjny/article/details/79681080</a><br>这两篇都非常详细，并且经调试可以使用。</p>
 <h1 id="涉及到的相关原理："><a href="#涉及到的相关原理：" class="headerlink" title="涉及到的相关原理："></a>涉及到的相关原理：</h1><h1 id="1、神经网络部分原理："><a href="#1、神经网络部分原理：" class="headerlink" title="1、神经网络部分原理："></a>1、神经网络部分原理：</h1><h2 id="1-1-神经网络基础介绍"><a href="#1-1-神经网络基础介绍" class="headerlink" title="1.1 神经网络基础介绍"></a>1.1 神经网络基础介绍</h2><h4 id="神经网络基本可以分成两种：一种为生物神经网络，一种为人工神经网络。"><a href="#神经网络基本可以分成两种：一种为生物神经网络，一种为人工神经网络。" class="headerlink" title="神经网络基本可以分成两种：一种为生物神经网络，一种为人工神经网络。"></a>神经网络基本可以分成两种：一种为生物神经网络，一种为人工神经网络。</h4><h4 id="生物神经网络一般是指生物的大脑神经元，细胞，触点等组成的网络，用于产生生物的意识，帮助生物进行思考和行动。其主要是由生物神经元构成，如下图所示。人工神经网络就是模拟人思维的第二种方式。这是一个非线性动力学系统，其特色在于信息的分布式存储和并行协同处理。虽然单个神经元的结构极其简单，功能有限，但大量神经元构成的网络系统所能实现的行为却是极其丰富多彩的。"><a href="#生物神经网络一般是指生物的大脑神经元，细胞，触点等组成的网络，用于产生生物的意识，帮助生物进行思考和行动。其主要是由生物神经元构成，如下图所示。人工神经网络就是模拟人思维的第二种方式。这是一个非线性动力学系统，其特色在于信息的分布式存储和并行协同处理。虽然单个神经元的结构极其简单，功能有限，但大量神经元构成的网络系统所能实现的行为却是极其丰富多彩的。" class="headerlink" title="生物神经网络一般是指生物的大脑神经元，细胞，触点等组成的网络，用于产生生物的意识，帮助生物进行思考和行动。其主要是由生物神经元构成，如下图所示。人工神经网络就是模拟人思维的第二种方式。这是一个非线性动力学系统，其特色在于信息的分布式存储和并行协同处理。虽然单个神经元的结构极其简单，功能有限，但大量神经元构成的网络系统所能实现的行为却是极其丰富多彩的。"></a>生物神经网络一般是指生物的大脑神经元，细胞，触点等组成的网络，用于产生生物的意识，帮助生物进行思考和行动。其主要是由生物神经元构成，如下图所示。<img src="https://img-blog.csdnimg.cn/2019122210122665.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">人工神经网络就是模拟人思维的第二种方式。这是一个非线性动力学系统，其特色在于信息的分布式存储和并行协同处理。虽然单个神经元的结构极其简单，功能有限，但大量神经元构成的网络系统所能实现的行为却是极其丰富多彩的。</h4><h4 id="神经网络的研究内容相当广泛，反映了多学科交叉技术领域的特点。主要的研究工作集中在以下几个方面："><a href="#神经网络的研究内容相当广泛，反映了多学科交叉技术领域的特点。主要的研究工作集中在以下几个方面：" class="headerlink" title="神经网络的研究内容相当广泛，反映了多学科交叉技术领域的特点。主要的研究工作集中在以下几个方面："></a>神经网络的研究内容相当广泛，反映了多学科交叉技术领域的特点。主要的研究工作集中在以下几个方面：</h4><h5 id="（1）生物原型研究。从生理学、心理学、解剖学、脑科学、病理学等生物科学方面研究神经细胞、神经网络、神经系统的生物原型结构及其功能机理。"><a href="#（1）生物原型研究。从生理学、心理学、解剖学、脑科学、病理学等生物科学方面研究神经细胞、神经网络、神经系统的生物原型结构及其功能机理。" class="headerlink" title="（1）生物原型研究。从生理学、心理学、解剖学、脑科学、病理学等生物科学方面研究神经细胞、神经网络、神经系统的生物原型结构及其功能机理。"></a>（1）生物原型研究。从生理学、心理学、解剖学、脑科学、病理学等生物科学方面研究神经细胞、神经网络、神经系统的生物原型结构及其功能机理。</h5><h5 id="（2）建立理论模型。根据生物原型的研究，建立神经元、神经网络的理论模型。其中包括概念模型、知识模型、物理化学模型、数学模型等。"><a href="#（2）建立理论模型。根据生物原型的研究，建立神经元、神经网络的理论模型。其中包括概念模型、知识模型、物理化学模型、数学模型等。" class="headerlink" title="（2）建立理论模型。根据生物原型的研究，建立神经元、神经网络的理论模型。其中包括概念模型、知识模型、物理化学模型、数学模型等。"></a>（2）建立理论模型。根据生物原型的研究，建立神经元、神经网络的理论模型。其中包括概念模型、知识模型、物理化学模型、数学模型等。</h5><h5 id="（3）网络模型与算法研究。在理论模型研究的基础上构作具体的神经网络模型，以实现计算机模拟或准备制作硬件，包括网络学习算法的研究。这方面的工作也称为技术模型研究。"><a href="#（3）网络模型与算法研究。在理论模型研究的基础上构作具体的神经网络模型，以实现计算机模拟或准备制作硬件，包括网络学习算法的研究。这方面的工作也称为技术模型研究。" class="headerlink" title="（3）网络模型与算法研究。在理论模型研究的基础上构作具体的神经网络模型，以实现计算机模拟或准备制作硬件，包括网络学习算法的研究。这方面的工作也称为技术模型研究。"></a>（3）网络模型与算法研究。在理论模型研究的基础上构作具体的神经网络模型，以实现计算机模拟或准备制作硬件，包括网络学习算法的研究。这方面的工作也称为技术模型研究。</h5><h5 id="（4）人工神经网络应用系统。在网络模型与算法研究的基础上，利用人工神经网络组成实际的应用系统，例如，完成某种信号处理或模式识别的功能、构造专家系统、制成机器人等等。"><a href="#（4）人工神经网络应用系统。在网络模型与算法研究的基础上，利用人工神经网络组成实际的应用系统，例如，完成某种信号处理或模式识别的功能、构造专家系统、制成机器人等等。" class="headerlink" title="（4）人工神经网络应用系统。在网络模型与算法研究的基础上，利用人工神经网络组成实际的应用系统，例如，完成某种信号处理或模式识别的功能、构造专家系统、制成机器人等等。"></a>（4）人工神经网络应用系统。在网络模型与算法研究的基础上，利用人工神经网络组成实际的应用系统，例如，完成某种信号处理或模式识别的功能、构造专家系统、制成机器人等等。</h5><h4 id="纵观当代新兴科学技术的发展历史，人类在征服宇宙空间、基本粒子，生命起源等科学技术领域的进程中历经了崎岖不平的道路。我们也会看到，探索人脑功能和神经网络的研究将伴随着重重困难的克服而日新月异。人工神经网络如下图所示。"><a href="#纵观当代新兴科学技术的发展历史，人类在征服宇宙空间、基本粒子，生命起源等科学技术领域的进程中历经了崎岖不平的道路。我们也会看到，探索人脑功能和神经网络的研究将伴随着重重困难的克服而日新月异。人工神经网络如下图所示。" class="headerlink" title="纵观当代新兴科学技术的发展历史，人类在征服宇宙空间、基本粒子，生命起源等科学技术领域的进程中历经了崎岖不平的道路。我们也会看到，探索人脑功能和神经网络的研究将伴随着重重困难的克服而日新月异。人工神经网络如下图所示。"></a>纵观当代新兴科学技术的发展历史，人类在征服宇宙空间、基本粒子，生命起源等科学技术领域的进程中历经了崎岖不平的道路。我们也会看到，探索人脑功能和神经网络的研究将伴随着重重困难的克服而日新月异。人工神经网络如下图所示。<img src="https://img-blog.csdnimg.cn/20191222101416373.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></h4><h2 id="1-2-卷积神经网络基本结构"><a href="#1-2-卷积神经网络基本结构" class="headerlink" title="1.2 卷积神经网络基本结构"></a>1.2 卷积神经网络基本结构</h2><h4 id="卷积神经网络-Convolutional-Neural-Network，CNN-是一种前馈神经网络，它的人工神经元可以对周围单元的一部分进行响应，并能很好的处理大型的图片。卷积神经网络是近几年来发展起来的一种高效的识别方法，并引起了广泛的关注-16-。正是由于高效的识别准确率，对卷积神经网络的研究才层出不穷。20世纪60年代，胡贝尔和魏塞尔发现，独特的网络结构可以有效地减少反馈神经网络在大脑皮层神经元研究中的局部敏感性和方向性选择的复杂性，从而提出了卷积神经网络-Convolutional-Neural-Networks简称CNN-的概念。目前，卷积神经网络已成为许多科学领域的热点话题。由于内部算法避免了对图像进行复杂的预处理，所以它可以直接输入原始图片。"><a href="#卷积神经网络-Convolutional-Neural-Network，CNN-是一种前馈神经网络，它的人工神经元可以对周围单元的一部分进行响应，并能很好的处理大型的图片。卷积神经网络是近几年来发展起来的一种高效的识别方法，并引起了广泛的关注-16-。正是由于高效的识别准确率，对卷积神经网络的研究才层出不穷。20世纪60年代，胡贝尔和魏塞尔发现，独特的网络结构可以有效地减少反馈神经网络在大脑皮层神经元研究中的局部敏感性和方向性选择的复杂性，从而提出了卷积神经网络-Convolutional-Neural-Networks简称CNN-的概念。目前，卷积神经网络已成为许多科学领域的热点话题。由于内部算法避免了对图像进行复杂的预处理，所以它可以直接输入原始图片。" class="headerlink" title="卷积神经网络(Convolutional Neural Network，CNN)是一种前馈神经网络，它的人工神经元可以对周围单元的一部分进行响应，并能很好的处理大型的图片。卷积神经网络是近几年来发展起来的一种高效的识别方法，并引起了广泛的关注[16]。正是由于高效的识别准确率，对卷积神经网络的研究才层出不穷。20世纪60年代，胡贝尔和魏塞尔发现，独特的网络结构可以有效地减少反馈神经网络在大脑皮层神经元研究中的局部敏感性和方向性选择的复杂性，从而提出了卷积神经网络(Convolutional Neural Networks简称CNN)的概念。目前，卷积神经网络已成为许多科学领域的热点话题。由于内部算法避免了对图像进行复杂的预处理，所以它可以直接输入原始图片。"></a>卷积神经网络(Convolutional Neural Network，CNN)是一种前馈神经网络，它的人工神经元可以对周围单元的一部分进行响应，并能很好的处理大型的图片。卷积神经网络是近几年来发展起来的一种高效的识别方法，并引起了广泛的关注[16]。正是由于高效的识别准确率，对卷积神经网络的研究才层出不穷。20世纪60年代，胡贝尔和魏塞尔发现，独特的网络结构可以有效地减少反馈神经网络在大脑皮层神经元研究中的局部敏感性和方向性选择的复杂性，从而提出了卷积神经网络(Convolutional Neural Networks简称CNN)的概念。目前，卷积神经网络已成为许多科学领域的热点话题。由于内部算法避免了对图像进行复杂的预处理，所以它可以直接输入原始图片。</h4><h3 id="1-2-1-输入层"><a href="#1-2-1-输入层" class="headerlink" title="1.2.1 输入层"></a>1.2.1 输入层</h3><h4 id="卷积神经网络的输入层可以处理多维数据，常见地，一维卷积神经网络的输入层接收一维或二维数组，其中一维数组通常为时间或频谱采样；二维数组可能包含多个通道；二维卷积神经网络的输入层接收二维或三维数组；三维卷积神经网络的输入层接收四维数组。"><a href="#卷积神经网络的输入层可以处理多维数据，常见地，一维卷积神经网络的输入层接收一维或二维数组，其中一维数组通常为时间或频谱采样；二维数组可能包含多个通道；二维卷积神经网络的输入层接收二维或三维数组；三维卷积神经网络的输入层接收四维数组。" class="headerlink" title="卷积神经网络的输入层可以处理多维数据，常见地，一维卷积神经网络的输入层接收一维或二维数组，其中一维数组通常为时间或频谱采样；二维数组可能包含多个通道；二维卷积神经网络的输入层接收二维或三维数组；三维卷积神经网络的输入层接收四维数组。"></a>卷积神经网络的输入层可以处理多维数据，常见地，一维卷积神经网络的输入层接收一维或二维数组，其中一维数组通常为时间或频谱采样；二维数组可能包含多个通道；二维卷积神经网络的输入层接收二维或三维数组；三维卷积神经网络的输入层接收四维数组。</h4><h3 id="1-2-2-隐含层"><a href="#1-2-2-隐含层" class="headerlink" title="1.2.2 隐含层"></a>1.2.2 隐含层</h3><h4 id="1-卷积层"><a href="#1-卷积层" class="headerlink" title="1.卷积层"></a>1.卷积层</h4><h5 id="（1）卷积层"><a href="#（1）卷积层" class="headerlink" title="（1）卷积层"></a>（1）卷积层</h5><h4 id="利用乘法卷积代替矩阵乘法。在图像处理的过程中，一张“小猫”的图片可以被看作是一个“薄饼”，它包括图片的高度、宽度和深度-即颜色的三原色，以RGB表示-。"><a href="#利用乘法卷积代替矩阵乘法。在图像处理的过程中，一张“小猫”的图片可以被看作是一个“薄饼”，它包括图片的高度、宽度和深度-即颜色的三原色，以RGB表示-。" class="headerlink" title="利用乘法卷积代替矩阵乘法。在图像处理的过程中，一张“小猫”的图片可以被看作是一个“薄饼”，它包括图片的高度、宽度和深度(即颜色的三原色，以RGB表示)。"></a>利用乘法卷积代替矩阵乘法。在图像处理的过程中，一张“小猫”的图片可以被看作是一个“薄饼”，它包括图片的高度、宽度和深度(即颜色的三原色，以RGB表示)。<img src="https://img-blog.csdnimg.cn/20191222102217444.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></h4><h4 id="如上图所示，若权重不变，把这个上方具有k个输出的小神经网络对应的小块滑遍整个图像，可以得到一个宽度、高度、深度都不同的新图像。得到的新图像如下图所示。"><a href="#如上图所示，若权重不变，把这个上方具有k个输出的小神经网络对应的小块滑遍整个图像，可以得到一个宽度、高度、深度都不同的新图像。得到的新图像如下图所示。" class="headerlink" title="如上图所示，若权重不变，把这个上方具有k个输出的小神经网络对应的小块滑遍整个图像，可以得到一个宽度、高度、深度都不同的新图像。得到的新图像如下图所示。"></a>如上图所示，若权重不变，把这个上方具有k个输出的小神经网络对应的小块滑遍整个图像，可以得到一个宽度、高度、深度都不同的新图像。得到的新图像如下图所示。</h4><p><img src="https://img-blog.csdnimg.cn/20191222102503552.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h5 id="（2）卷积层参数"><a href="#（2）卷积层参数" class="headerlink" title="（2）卷积层参数"></a>（2）卷积层参数</h5><h4 id="卷积层参数包括卷积核大小、步长和填充，三者共同决定了卷积层输出特征图的尺寸，是卷积神经网络的超参数。其中卷积核大小可以指定为小于输入图像尺寸的任意值，卷积核越大，可提取的输入特征越复杂。"><a href="#卷积层参数包括卷积核大小、步长和填充，三者共同决定了卷积层输出特征图的尺寸，是卷积神经网络的超参数。其中卷积核大小可以指定为小于输入图像尺寸的任意值，卷积核越大，可提取的输入特征越复杂。" class="headerlink" title="卷积层参数包括卷积核大小、步长和填充，三者共同决定了卷积层输出特征图的尺寸，是卷积神经网络的超参数。其中卷积核大小可以指定为小于输入图像尺寸的任意值，卷积核越大，可提取的输入特征越复杂。"></a>卷积层参数包括卷积核大小、步长和填充，三者共同决定了卷积层输出特征图的尺寸，是卷积神经网络的超参数。其中卷积核大小可以指定为小于输入图像尺寸的任意值，卷积核越大，可提取的输入特征越复杂。</h4><h4 id="卷积步长定义了卷积核相邻两次扫过特征图时位置的距离，卷积步长为1时，卷积核会逐个扫过特征图的元素，步长为n时会在下一次扫描跳过n-1个像素。"><a href="#卷积步长定义了卷积核相邻两次扫过特征图时位置的距离，卷积步长为1时，卷积核会逐个扫过特征图的元素，步长为n时会在下一次扫描跳过n-1个像素。" class="headerlink" title="卷积步长定义了卷积核相邻两次扫过特征图时位置的距离，卷积步长为1时，卷积核会逐个扫过特征图的元素，步长为n时会在下一次扫描跳过n-1个像素。"></a>卷积步长定义了卷积核相邻两次扫过特征图时位置的距离，卷积步长为1时，卷积核会逐个扫过特征图的元素，步长为n时会在下一次扫描跳过n-1个像素。</h4><h4 id="由卷积核的交叉相关计算可知，随着卷积层的堆叠，特征图的尺寸会逐步减小，例如16×16的输入图像在经过单位步长、无填充的5×5的卷积核后，会输出12×12的特征图。为此，填充是在特征图通过卷积核之前人为增大其尺寸以抵消计算中尺寸收缩影响的方法。常见的填充方法为按0填充和重复边界值填充。填充依据其层数和目的可分为四类："><a href="#由卷积核的交叉相关计算可知，随着卷积层的堆叠，特征图的尺寸会逐步减小，例如16×16的输入图像在经过单位步长、无填充的5×5的卷积核后，会输出12×12的特征图。为此，填充是在特征图通过卷积核之前人为增大其尺寸以抵消计算中尺寸收缩影响的方法。常见的填充方法为按0填充和重复边界值填充。填充依据其层数和目的可分为四类：" class="headerlink" title="由卷积核的交叉相关计算可知，随着卷积层的堆叠，特征图的尺寸会逐步减小，例如16×16的输入图像在经过单位步长、无填充的5×5的卷积核后，会输出12×12的特征图。为此，填充是在特征图通过卷积核之前人为增大其尺寸以抵消计算中尺寸收缩影响的方法。常见的填充方法为按0填充和重复边界值填充。填充依据其层数和目的可分为四类："></a>由卷积核的交叉相关计算可知，随着卷积层的堆叠，特征图的尺寸会逐步减小，例如16×16的输入图像在经过单位步长、无填充的5×5的卷积核后，会输出12×12的特征图。为此，填充是在特征图通过卷积核之前人为增大其尺寸以抵消计算中尺寸收缩影响的方法。常见的填充方法为按0填充和重复边界值填充。填充依据其层数和目的可分为四类：</h4><h5 id="有效填充（valid-padding）：即完全不使用填充，卷积核只允许访问特征图中包含完整感受野的位置。输出的所有像素都是输入中相同数量像素的函数。使用有效填充的卷积被称为“窄卷积”，窄卷积输出的特征图尺寸为-L-f-s-1。"><a href="#有效填充（valid-padding）：即完全不使用填充，卷积核只允许访问特征图中包含完整感受野的位置。输出的所有像素都是输入中相同数量像素的函数。使用有效填充的卷积被称为“窄卷积”，窄卷积输出的特征图尺寸为-L-f-s-1。" class="headerlink" title="有效填充（valid padding）：即完全不使用填充，卷积核只允许访问特征图中包含完整感受野的位置。输出的所有像素都是输入中相同数量像素的函数。使用有效填充的卷积被称为“窄卷积”，窄卷积输出的特征图尺寸为(L-f)/s+1。"></a>有效填充（valid padding）：即完全不使用填充，卷积核只允许访问特征图中包含完整感受野的位置。输出的所有像素都是输入中相同数量像素的函数。使用有效填充的卷积被称为“窄卷积”，窄卷积输出的特征图尺寸为(L-f)/s+1。</h5><h5 id="相同填充-半填充：只进行足够的填充来保持输出和输入的特征图尺寸相同。相同填充下特征图的尺寸不会缩减但输入像素中靠近边界的部分相比于中间部分对于特征图的影响更小，即存在边界像素的欠表达。使用相同填充的卷积被称为“等长卷积。"><a href="#相同填充-半填充：只进行足够的填充来保持输出和输入的特征图尺寸相同。相同填充下特征图的尺寸不会缩减但输入像素中靠近边界的部分相比于中间部分对于特征图的影响更小，即存在边界像素的欠表达。使用相同填充的卷积被称为“等长卷积。" class="headerlink" title="相同填充/半填充：只进行足够的填充来保持输出和输入的特征图尺寸相同。相同填充下特征图的尺寸不会缩减但输入像素中靠近边界的部分相比于中间部分对于特征图的影响更小，即存在边界像素的欠表达。使用相同填充的卷积被称为“等长卷积。"></a>相同填充/半填充：只进行足够的填充来保持输出和输入的特征图尺寸相同。相同填充下特征图的尺寸不会缩减但输入像素中靠近边界的部分相比于中间部分对于特征图的影响更小，即存在边界像素的欠表达。使用相同填充的卷积被称为“等长卷积。</h5><h5 id="全填充：进行足够多的填充使得每个像素在每个方向上被访问的次数相同。步长为1时，全填充输出的特征图尺寸为L-f-1，大于输入值。使用全填充的卷积被称为“宽卷积”。"><a href="#全填充：进行足够多的填充使得每个像素在每个方向上被访问的次数相同。步长为1时，全填充输出的特征图尺寸为L-f-1，大于输入值。使用全填充的卷积被称为“宽卷积”。" class="headerlink" title="全填充：进行足够多的填充使得每个像素在每个方向上被访问的次数相同。步长为1时，全填充输出的特征图尺寸为L+f-1，大于输入值。使用全填充的卷积被称为“宽卷积”。"></a>全填充：进行足够多的填充使得每个像素在每个方向上被访问的次数相同。步长为1时，全填充输出的特征图尺寸为L+f-1，大于输入值。使用全填充的卷积被称为“宽卷积”。</h5><h5 id="任意填充：介于有效填充和全填充之间，人为设定的填充，较少使用。"><a href="#任意填充：介于有效填充和全填充之间，人为设定的填充，较少使用。" class="headerlink" title="任意填充：介于有效填充和全填充之间，人为设定的填充，较少使用。"></a>任意填充：介于有效填充和全填充之间，人为设定的填充，较少使用。</h5><h5 id="（3）激励函数"><a href="#（3）激励函数" class="headerlink" title="（3）激励函数"></a>（3）激励函数</h5><h4 id="一个合适的激励函数可以有效地提高卷积神经网络的运行性能。激活函数应当具有的性质："><a href="#一个合适的激励函数可以有效地提高卷积神经网络的运行性能。激活函数应当具有的性质：" class="headerlink" title="一个合适的激励函数可以有效地提高卷积神经网络的运行性能。激活函数应当具有的性质："></a>一个合适的激励函数可以有效地提高卷积神经网络的运行性能。激活函数应当具有的性质：</h4><h5 id="1）可微性：当优化方法是基于梯度的时候，这个性质是必不可少的。"><a href="#1）可微性：当优化方法是基于梯度的时候，这个性质是必不可少的。" class="headerlink" title="1）可微性：当优化方法是基于梯度的时候，这个性质是必不可少的。"></a>1）可微性：当优化方法是基于梯度的时候，这个性质是必不可少的。</h5><h5 id="2）单调性：当激活函数为单调函数时，能够确保单层网络为凸函数。"><a href="#2）单调性：当激活函数为单调函数时，能够确保单层网络为凸函数。" class="headerlink" title="2）单调性：当激活函数为单调函数时，能够确保单层网络为凸函数。"></a>2）单调性：当激活函数为单调函数时，能够确保单层网络为凸函数。</h5><h5 id="3）输出值的范围：当激活函数的输出值受到限制时，基于梯度的优化方法将更加稳定，因为特征的表示更受有限权重的影响。当激活函数的输出是无限时，模型的训练将更加油效率，但在这种情形下，通常需要较小的学习速率。"><a href="#3）输出值的范围：当激活函数的输出值受到限制时，基于梯度的优化方法将更加稳定，因为特征的表示更受有限权重的影响。当激活函数的输出是无限时，模型的训练将更加油效率，但在这种情形下，通常需要较小的学习速率。" class="headerlink" title="3）输出值的范围：当激活函数的输出值受到限制时，基于梯度的优化方法将更加稳定，因为特征的表示更受有限权重的影响。当激活函数的输出是无限时，模型的训练将更加油效率，但在这种情形下，通常需要较小的学习速率。"></a>3）输出值的范围：当激活函数的输出值受到限制时，基于梯度的优化方法将更加稳定，因为特征的表示更受有限权重的影响。当激活函数的输出是无限时，模型的训练将更加油效率，但在这种情形下，通常需要较小的学习速率。</h5><h4 id="经常使用的非线性激活函数有sigmid、tanh、Relu等等，前两者sigmid与tanh在全连接层-比较常见，后者ReLU常见于卷积层。"><a href="#经常使用的非线性激活函数有sigmid、tanh、Relu等等，前两者sigmid与tanh在全连接层-比较常见，后者ReLU常见于卷积层。" class="headerlink" title="经常使用的非线性激活函数有sigmid、tanh、Relu等等，前两者sigmid与tanh在全连接层 比较常见，后者ReLU常见于卷积层。"></a>经常使用的非线性激活函数有sigmid、tanh、Relu等等，前两者sigmid与tanh在全连接层 比较常见，后者ReLU常见于卷积层。</h4><h4 id="2-池化层"><a href="#2-池化层" class="headerlink" title="2.池化层"></a>2.池化层</h4><h4 id="池化层是卷积神经网络的一个重要组成部分，它通过减少卷积层之间的连接数量来降低计算的困难度。包括以下几种池化："><a href="#池化层是卷积神经网络的一个重要组成部分，它通过减少卷积层之间的连接数量来降低计算的困难度。包括以下几种池化：" class="headerlink" title="池化层是卷积神经网络的一个重要组成部分，它通过减少卷积层之间的连接数量来降低计算的困难度。包括以下几种池化："></a>池化层是卷积神经网络的一个重要组成部分，它通过减少卷积层之间的连接数量来降低计算的困难度。包括以下几种池化：</h4><h5 id="（1）一般池化-General-Pooling"><a href="#（1）一般池化-General-Pooling" class="headerlink" title="（1）一般池化(General Pooling)"></a>（1）一般池化(General Pooling)</h5><h5 id="1）mean-pooling，即只要求邻域中特征点的平均值；"><a href="#1）mean-pooling，即只要求邻域中特征点的平均值；" class="headerlink" title="1）mean-pooling，即只要求邻域中特征点的平均值；"></a>1）mean-pooling，即只要求邻域中特征点的平均值；</h5><h5 id="2）max-pooling，即在邻域中提取最大特征点；"><a href="#2）max-pooling，即在邻域中提取最大特征点；" class="headerlink" title="2）max-pooling，即在邻域中提取最大特征点；"></a>2）max-pooling，即在邻域中提取最大特征点；</h5><h5 id="3）Stochastic-pooling，介于两者之间，根据数值给出像素的概率，并根据概率进行二次采样。"><a href="#3）Stochastic-pooling，介于两者之间，根据数值给出像素的概率，并根据概率进行二次采样。" class="headerlink" title="3）Stochastic-pooling，介于两者之间，根据数值给出像素的概率，并根据概率进行二次采样。"></a>3）Stochastic-pooling，介于两者之间，根据数值给出像素的概率，并根据概率进行二次采样。</h5><h4 id="特征提取的误差主要来自两个方面："><a href="#特征提取的误差主要来自两个方面：" class="headerlink" title="特征提取的误差主要来自两个方面："></a>特征提取的误差主要来自两个方面：</h4><h5 id="1）邻域大小受限造成的估计值方差增大；"><a href="#1）邻域大小受限造成的估计值方差增大；" class="headerlink" title="1）邻域大小受限造成的估计值方差增大；"></a>1）邻域大小受限造成的估计值方差增大；</h5><h5 id="2）卷积层参数误差导致估计均值的偏移。"><a href="#2）卷积层参数误差导致估计均值的偏移。" class="headerlink" title="2）卷积层参数误差导致估计均值的偏移。"></a>2）卷积层参数误差导致估计均值的偏移。</h5><h4 id="一般来说，mean-pooling能减小第一种误差并保留图像的背景信息，max-pooling能减小第二类的错误，并保留更多的纹理信息。在平均意义上，与mean"><a href="#一般来说，mean-pooling能减小第一种误差并保留图像的背景信息，max-pooling能减小第二类的错误，并保留更多的纹理信息。在平均意义上，与mean" class="headerlink" title="一般来说，mean-pooling能减小第一种误差并保留图像的背景信息，max-pooling能减小第二类的错误，并保留更多的纹理信息。在平均意义上，与mean-"></a>一般来说，mean-pooling能减小第一种误差并保留图像的背景信息，max-pooling能减小第二类的错误，并保留更多的纹理信息。在平均意义上，与mean-</h4><h4 id="pooling近似，在局部意义上，则服从max-pooling的准则。如图下图所示，"><a href="#pooling近似，在局部意义上，则服从max-pooling的准则。如图下图所示，" class="headerlink" title="pooling近似，在局部意义上，则服从max-pooling的准则。如图下图所示，"></a>pooling近似，在局部意义上，则服从max-pooling的准则。如图下图所示，</h4><p><img src="https://img-blog.csdnimg.cn/20191222102557759.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h5 id="（2）空间金字塔池化-Spatial-pyramid-pooling"><a href="#（2）空间金字塔池化-Spatial-pyramid-pooling" class="headerlink" title="（2）空间金字塔池化(Spatial pyramid pooling)"></a>（2）空间金字塔池化(Spatial pyramid pooling)</h5><h4 id="一般的卷积神将网络都需要输入图像的大小是固定的，这是因为全连接层的输入需要一个固定的维度。几乎所有作者提出了空间金字塔池化，先让图像进行卷积，然后变换为要输入到全连接层的维度，这样可以把卷积神经网络扩展到任意大小的图像。"><a href="#一般的卷积神将网络都需要输入图像的大小是固定的，这是因为全连接层的输入需要一个固定的维度。几乎所有作者提出了空间金字塔池化，先让图像进行卷积，然后变换为要输入到全连接层的维度，这样可以把卷积神经网络扩展到任意大小的图像。" class="headerlink" title="一般的卷积神将网络都需要输入图像的大小是固定的，这是因为全连接层的输入需要一个固定的维度。几乎所有作者提出了空间金字塔池化，先让图像进行卷积，然后变换为要输入到全连接层的维度，这样可以把卷积神经网络扩展到任意大小的图像。"></a>一般的卷积神将网络都需要输入图像的大小是固定的，这是因为全连接层的输入需要一个固定的维度。几乎所有作者提出了空间金字塔池化，先让图像进行卷积，然后变换为要输入到全连接层的维度，这样可以把卷积神经网络扩展到任意大小的图像。</h4><h4 id="空间金字塔池化可以把任何尺度的卷积特征转化成同一维，这不仅可以让卷积神经网络处理任意大小的图像，还能避免裁剪和扭曲操作，这具有重要意义。"><a href="#空间金字塔池化可以把任何尺度的卷积特征转化成同一维，这不仅可以让卷积神经网络处理任意大小的图像，还能避免裁剪和扭曲操作，这具有重要意义。" class="headerlink" title="空间金字塔池化可以把任何尺度的卷积特征转化成同一维，这不仅可以让卷积神经网络处理任意大小的图像，还能避免裁剪和扭曲操作，这具有重要意义。"></a>空间金字塔池化可以把任何尺度的卷积特征转化成同一维，这不仅可以让卷积神经网络处理任意大小的图像，还能避免裁剪和扭曲操作，这具有重要意义。</h4><h4 id="3-全连接层"><a href="#3-全连接层" class="headerlink" title="3.全连接层"></a>3.全连接层</h4><h4 id="卷积神经网络中的全连接层等价于传统前馈神经网络中的隐含层。全连接层通常搭建在卷积神经网络隐含层的最后部分，并只向其它全连接层传递信号。特征图在全连接层中会失去三维结构，被展开为向量并通过激励函数传递至下一层。"><a href="#卷积神经网络中的全连接层等价于传统前馈神经网络中的隐含层。全连接层通常搭建在卷积神经网络隐含层的最后部分，并只向其它全连接层传递信号。特征图在全连接层中会失去三维结构，被展开为向量并通过激励函数传递至下一层。" class="headerlink" title="卷积神经网络中的全连接层等价于传统前馈神经网络中的隐含层。全连接层通常搭建在卷积神经网络隐含层的最后部分，并只向其它全连接层传递信号。特征图在全连接层中会失去三维结构，被展开为向量并通过激励函数传递至下一层。"></a>卷积神经网络中的全连接层等价于传统前馈神经网络中的隐含层。全连接层通常搭建在卷积神经网络隐含层的最后部分，并只向其它全连接层传递信号。特征图在全连接层中会失去三维结构，被展开为向量并通过激励函数传递至下一层。</h4><h3 id="1-2-3-输出层"><a href="#1-2-3-输出层" class="headerlink" title="1.2.3 输出层"></a>1.2.3 输出层</h3><h4 id="卷积神经网络中输出层的上游通常是全连接层，因此其结构和工作原理与传统前馈神经网络中的输出层相同。对于图像分类问题，输出层使用逻辑函数或归一化指数函数输出分类标签。在物体识别问题中，输出层可设计为输出物体的中心标、大小和分类。在图像语义分割中，输出层直接输出每个像素的分类结果。"><a href="#卷积神经网络中输出层的上游通常是全连接层，因此其结构和工作原理与传统前馈神经网络中的输出层相同。对于图像分类问题，输出层使用逻辑函数或归一化指数函数输出分类标签。在物体识别问题中，输出层可设计为输出物体的中心标、大小和分类。在图像语义分割中，输出层直接输出每个像素的分类结果。" class="headerlink" title="卷积神经网络中输出层的上游通常是全连接层，因此其结构和工作原理与传统前馈神经网络中的输出层相同。对于图像分类问题，输出层使用逻辑函数或归一化指数函数输出分类标签。在物体识别问题中，输出层可设计为输出物体的中心标、大小和分类。在图像语义分割中，输出层直接输出每个像素的分类结果。"></a>卷积神经网络中输出层的上游通常是全连接层，因此其结构和工作原理与传统前馈神经网络中的输出层相同。对于图像分类问题，输出层使用逻辑函数或归一化指数函数输出分类标签。在物体识别问题中，输出层可设计为输出物体的中心标、大小和分类。在图像语义分割中，输出层直接输出每个像素的分类结果。</h4><h2 id="1-3-卷积神经网络的卷积过程"><a href="#1-3-卷积神经网络的卷积过程" class="headerlink" title="1.3 卷积神经网络的卷积过程"></a>1.3 卷积神经网络的卷积过程</h2><h4 id="卷积神经网络的结构有很多种，但是其基本结构是类似的。如下图，它包含三个主要的层——卷积层-convolutional-layer-、池化层-pooling-layer-、全连接层-fully-connected-layer-。"><a href="#卷积神经网络的结构有很多种，但是其基本结构是类似的。如下图，它包含三个主要的层——卷积层-convolutional-layer-、池化层-pooling-layer-、全连接层-fully-connected-layer-。" class="headerlink" title="卷积神经网络的结构有很多种，但是其基本结构是类似的。如下图，它包含三个主要的层——卷积层(convolutional layer)、池化层(pooling layer)、全连接层(fully-connected layer)。"></a>卷积神经网络的结构有很多种，但是其基本结构是类似的。如下图，它包含三个主要的层——卷积层(convolutional layer)、池化层(pooling layer)、全连接层(fully-connected layer)。</h4><p><img src="https://img-blog.csdnimg.cn/20191222102628441.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
@@ -342,136 +394,174 @@
 <h4 id="当训练开始时，根据内容图片和噪声，生成一张噪声图片。并将噪声图片传送给网络，计算loss，再根据loss调整噪声图片。将调整后的图片发给网络，重新计算loss，再调整，再计算，直到达到指定迭代次数，这时，噪声图片已兼具内容图片的内容和风格图片的风格，进行保存即可，其训练过程如图下所示，训练顺序依次从左向右。"><a href="#当训练开始时，根据内容图片和噪声，生成一张噪声图片。并将噪声图片传送给网络，计算loss，再根据loss调整噪声图片。将调整后的图片发给网络，重新计算loss，再调整，再计算，直到达到指定迭代次数，这时，噪声图片已兼具内容图片的内容和风格图片的风格，进行保存即可，其训练过程如图下所示，训练顺序依次从左向右。" class="headerlink" title="当训练开始时，根据内容图片和噪声，生成一张噪声图片。并将噪声图片传送给网络，计算loss，再根据loss调整噪声图片。将调整后的图片发给网络，重新计算loss，再调整，再计算，直到达到指定迭代次数，这时，噪声图片已兼具内容图片的内容和风格图片的风格，进行保存即可，其训练过程如图下所示，训练顺序依次从左向右。"></a>当训练开始时，根据内容图片和噪声，生成一张噪声图片。并将噪声图片传送给网络，计算loss，再根据loss调整噪声图片。将调整后的图片发给网络，重新计算loss，再调整，再计算，直到达到指定迭代次数，这时，噪声图片已兼具内容图片的内容和风格图片的风格，进行保存即可，其训练过程如图下所示，训练顺序依次从左向右。</h4><p><img src="https://img-blog.csdnimg.cn/20191222104239449.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h2 id="原理总结：感谢能翻到这的同学们，这一篇只是为了让大家了解到一些相关知识，毕竟操作简单，主要的是算法思想。下一篇就是与代码相关的部分了，可以开始打开建的工程，写代码了！"><a href="#原理总结：感谢能翻到这的同学们，这一篇只是为了让大家了解到一些相关知识，毕竟操作简单，主要的是算法思想。下一篇就是与代码相关的部分了，可以开始打开建的工程，写代码了！" class="headerlink" title="原理总结：感谢能翻到这的同学们，这一篇只是为了让大家了解到一些相关知识，毕竟操作简单，主要的是算法思想。下一篇就是与代码相关的部分了，可以开始打开建的工程，写代码了！"></a>原理总结：感谢能翻到这的同学们，这一篇只是为了让大家了解到一些相关知识，毕竟操作简单，主要的是算法思想。下一篇就是与代码相关的部分了，可以开始打开建的工程，写代码了！</h2><p><a href="https://blog.csdn.net/weixin_41108515/article/details/103651784" target="_blank" rel="noopener">卷积神经网络：（三）风格迁移——代码部分</a></p>
 
-        </div>
-        <!-- .entry-content -->
-        <div class="single-reward">
-          <div class="reward-open">赏
-            <div class="reward-main">
-              <ul class="reward-row">
-                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/custom/donate/AliPayQR.jpg"></li>
-                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/custom/donate/WeChanQR.jpg"></li>
-              </ul>
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://ailous.top/2018/10/28/卷积神经网络：（二）风格迁移——原理部分/" title="风格迁移——原理部分" target="_blank" rel="external">http://ailous.top/2018/10/28/卷积神经网络：（二）风格迁移——原理部分/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/cofess" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/cofess" target="_blank"><span class="text-dark">昵称</span><small class="ml-1x">Web Developer &amp; Designer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2018/10/29/卷积神经网络：（三）风格迁移——代码部分 (1)/" title="风格迁移——代码部分"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2018/10/27/卷积神经网络：（一）风格迁移——环境配置 (1)/" title="风格迁移——环境配置"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>Maybe you could buy me a cup of coffee.</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="Scan Qrcode" title="Scan" />
+              </div>
+              <p class="text-muted mv">Scan this qrcode</p>
+              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
             </div>
           </div>
-        </div>
-		
-
-        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
-        <footer class="post-footer">
-          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
-          <div class="post-tags">
-		  
-          </div>
-		  				<div class="tag-cloud">
-                  <div class="tag-cloud-title">
-                  </div>
-                  <div class="tag-cloud-tags">
-                  <a href="/tags/BS4/" style="font-size: 20px; color: #95e1d3">BS4</a> <a href="/tags/CJNE/" style="font-size: 10px; color: #f38181">CJNE</a> <a href="/tags/CSV/" style="font-size: 10px; color: #f38181">CSV</a> <a href="/tags/DJNE/" style="font-size: 10px; color: #f38181">DJNE</a> <a href="/tags/MYSQL/" style="font-size: 16.67px; color: #b4c1b8">MYSQL</a> <a href="/tags/RE（正则表达式/" style="font-size: 10px; color: #f38181">RE（正则表达式</a> <a href="/tags/RE（正则表达式）/" style="font-size: 10px; color: #f38181">RE（正则表达式）</a> <a href="/tags/TIOBE指数/" style="font-size: 10px; color: #f38181">TIOBE指数</a> <a href="/tags/Xpath/" style="font-size: 16.67px; color: #b4c1b8">Xpath</a> <a href="/tags/mnist/" style="font-size: 10px; color: #f38181">mnist</a> <a href="/tags/xpath/" style="font-size: 13.33px; color: #d4a19c">xpath</a> <a href="/tags/xx/" style="font-size: 10px; color: #f38181">xx</a> <a href="/tags/二手房/" style="font-size: 10px; color: #f38181">二手房</a> <a href="/tags/公共子序列/" style="font-size: 10px; color: #f38181">公共子序列</a> <a href="/tags/前程无忧/" style="font-size: 10px; color: #f38181">前程无忧</a> <a href="/tags/卷积神经网络/" style="font-size: 16.67px; color: #b4c1b8">卷积神经网络</a> <a href="/tags/古诗文网/" style="font-size: 10px; color: #f38181">古诗文网</a> <a href="/tags/手写识别/" style="font-size: 10px; color: #f38181">手写识别</a> <a href="/tags/文章/" style="font-size: 10px; color: #f38181">文章</a> <a href="/tags/票房/" style="font-size: 13.33px; color: #d4a19c">票房</a> <a href="/tags/超级鹰/" style="font-size: 13.33px; color: #d4a19c">超级鹰</a> <a href="/tags/问题/" style="font-size: 10px; color: #f38181">问题</a> <a href="/tags/风格迁移/" style="font-size: 16.67px; color: #b4c1b8">风格迁移</a>
-                  </div>
-                </div>
-
-          <div class="post-share">
-            <div class="social-share sharehidden share-component"></div>
-            <i class="iconfont show-share icon-forward"></i>
-          </div>
-        </footer><!-- .entry-footer -->
-      </article>
-      <!-- #post-## -->
-      <div class="toc" style="background: none;"></div>
-      <section class="post-squares nextprev">
-        
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2018/10/29/卷积神经网络：（三）风格迁移——代码部分 (1)/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20191222152856860.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://img-blog.csdnimg.cn/20191222152856860.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                风格迁移——代码部分</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-        
-          
-            <div class="post-nepre half next">
-          
-            <a href="/2018/10/27/卷积神经网络：（一）风格迁移——环境配置 (1)/" rel="next">
-              <div class="background">
-                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/michaelminger/CDN/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://img-blog.csdnimg.cn/20191221235345841.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://img-blog.csdnimg.cn/20191221235345841.png">
-              </div>
-              <span class="label">
-              Next Post</span>
-              <div class="info">
-                <h3>
-                风格迁移——环境配置</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-      </section>
-      
-  <script src="https://cdn.jsdelivr.net/gh/yremp/yremp-js@1.1/gitalk.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yremp/yremp-css@1.3/gitalk.css">
-  <div id="gitalk-container"></div>
-  <script type="text/javascript">
-      var gitalk = new Gitalk({
-          clientID: '6228d2f5fa297a392a50',
-          clientSecret: '125d58876839025e9bca5343598f3ab7e209cc9a',
-          id: window.location.pathname,
-          repo: 'michaelminger.github.io',
-          owner: 'michaelminger',
-          admin: 'michaelminger'
-      })
-      gitalk.render('gitalk-container')
-    </script>
-
-      <section class="author-profile">
-        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
-          <a href="https://user.qzone.qq.com/1980300447/main" class="profile gravatar"><img src="https://qlogo4.store.qq.com/qzone/1980300447/1980300447/100?1567639060" itemprop="image" alt="michaelming" height="70" width="70"></a>
-          <div class="meta">
-            <span class="title">Author</span>
-            <h3 itemprop="name">
-            <a href="https://user.qzone.qq.com/1980300447/main" itemprop="url" rel="author">michaelming</a>
-            </h3>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
+              </li>
+            </ul>
           </div>
         </div>
-        <hr>
-        <p><i class="iconfont icon-write"></i></p>
-      </section>
-    </main><!-- #main -->
-  </div><!-- #primary -->
+      </div>
+    </div>
+  </div>
 </div>
 
 
 
-    </div>    
-    <div class="ins-search">
-    <div class="ins-search-mask"></div>
-    <div class="ins-search-container">
-        <div class="ins-input-wrapper">
-            <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
-            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="ins-section-wrapper">
-            <div class="ins-section-container"></div>
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
         </div>
     </div>
-</div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
 (function (window) {
     var INSIGHT_CONFIG = {
         TRANSLATION: {
-            POSTS: '文章',
-            // PAGES: '页面',
-            CATEGORIES: '分类',
-            TAGS: '标签',
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
         },
         ROOT_URL: '/',
         CONTENT_URL: '/content.json',
@@ -479,359 +569,48 @@
     window.INSIGHT_CONFIG = INSIGHT_CONFIG;
 })(window);
 </script>
-    <!-- <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2020 Michaelming<br>
-      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer> -->
-
-<footer id="colophon" class="site-footer" role="contentinfo">
-  <div class="site-info">
-    <div class="footertext">
-      。。。。。
-    </div>
-    <div class="footer-device">
-    <p style="font-family: 'Ubuntu', sans-serif;">
-        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> by <a href="https://2heng.xin/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Mashiro</a>&<a href="https://www.hojun.cn/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Hojun</a>, Powered by Hexo, Hosted by Coding Pages</a>
-        </span>
-      </p>
-    </div>
-    <!-- <i class="fa fa-fire" aria-hidden="true"></i> -->
-    <span style="color: #ccc;padding-left: 20px;">
-      <i class="fa fa-clock-o" aria-hidden="true"></i>
-      <span id="time" align="center">载入时间中...</span>
-      <script>
-        var now = new Date(); 
-        function createtime() { 
-          var grt= new Date("2020-02-11 17:20:00");//在此处修改你的建站时间
-          now.setTime(now.getTime()+250); 
-          days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
-          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
-          if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
-          mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
-          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
-          snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
-          document.getElementById("time").innerHTML = "小站已经苟活 "+ dnum +" 天 "+hnum + " 小时 " + mnum + " 分 " + snum + " 秒";      
-       } 
-       setInterval("createtime()",250);
-      </script>
-      <!--不蒜子网页计数器-->
-      <span style="color:#ccc;padding-left: 20px;"><i class="fa fa-eye" aria-hidden="true"></i>访问量: <span id="busuanzi_value_site_pv"></span>次</span>
-    </span>
-  </div><!-- .site-info -->
-</footer>
-
-
-<!-- <script src="/js/tocbot.js"></script> -->
-<script type="text/javascript" src="/js/lib.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
-<script type="text/javascript" src="/js/InsightSearch.js"></script>
-<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
-<script type="text/javascript" src="/js/zoom.min.js"></script>
-<script type="text/javascript" src="/js/sakura-app.js"></script>
-<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
-<script src="/js/botui.js"></script>
-<!-- 不蒜子 网页计数器 -->
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
-
-<!-- <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
-<script type="text/javascript">
-/* <![CDATA[ */
-if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/michaelminger/CDN@","name":"Unbroken.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
-} else {
-  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/michaelminger/CDN@","name":"Unbroken.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
-}
-/* ]]> */
-
-</script>
-
-
-<script>
-$(document).ready(function() {
-  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
-    if ($(".pattern-center").length > 0) { //有图的情况
-      tocbot.init({
-          // Where to render the table of contents.
-          tocSelector: '.toc', // 放置目录的容器
-          // Where to grab the headings to build the table of contents.
-          contentSelector: '.entry-content', // 正文内容所在
-          // Which headings to grab inside of the contentSelector element.
-          scrollSmooth: true,
-          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
-          headingsOffset: -400,
-          scrollSmoothOffset: -85
-      });
-    } else {
-      tocbot.init({
-          // Where to render the table of contents.
-          tocSelector: '.toc', // 放置目录的容器
-          // Where to grab the headings to build the table of contents.
-          contentSelector: '.entry-content', // 正文内容所在
-          // Which headings to grab inside of the contentSelector element.
-          scrollSmooth: true,
-          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
-          headingsOffset: -85,
-          scrollSmoothOffset: -85
-      });
-    }
-    var offsetTop = $('.toc').offset().top - 95;
-    window.onscroll = function() {
-      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-      if (scrollTop >= offsetTop) {
-        $('.toc').addClass('toc-fixed');
-      } else {
-        $('.toc').removeClass('toc-fixed');
-      }
-    }
-  }
-});
-</script>
-
-<div id="gitalk-container"></div>
-<script src="https://cdn.jsdelivr.net/gh/yremp/yremp-js@1.1/gitalk.js"></script>
+<script src="/js/insight.js"></script>
 
 
 
-<!--浏览器搞笑标题-->
-<script src="https://cdn.jsdelivr.net/gh/wallleap/cdn@latest/js/hititle.js"></script>
-<!-- 🌸飘落 -->
-<script src="https://cdn.jsdelivr.net/gh/wallleap/cdn@latest/js/sakura.js"></script>
-<!-- 雪花飘落 -->
-<!-- <script src="https://cdn.jsdelivr.net/gh/Yafine/cdn@2.5/source/js/snow1.js"></script> -->
-    <div class="openNav no-select" style="height: 50px;">
-      <div class="iconflat no-select" style="width: 50px; height: 50px;">
-        <div class="icon"></div>
-      </div>
-      <div class="site-branding search-form-submit">
-        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
-      </div>
-    </div>
-  </section>
-  <!-- 实现换肤功能 -->
-  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
- <div class="theme-controls row-container">
-  <ul class="menu-list">
-   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
-   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
-   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
-   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
-   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
-   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
-   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
-   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
-  </ul>
- </div>
-</div>
-<canvas id="night-mode-cover"></canvas> 
-  <div class="changeSkin-gear no-select">
-  <div class="keys" id="setbtn"> 
-   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
-     <i class="iconfont icon-gear inline-block rotating"></i> 
-   </span>
-  </div>
-</div>
-  
-  <div id="mo-nav" class="">
-  <div class="m-avatar">
-    <img src="https://cdn.jsdelivr.net/gh/michaelminger/CDN@1.8/img/custom/avatar.jpg">
-  </div>
-  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Michaelming's Blog</p>
-  <p style="text-align: center; word-spacing: 20px;">
+
+
+   
+
+
+
+
+   
     
-      
-        <a href="https://github.com/michaelminger" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
-      
-        <a href="http://weibo.com/mashirozx?is_all=1" class="fa fa-weibo" target="_blank" style="color: #dd4b39; margin-left:20px"></a>
-      
-    
-  </p>
-  <ul id="menu-new-1" class="menu">
-    
-      <li>
-        <a href="/">
-          <span class="faa-parent animated-hover">
-            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
-            首页
-          </span>
-        </a>
-        
-      </li>
-    
-      <li>
-        <a href="/categories/">
-          <span class="faa-parent animated-hover">
-            <i class="fa  fa-bookmark" aria-hidden="true"></i>
-            分类
-          </span>
-        </a>
-        
-          <ul class="sub-menu">
-            
-              <li>
-                <a href="/categories/人工智能/">
-                  <i class="fa fa-code" aria-hidden="true"></i>
-                  人工智能
-                </a>
-              </li>
-            
-              <li>
-                <a href="/categories/网络爬虫/">
-                  <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                  网络爬虫
-                </a>
-              </li>
-            
-              <li>
-                <a href="/categories/算法/">
-                  <i class="fa fa-cloud-download" aria-hidden="true"></i>
-                  算法分析
-                </a>
-              </li>
-            
-              <li>
-                <a href="/categories/汇编/">
-                  <i class="fa fa-commenting-o" aria-hidden="true"></i>
-                  汇编
-                </a>
-              </li>
-            
-          </ul>
-        
-      </li>
-    
-      <li>
-        <a href="/tags/">
-          <span class="faa-parent animated-hover">
-            <i class="fa  fa-tag" aria-hidden="true"></i>
-            标签
-          </span>
-        </a>
-        
-      </li>
-    
-      <li>
-        <a href="/archives">
-          <span class="faa-parent animated-hover">
-            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
-            时间轴
-          </span>
-        </a>
-        
-      </li>
-    
-      <li>
-        <a href="javascript:;">
-          <span class="faa-parent animated-hover">
-            <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
-            爱好
-          </span>
-        </a>
-        
-          <ul class="sub-menu">
-            
-              <li>
-                <a href="/bangumi/">
-                  <i class="fa fa-film faa-vertical" aria-hidden="true"></i>
-                  视频
-                </a>
-              </li>
-            
-              <li>
-                <a href="/music/">
-                  <i class="fa fa-headphones" aria-hidden="true"></i>
-                  歌单
-                </a>
-              </li>
-            
-          </ul>
-        
-      </li>
-    
-  </ul>
-  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
-</div>
-<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
-<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
-<!-- require MetingJS -->
-<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
-<style>
-  .aplayer .aplayer-lrc {
-    height: 35px;
-  }
-  .aplayer .aplayer-lrc p{
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 18px !important;
-  }
-  .aplayer .aplayer-lrc p.aplayer-lrc-current{
-    color: #FF1493;
-  }
-  .aplayer.aplayer-narrow .aplayer-body{
-    left: -66px !important;
-  }
-  .aplayer.aplayer-fixed .aplayer-lrc {
-    display: none;
-  }
-  .aplayer .aplayer-lrc.aplayer-lrc-hide {
-      display:none !important;
-  }
-  .aplayer.aplayer-fixed .lrc-show {
-    display: block;
-    background: rgba(255, 255, 255, 0.8);
-  }
-</style>
-<meting-js
-
-    id="3100100114"
-
-    server="netease"
-
-    type="playlist"
-
-    fixed="true"
-
-    autoplay="false"
-
-    loop="all"
-
-    order="random"
-
-    preload="auto"
-
-    volume="0.7"
-
-    mutex="true"
-
-</meting-js>
-<script>
-  $(function(){
-    $('body').on('click', '.aplayer', function(){
-      if($('.aplayer-button').hasClass('aplayer-play')) {
-        $('.aplayer-lrc').removeClass('lrc-show');
-      } else {
-        $('.aplayer-lrc').addClass('lrc-show');
-      }
-    })
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
   });
-</script>
-  <!-- 点击出现社会主义彩色文字 -->
-  <script src="https://cdn.jsdelivr.net/gh/wallleap/cdn/js/shehuizhuyi.js"></script>
-  <!-- 点击出现爱心 -->
-  <!-- <script src="https://cdn.jsdelivr.net/gh/wallleap/cdn/js/love.js"></script> -->
-  <!-- 滑动特效 -->
-  <script src="https://cdn.jsdelivr.net/gh/wallleap/cdn/js/xuehua.js"></script>
-  <!-- 鼠标键盘 -->
-  <script src="https://cdn.jsdelivr.net/gh/wallleap/cdn/js/noSomeKey.js"></script>
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
 
 </body>
 </html>
