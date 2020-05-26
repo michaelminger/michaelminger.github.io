@@ -29,7 +29,8 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 
 <body>
@@ -476,35 +477,35 @@ class Model(object):
             # 读取预训练的vgg模型
             # 这里装的是misc，安装opencv的也亦可以使用opencv等其他方法
         vgg = scipy.io.loadmat(settings.VGG_MODEL_PATH) 
-        vgg_layers = vgg[&apos;layers&apos;][0]
+        vgg_layers = vgg[&#39;layers&#39;][0]
         net = {}
             # 使用预训练的模型参数构建vgg网络的卷积层和池化层
         # 全连接层不需要
         # 注意，除了input之外，这里参数都为常量，不训练vgg的参数（权重比），这个以及训练完不需调整。
         # 需要进行训练的是input，它即是我们最终生成的图像
-        net[&apos;input&apos;] = tf.Variable(np.zeros([1, settings.IMAGE_HEIGHT, settings.IMAGE_WIDTH, 3]), dtype=tf.float32)
+        net[&#39;input&#39;] = tf.Variable(np.zeros([1, settings.IMAGE_HEIGHT, settings.IMAGE_WIDTH, 3]), dtype=tf.float32)
         # 参数对应的层数可以参考vgg模型图
-        net[&apos;conv1_1&apos;] = self.conv_relu(net[&apos;input&apos;], self.get_wb(vgg_layers, 0))
-        net[&apos;conv1_2&apos;] = self.conv_relu(net[&apos;conv1_1&apos;], self.get_wb(vgg_layers, 2))
-        net[&apos;pool1&apos;] = self.pool(net[&apos;conv1_2&apos;])
-        net[&apos;conv2_1&apos;] = self.conv_relu(net[&apos;pool1&apos;], self.get_wb(vgg_layers, 5))
-        net[&apos;conv2_2&apos;] = self.conv_relu(net[&apos;conv2_1&apos;], self.get_wb(vgg_layers, 7))
-        net[&apos;pool2&apos;] = self.pool(net[&apos;conv2_2&apos;])
-        net[&apos;conv3_1&apos;] = self.conv_relu(net[&apos;pool2&apos;], self.get_wb(vgg_layers, 10))
-        net[&apos;conv3_2&apos;] = self.conv_relu(net[&apos;conv3_1&apos;], self.get_wb(vgg_layers, 12))
-        net[&apos;conv3_3&apos;] = self.conv_relu(net[&apos;conv3_2&apos;], self.get_wb(vgg_layers, 14))
-        net[&apos;conv3_4&apos;] = self.conv_relu(net[&apos;conv3_3&apos;], self.get_wb(vgg_layers, 16))
-        net[&apos;pool3&apos;] = self.pool(net[&apos;conv3_4&apos;])
-        net[&apos;conv4_1&apos;] = self.conv_relu(net[&apos;pool3&apos;], self.get_wb(vgg_layers, 19))
-           net[&apos;conv4_2&apos;] = self.conv_relu(net[&apos;conv4_1&apos;], self.get_wb(vgg_layers, 21))
-        net[&apos;conv4_3&apos;] = self.conv_relu(net[&apos;conv4_2&apos;], self.get_wb(vgg_layers, 23))
-        net[&apos;conv4_4&apos;] = self.conv_relu(net[&apos;conv4_3&apos;], self.get_wb(vgg_layers, 25))
-        net[&apos;pool4&apos;] = self.pool(net[&apos;conv4_4&apos;])
-        net[&apos;conv5_1&apos;] = self.conv_relu(net[&apos;pool4&apos;], self.get_wb(vgg_layers, 28))
-        net[&apos;conv5_2&apos;] = self.conv_relu(net[&apos;conv5_1&apos;], self.get_wb(vgg_layers, 30))
-        net[&apos;conv5_3&apos;] = self.conv_relu(net[&apos;conv5_2&apos;], self.get_wb(vgg_layers, 32))
-        net[&apos;conv5_4&apos;] = self.conv_relu(net[&apos;conv5_3&apos;], self.get_wb(vgg_layers, 34))
-        net[&apos;pool5&apos;] = self.pool(net[&apos;conv5_4&apos;])
+        net[&#39;conv1_1&#39;] = self.conv_relu(net[&#39;input&#39;], self.get_wb(vgg_layers, 0))
+        net[&#39;conv1_2&#39;] = self.conv_relu(net[&#39;conv1_1&#39;], self.get_wb(vgg_layers, 2))
+        net[&#39;pool1&#39;] = self.pool(net[&#39;conv1_2&#39;])
+        net[&#39;conv2_1&#39;] = self.conv_relu(net[&#39;pool1&#39;], self.get_wb(vgg_layers, 5))
+        net[&#39;conv2_2&#39;] = self.conv_relu(net[&#39;conv2_1&#39;], self.get_wb(vgg_layers, 7))
+        net[&#39;pool2&#39;] = self.pool(net[&#39;conv2_2&#39;])
+        net[&#39;conv3_1&#39;] = self.conv_relu(net[&#39;pool2&#39;], self.get_wb(vgg_layers, 10))
+        net[&#39;conv3_2&#39;] = self.conv_relu(net[&#39;conv3_1&#39;], self.get_wb(vgg_layers, 12))
+        net[&#39;conv3_3&#39;] = self.conv_relu(net[&#39;conv3_2&#39;], self.get_wb(vgg_layers, 14))
+        net[&#39;conv3_4&#39;] = self.conv_relu(net[&#39;conv3_3&#39;], self.get_wb(vgg_layers, 16))
+        net[&#39;pool3&#39;] = self.pool(net[&#39;conv3_4&#39;])
+        net[&#39;conv4_1&#39;] = self.conv_relu(net[&#39;pool3&#39;], self.get_wb(vgg_layers, 19))
+           net[&#39;conv4_2&#39;] = self.conv_relu(net[&#39;conv4_1&#39;], self.get_wb(vgg_layers, 21))
+        net[&#39;conv4_3&#39;] = self.conv_relu(net[&#39;conv4_2&#39;], self.get_wb(vgg_layers, 23))
+        net[&#39;conv4_4&#39;] = self.conv_relu(net[&#39;conv4_3&#39;], self.get_wb(vgg_layers, 25))
+        net[&#39;pool4&#39;] = self.pool(net[&#39;conv4_4&#39;])
+        net[&#39;conv5_1&#39;] = self.conv_relu(net[&#39;pool4&#39;], self.get_wb(vgg_layers, 28))
+        net[&#39;conv5_2&#39;] = self.conv_relu(net[&#39;conv5_1&#39;], self.get_wb(vgg_layers, 30))
+        net[&#39;conv5_3&#39;] = self.conv_relu(net[&#39;conv5_2&#39;], self.get_wb(vgg_layers, 32))
+        net[&#39;conv5_4&#39;] = self.conv_relu(net[&#39;conv5_3&#39;], self.get_wb(vgg_layers, 34))
+        net[&#39;pool5&#39;] = self.pool(net[&#39;conv5_4&#39;])
         return net
 
     def conv_relu(self, input, wb):
@@ -514,7 +515,7 @@ class Model(object):
         :param wb: wb[0],wb[1] == w,b
         :return: relu后的结果
         &quot;&quot;&quot;
-        conv = tf.nn.conv2d(input, wb[0], strides=[1, 1, 1, 1], padding=&apos;SAME&apos;)
+        conv = tf.nn.conv2d(input, wb[0], strides=[1, 1, 1, 1], padding=&#39;SAME&#39;)
         relu = tf.nn.relu(conv + wb[1])
         return relu
 
@@ -524,7 +525,7 @@ class Model(object):
         :param input: 输入层
         :return: 池化后的结果
         &quot;&quot;&quot;
-        return tf.nn.max_pool(input, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding=&apos;SAME&apos;)
+        return tf.nn.max_pool(input, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding=&#39;SAME&#39;)
 
     def get_wb(self, layers, i):
         &quot;&quot;&quot;
@@ -563,7 +564,7 @@ class Model(object):
         image = image - settings.IMAGE_MEAN_VALUE
         return image
 
-if __name__ == &apos;__main__&apos;:
+if __name__ == &#39;__main__&#39;:
     Model(settings.CONTENT_IMAGE, settings.STYLE_IMAGE)
 </code></pre><h2 id="3-模型训练"><a href="#3-模型训练" class="headerlink" title="3.模型训练"></a>3.模型训练</h2><h4 id="但是实际上，图片的内容和风格是不能够被完全分离的。当我们合成图片时，我们通常找不出一张能够匹配某个图片内容和另一种图片风格的图片。在我们合成图片的过程中，我们需要最小化的损失函数包含内容和风格，但它们是分开的。因此，我们需要平滑地调整内容和风格的权重比例。当损失函数分配在内容和风格的权重不同时，合成产生的图片效果也完全不一样。我们需要适当地调整内容表示和风格表示的权重比来产生具有视觉感染力的图片。是否能够找到合适的权重比是能否产生令人满意的图片的关键因素。"><a href="#但是实际上，图片的内容和风格是不能够被完全分离的。当我们合成图片时，我们通常找不出一张能够匹配某个图片内容和另一种图片风格的图片。在我们合成图片的过程中，我们需要最小化的损失函数包含内容和风格，但它们是分开的。因此，我们需要平滑地调整内容和风格的权重比例。当损失函数分配在内容和风格的权重不同时，合成产生的图片效果也完全不一样。我们需要适当地调整内容表示和风格表示的权重比来产生具有视觉感染力的图片。是否能够找到合适的权重比是能否产生令人满意的图片的关键因素。" class="headerlink" title="但是实际上，图片的内容和风格是不能够被完全分离的。当我们合成图片时，我们通常找不出一张能够匹配某个图片内容和另一种图片风格的图片。在我们合成图片的过程中，我们需要最小化的损失函数包含内容和风格，但它们是分开的。因此，我们需要平滑地调整内容和风格的权重比例。当损失函数分配在内容和风格的权重不同时，合成产生的图片效果也完全不一样。我们需要适当地调整内容表示和风格表示的权重比来产生具有视觉感染力的图片。是否能够找到合适的权重比是能否产生令人满意的图片的关键因素。"></a>但是实际上，图片的内容和风格是不能够被完全分离的。当我们合成图片时，我们通常找不出一张能够匹配某个图片内容和另一种图片风格的图片。在我们合成图片的过程中，我们需要最小化的损失函数包含内容和风格，但它们是分开的。因此，我们需要平滑地调整内容和风格的权重比例。当损失函数分配在内容和风格的权重不同时，合成产生的图片效果也完全不一样。我们需要适当地调整内容表示和风格表示的权重比来产生具有视觉感染力的图片。是否能够找到合适的权重比是能否产生令人满意的图片的关键因素。</h4><h4 id="就是将输入层的Variable训练到满意的比例，最开始输入一张噪音图片，然后不断地根据内容loss和风格loss对其进行调整，直到一定次数后，该图片兼具了风格图片的风格以及内容图片的内容。当训练结束时，输入层的参数就是我们生成的图片。"><a href="#就是将输入层的Variable训练到满意的比例，最开始输入一张噪音图片，然后不断地根据内容loss和风格loss对其进行调整，直到一定次数后，该图片兼具了风格图片的风格以及内容图片的内容。当训练结束时，输入层的参数就是我们生成的图片。" class="headerlink" title="就是将输入层的Variable训练到满意的比例，最开始输入一张噪音图片，然后不断地根据内容loss和风格loss对其进行调整，直到一定次数后，该图片兼具了风格图片的风格以及内容图片的内容。当训练结束时，输入层的参数就是我们生成的图片。"></a>就是将输入层的Variable训练到满意的比例，最开始输入一张噪音图片，然后不断地根据内容loss和风格loss对其进行调整，直到一定次数后，该图片兼具了风格图片的风格以及内容图片的内容。当训练结束时，输入层的参数就是我们生成的图片。</h4><h4 id="这里建立py文件-train-py，下面内容我会写在注释里。"><a href="#这里建立py文件-train-py，下面内容我会写在注释里。" class="headerlink" title="这里建立py文件 train.py，下面内容我会写在注释里。"></a>这里建立py文件 train.py，下面内容我会写在注释里。</h4><pre><code># -*- coding: utf-8 -*-
 import tensorflow as tf
@@ -583,7 +584,7 @@ def loss(sess, model):
     # 获取定义内容损失的vgg层名称列表及权重
     content_layers = settings.CONTENT_LOSS_LAYERS
     # 将内容图片作为输入，方便后面提取内容图片在各层中的特征矩阵
-    sess.run(tf.assign(model.net[&apos;input&apos;], model.content))
+    sess.run(tf.assign(model.net[&#39;input&#39;], model.content))
     # 内容损失累加量
     content_loss = 0.0
     # 逐个取出衡量内容损失的vgg层名称及对应权重
@@ -604,7 +605,7 @@ def loss(sess, model):
     # 再计算风格损失函数
     style_layers = settings.STYLE_LOSS_LAYERS
     # 将风格图片作为输入，方便后面提取风格图片在各层中的特征矩阵
-    sess.run(tf.assign(model.net[&apos;input&apos;], model.style))
+    sess.run(tf.assign(model.net[&#39;input&#39;], model.style))
     # 风格损失累加量
     style_loss = 0.0
     # 逐个取出衡量风格损失的vgg层名称及对应权重
@@ -657,16 +658,16 @@ def train():
         # 再初始化一次（主要针对于第一次初始化后又定义的运算，不然可能会报错）
         sess.run(tf.global_variables_initializer())
         # 使用噪声图片进行训练
-        sess.run(tf.assign(model.net[&apos;input&apos;], model.random_img))
+        sess.run(tf.assign(model.net[&#39;input&#39;], model.random_img))
         # 迭代指定次数
         for step in range(settings.TRAIN_STEPS):
             # 进行一次反向传播
             sess.run(optimizer)
             # 每隔一定次数，输出一下进度，并保存当前训练结果
             if step % 50 == 0:
-                print(&apos;step {} is down.&apos;.format(step))
+                print(&#39;step {} is down.&#39;.format(step))
                 # 取出input的内容，这是生成的图片
-                img = sess.run(model.net[&apos;input&apos;])
+                img = sess.run(model.net[&#39;input&#39;])
                 # 训练过程是减去均值的，这里要加上
                 img += settings.IMAGE_MEAN_VALUE
                 # 这里是一个batch_size=1的batch，所以img[0]才是图片内容
@@ -674,33 +675,33 @@ def train():
                 # 将像素值限定在0-255，并转为整型
                 img = np.clip(img, 0, 255).astype(np.uint8)
                 # 保存图片
-                scipy.misc.imsave(&apos;{}-{}.jpg&apos;.format(settings.OUTPUT_IMAGE,step), img)
+                scipy.misc.imsave(&#39;{}-{}.jpg&#39;.format(settings.OUTPUT_IMAGE,step), img)
         # 保存最终训练结果
-        img = sess.run(model.net[&apos;input&apos;])
+        img = sess.run(model.net[&#39;input&#39;])
         img += settings.IMAGE_MEAN_VALUE
         img = img[0]
         img = np.clip(img, 0, 255).astype(np.uint8)
-        scipy.misc.imsave(&apos;{}.jpg&apos;.format(settings.OUTPUT_IMAGE), img)
+        scipy.misc.imsave(&#39;{}.jpg&#39;.format(settings.OUTPUT_IMAGE), img)
 
-if __name__ == &apos;__main__&apos;:
+if __name__ == &#39;__main__&#39;:
     train()
 </code></pre><h2 id="4-系统文件配置这里建立py文件-setting-py。"><a href="#4-系统文件配置这里建立py文件-setting-py。" class="headerlink" title="4.系统文件配置这里建立py文件 setting.py。"></a>4.系统文件配置这里建立py文件 setting.py。</h2><pre><code># -*- coding: utf-8 -*-
 # 内容图片路径
-CONTENT_IMAGE = &apos;content/qd.jpg&apos; # 路径/图片 自己在工程文件夹下建立。
+CONTENT_IMAGE = &#39;content/qd.jpg&#39; # 路径/图片 自己在工程文件夹下建立。
 # 风格图片路径
-STYLE_IMAGE = &apos;style/painting.jpg&apos; # 路径/图片 自己在工程文件夹下建立。
+STYLE_IMAGE = &#39;style/painting.jpg&#39; # 路径/图片 自己在工程文件夹下建立。
 # 输出图片路径
-OUTPUT_IMAGE = &apos;output/output&apos; # 路径/图片开始名 自己在工程文件夹下建立。
+OUTPUT_IMAGE = &#39;output/output&#39; # 路径/图片开始名 自己在工程文件夹下建立。
 # 预训练的vgg模型路径
-VGG_MODEL_PATH = &apos;imagenet-vgg-verydeep-19.mat&apos; # 直接置于工程文件夹即可。
+VGG_MODEL_PATH = &#39;imagenet-vgg-verydeep-19.mat&#39; # 直接置于工程文件夹即可。
 # 图片宽度
 IMAGE_WIDTH = 450
 # 图片高度
 IMAGE_HEIGHT = 300
 # 定义计算内容损失的vgg层名称及对应权重的列表
-CONTENT_LOSS_LAYERS = [(&apos;conv4_2&apos;, 0.5),(&apos;conv5_2&apos;,0.5)]
+CONTENT_LOSS_LAYERS = [(&#39;conv4_2&#39;, 0.5),(&#39;conv5_2&#39;,0.5)]
 # 定义计算风格损失的vgg层名称及对应权重的列表
-STYLE_LOSS_LAYERS = [(&apos;conv1_1&apos;, 0.2), (&apos;conv2_1&apos;, 0.2), (&apos;conv3_1&apos;, 0.2), (&apos;conv4_1&apos;, 0.2), (&apos;conv5_1&apos;, 0.2)]
+STYLE_LOSS_LAYERS = [(&#39;conv1_1&#39;, 0.2), (&#39;conv2_1&#39;, 0.2), (&#39;conv3_1&#39;, 0.2), (&#39;conv4_1&#39;, 0.2), (&#39;conv5_1&#39;, 0.2)]
 # 噪音比率
 NOISE = 0.5
 # 图片RGB均值
