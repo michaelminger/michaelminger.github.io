@@ -108,33 +108,6 @@
     
     
     <entry>
-      <title>网络爬虫——前程无忧网数据获取及MYSQL存储</title>
-      <link href="/2019/05/27/wang-luo-pa-chong-qian-cheng-wu-you-wang-shu-ju-huo-qu-ji-mysql-cun-chu/"/>
-      <url>/2019/05/27/wang-luo-pa-chong-qian-cheng-wu-you-wang-shu-ju-huo-qu-ji-mysql-cun-chu/</url>
-      
-        <content type="html"><![CDATA[<h2 id="网络爬虫——前程无忧网数据获取及MYSQL存储"><a href="#网络爬虫——前程无忧网数据获取及MYSQL存储" class="headerlink" title="网络爬虫——前程无忧网数据获取及MYSQL存储"></a>网络爬虫——前程无忧网数据获取及MYSQL存储</h2><p>实验内容1<br>目标网站：前程无忧招聘网</p><p>目标网址：<a href="https://search.51job.com/list/120000,000000,0000,00,9,99,Python,2,1.html" target="_blank" rel="noopener">https://search.51job.com/list/120000,000000,0000,00,9,99,Python,2,1.html</a></p><p>目标数据：（1）职位名（2）公司名（3）工作地点（4）薪资 （5）发布时间</p><p><img src="https://img-blog.csdnimg.cn/20200413221530218.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>要求</p><p>（1）使用urllib或requests库实现该网站网页源代码的获取，并将源代码进行保存；</p><p>（2）自主选择re、bs4、lxml中的一种解析方法对保存的的源代码读取并进行解析，成功找到目标数据所在的特定标签，进行网页结构的解析；</p><p>（3）定义函数，将获取的目标数据保存到MYSQL库文件中。</p><p>（4）使用框架式结构，通过参数传递实现整个特定数据的爬取。</p><h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requestsimport jsonimport csvfrom requests.exceptions import RequestExceptionfrom lxml import etreeimport pymysql from PIL import Imageimport pytesseractimport traceback  def connectMysql():    return pymysql.connect(host=&#39;localhost&#39;,user=&#39;root&#39;,password=&#39;123456&#39;,port=3306,db=&#39;spiders&#39;)def createMysqlTable():    db = connectMysql()    cursor = db.cursor()# （1）职位名（2）公司名（3）工作地点（4）薪资 （5）发布时间    sql = &#39;create table if not exists proStr (\    职位名 varchar(255) not null ,\    公司名 varchar(255) not null,\    工作地点 varchar(255) not null,\    薪资 varchar(255) not null,\    发布时间 varchar(255) not null,\    primary key(职位名))&#39;    cursor.execute(sql)    print(&#39;ok&#39;)    db.close()def getHtmlText(url):    headers = {        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;            }    try:        result = requests.get(url,headers=headers,timeout=30)        result.raise_for_status()        result.encoding = result.apparent_encoding        return result.text    except:        return &quot;&quot;def parsePage(html):    ulist = []    clist = []    rlist = []    ilist = []    newhtml =etree.HTML(html,etree.HTMLParser())    result=newhtml.xpath(&#39;//*[@id=&quot;content&quot;]/div[2]/table/tbody/tr/td//text()&#39;)    imgs = newhtml.xpath(&#39;//*[@id=&quot;content&quot;]/div[2]/table/tbody/tr/td/a/img/@src&#39;, stream=True)    j = 0     for img in imgs:        j=j+1        with open(str(j)+&#39;.png&#39;, &#39;wb&#39;) as fd:            picture=requests.get(img).content            fd.write(picture)      for i in range(len(imgs)):              str_ = str(i+1)+&#39;.png&#39;            text = pytesseract.image_to_string(Image.open(str_))            ilist.append(text.replace(&quot; &quot;,&quot;.&quot;).replace(&quot;M&quot;,&quot;亿&quot;).replace(&quot;a&quot;,&quot;亿&quot;))#     print(ilist)            for i in range(len(result)):        ulist.append(result[i].replace(&quot; &quot;,&quot;&quot;).replace(&#39;\r&#39;,&quot;&quot;).replace(&quot;\n&quot;,&#39;&#39;))    while &#39;&#39; in ulist:        ulist.remove(&#39;&#39;)    length = len(ulist)    weight = int(length / 8 )    for i in range(weight):        for j in range(8):            clist.append(ulist[i*8+j])        clist.append(ilist[i])        rlist.append(clist)        clist = []    return rlistdef mysqlData(datas):    table = &#39;movies&#39;    keys = &#39;名次,电影名称,日期,总场次,废场,人次,上座率,票价,票房&#39;    db = connectMysql()    cursor = db.cursor()    for data in datas:        values = &#39;,&#39;.join([&#39;%s&#39;]*len(data))        sql = &#39;INSERT INTO {table}({keys}) VALUES({values})&#39;.format(table=table,keys = keys ,values = values)        print(sql)        print(tuple(data))        try :            if cursor.execute(sql, tuple(data)):                print(&quot;Succcessful&quot;)                db.commit()        except:            traceback.print_exc()            print(&quot;Failed&quot;)            db.rollback()    db.close()def main():    createMysqlTable()    url=&quot;http://58921.com/daily/wangpiao&quot;    html=getHtmlText(url)    rlist=parsePage(html)    mysqlData(rlist)main()</code></pre><h3 id="结果输出效果："><a href="#结果输出效果：" class="headerlink" title="结果输出效果："></a>结果输出效果：</h3><p><img src="https://img-blog.csdnimg.cn/20200423213948381.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>]]></content>
-      
-      
-      <categories>
-          
-          <category> 网络爬虫 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 前程无忧 </tag>
-            
-            <tag> MYSQL </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>网络爬虫——二手房数据抓取及MYSQL存储</title>
       <link href="/2019/05/27/wang-luo-pa-chong-er-shou-fang-shu-ju-zhua-qu-ji-mysql-cun-chu/"/>
       <url>/2019/05/27/wang-luo-pa-chong-er-shou-fang-shu-ju-zhua-qu-ji-mysql-cun-chu/</url>
@@ -151,9 +124,36 @@
       
         <tags>
             
+            <tag> 二手房 </tag>
+            
             <tag> MYSQL </tag>
             
-            <tag> 二手房 </tag>
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>网络爬虫——前程无忧网数据获取及MYSQL存储</title>
+      <link href="/2019/05/27/wang-luo-pa-chong-qian-cheng-wu-you-wang-shu-ju-huo-qu-ji-mysql-cun-chu/"/>
+      <url>/2019/05/27/wang-luo-pa-chong-qian-cheng-wu-you-wang-shu-ju-huo-qu-ji-mysql-cun-chu/</url>
+      
+        <content type="html"><![CDATA[<h2 id="网络爬虫——前程无忧网数据获取及MYSQL存储"><a href="#网络爬虫——前程无忧网数据获取及MYSQL存储" class="headerlink" title="网络爬虫——前程无忧网数据获取及MYSQL存储"></a>网络爬虫——前程无忧网数据获取及MYSQL存储</h2><p>实验内容1<br>目标网站：前程无忧招聘网</p><p>目标网址：<a href="https://search.51job.com/list/120000,000000,0000,00,9,99,Python,2,1.html" target="_blank" rel="noopener">https://search.51job.com/list/120000,000000,0000,00,9,99,Python,2,1.html</a></p><p>目标数据：（1）职位名（2）公司名（3）工作地点（4）薪资 （5）发布时间</p><p><img src="https://img-blog.csdnimg.cn/20200413221530218.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>要求</p><p>（1）使用urllib或requests库实现该网站网页源代码的获取，并将源代码进行保存；</p><p>（2）自主选择re、bs4、lxml中的一种解析方法对保存的的源代码读取并进行解析，成功找到目标数据所在的特定标签，进行网页结构的解析；</p><p>（3）定义函数，将获取的目标数据保存到MYSQL库文件中。</p><p>（4）使用框架式结构，通过参数传递实现整个特定数据的爬取。</p><h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requestsimport jsonimport csvfrom requests.exceptions import RequestExceptionfrom lxml import etreeimport pymysql from PIL import Imageimport pytesseractimport traceback  def connectMysql():    return pymysql.connect(host=&#39;localhost&#39;,user=&#39;root&#39;,password=&#39;123456&#39;,port=3306,db=&#39;spiders&#39;)def createMysqlTable():    db = connectMysql()    cursor = db.cursor()# （1）职位名（2）公司名（3）工作地点（4）薪资 （5）发布时间    sql = &#39;create table if not exists proStr (\    职位名 varchar(255) not null ,\    公司名 varchar(255) not null,\    工作地点 varchar(255) not null,\    薪资 varchar(255) not null,\    发布时间 varchar(255) not null,\    primary key(职位名))&#39;    cursor.execute(sql)    print(&#39;ok&#39;)    db.close()def getHtmlText(url):    headers = {        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;            }    try:        result = requests.get(url,headers=headers,timeout=30)        result.raise_for_status()        result.encoding = result.apparent_encoding        return result.text    except:        return &quot;&quot;def parsePage(html):    ulist = []    clist = []    rlist = []    ilist = []    newhtml =etree.HTML(html,etree.HTMLParser())    result=newhtml.xpath(&#39;//*[@id=&quot;content&quot;]/div[2]/table/tbody/tr/td//text()&#39;)    imgs = newhtml.xpath(&#39;//*[@id=&quot;content&quot;]/div[2]/table/tbody/tr/td/a/img/@src&#39;, stream=True)    j = 0     for img in imgs:        j=j+1        with open(str(j)+&#39;.png&#39;, &#39;wb&#39;) as fd:            picture=requests.get(img).content            fd.write(picture)      for i in range(len(imgs)):              str_ = str(i+1)+&#39;.png&#39;            text = pytesseract.image_to_string(Image.open(str_))            ilist.append(text.replace(&quot; &quot;,&quot;.&quot;).replace(&quot;M&quot;,&quot;亿&quot;).replace(&quot;a&quot;,&quot;亿&quot;))#     print(ilist)            for i in range(len(result)):        ulist.append(result[i].replace(&quot; &quot;,&quot;&quot;).replace(&#39;\r&#39;,&quot;&quot;).replace(&quot;\n&quot;,&#39;&#39;))    while &#39;&#39; in ulist:        ulist.remove(&#39;&#39;)    length = len(ulist)    weight = int(length / 8 )    for i in range(weight):        for j in range(8):            clist.append(ulist[i*8+j])        clist.append(ilist[i])        rlist.append(clist)        clist = []    return rlistdef mysqlData(datas):    table = &#39;movies&#39;    keys = &#39;名次,电影名称,日期,总场次,废场,人次,上座率,票价,票房&#39;    db = connectMysql()    cursor = db.cursor()    for data in datas:        values = &#39;,&#39;.join([&#39;%s&#39;]*len(data))        sql = &#39;INSERT INTO {table}({keys}) VALUES({values})&#39;.format(table=table,keys = keys ,values = values)        print(sql)        print(tuple(data))        try :            if cursor.execute(sql, tuple(data)):                print(&quot;Succcessful&quot;)                db.commit()        except:            traceback.print_exc()            print(&quot;Failed&quot;)            db.rollback()    db.close()def main():    createMysqlTable()    url=&quot;http://58921.com/daily/wangpiao&quot;    html=getHtmlText(url)    rlist=parsePage(html)    mysqlData(rlist)main()</code></pre><h3 id="结果输出效果："><a href="#结果输出效果：" class="headerlink" title="结果输出效果："></a>结果输出效果：</h3><p><img src="https://img-blog.csdnimg.cn/20200423213948381.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 网络爬虫 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MYSQL </tag>
+            
+            <tag> 前程无忧 </tag>
             
         </tags>
       
@@ -264,31 +264,6 @@
     
     
     <entry>
-      <title>基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）</title>
-      <link href="/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/"/>
-      <url>/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/</url>
-      
-        <content type="html"><![CDATA[<h2 id="网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析"><a href="#网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析" class="headerlink" title="网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析"></a>网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析</h2><h4 id="实验内容"><a href="#实验内容" class="headerlink" title="实验内容"></a>实验内容</h4><p>目标网站：Bilibili热门视频Top100</p><p>目标网址：<br><a href="https://www.bilibili.com/ranking?" target="_blank" rel="noopener">https://www.bilibili.com/ranking?</a>（每过几天都会变的哦）<br><img src="https://img-blog.csdnimg.cn/20200518053212353.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p><h4 id="任务要求"><a href="#任务要求" class="headerlink" title="任务要求"></a>任务要求</h4><p>实现对于Bilibili热门视频Top100弹幕的数据爬取与分析</p><h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><pre><code>from lxml import etreeimport timeimport jiebaimport numpy as npfrom PIL import Imageimport requestsimport refrom requests.exceptions import RequestExceptionfrom wordcloud import WordCloud as wcclass getUrl ():    def __init__(self,url):        self.url = url    def getTxt(self):        self.headers = {            &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;                }        try:            result = requests.get(self.url,headers=self.headers,timeout=30)            result.raise_for_status()            result.encoding = result.apparent_encoding            return result.text        except:            return &quot;&quot;        def parsePage(self):        res = self.getTxt()        newhtml =etree.HTML(res,etree.HTMLParser())        result=newhtml.xpath(&#39;//*[@id=&quot;app&quot;]/div[1]/div/div[1]/div[2]/div[3]/ul/li/div[2]/div[1]/a//@href&#39;)        return  resultclass getAvNum():    def __init__(self,url):        self.url = url    def getTxt(self):        self.headers = {            &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;                }        try:            result = requests.get(self.url,headers=self.headers,timeout=30)            result.raise_for_status()            result.encoding = result.apparent_encoding            return result.text        except:            return &quot;&quot;    def parsePage(self):        res = self.getTxt()        newhtml =etree.HTML(res,etree.HTMLParser())        rlist=newhtml.xpath(&#39;/html/head/meta[10]//@content&#39;)        resp = requests.get(rlist[0],headers=self.headers)        match_rule = r&#39;cid=(.*?)&amp;aid&#39;        oid = re.search(match_rule,resp.text).group().replace(&#39;cid=&#39;,&#39;&#39;).replace(&#39;&amp;aid&#39;,&#39;&#39;)        return  oidclass Bilibili():    def __init__(self,oid):        self.headers={        &#39;Host&#39;: &#39;api.bilibili.com&#39;,        &#39;Connection&#39;: &#39;keep-alive&#39;,        &#39;Cache-Control&#39;: &#39;max-age=0&#39;,        &#39;Upgrade-Insecure-Requests&#39;: &#39;1&#39;,        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36&#39;,        &#39;Accept&#39;: &#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8&#39;,        &#39;Accept-Encoding&#39;: &#39;gzip, deflate, br&#39;,        &#39;Accept-Language&#39;: &#39;zh-CN,zh;q=0.9&#39;,        &#39;Cookie&#39;: &#39;finger=edc6ecda; LIVE_BUVID=AUTO1415378023816310; stardustvideo=1; CURRENT_FNVAL=8; buvid3=0D8F3D74-987D-442D-99CF-42BC9A967709149017infoc; rpdid=olwimklsiidoskmqwipww; fts=1537803390&#39;        }        self.url=&#39;https://api.bilibili.com/x/v1/dm/list.so?oid=&#39;+str(oid)        self.barrage_reault=self.get_page()    def get_page(self):        try:            time.sleep(0.5)            response=requests.get(self.url,headers=self.headers)        except Exception as e:            print(&#39;获取xml内容失败,%s&#39; % e)            return False        else:            if response.status_code == 200:                with open(&#39;bilibili.xml&#39;,&#39;wb&#39;) as f:                    f.write(response.content)                return True            else:                return False    def param_page(self):        time.sleep(1)        if  self.barrage_reault:            html=etree.parse(&#39;bilibili.xml&#39;,etree.HTMLParser())            results=html.xpath(&#39;//d//text()&#39;)            return resultsdef remove_double_barrage(resultlist):    double_barrage=[]    results=[]    barrage=set()    for result in resultlist:        if result not in results:            results.append(result)        else:            double_barrage.append(result)            barrage.add(result)    return double_barrage,results,barragedef make_wordCould(resultlist):    double_barrages,results,barrages=remove_double_barrage(resultlist)    # 重词计数    with open(&#39;barrages.txt&#39;,&#39;w&#39;, -1, &#39;utf-8&#39;, None, None) as f:        for barrage in barrages:            amount=double_barrages.count(barrage)            stt = barrage+&#39;:&#39;+str(amount+1)+&#39;\n&#39;            f.write(stt)    # 设置停用词    stop_words=[&#39;【&#39;,&#39;】&#39;,&#39;,&#39;,&#39;.&#39;,&#39;?&#39;,&#39;!&#39;,&#39;。&#39;]    words=[]    if results:        for result in results:            for stop in stop_words:                result=&#39;&#39;.join(result.split(stop))            words.append(result)        # 列表拼接成字符串        words=&#39;&#39;.join(words)        words=jieba.cut(words)        words=&#39;&#39;.join(words)        luo=np.array(Image.open(&#39;洛天依.jpg&#39;))            w=wc(font_path=&#39;‪C:/Windows/Fonts/SIMYOU.TTF&#39;,background_color=&#39;white&#39;,width=1600,height=1600,max_words=2000,mask=luo)        w.generate(words)        w.to_file(&#39;luo.jpg&#39;)def main():    url=&quot;https://www.bilibili.com/ranking?spm_id_from=333.851.b_7072696d61727950616765546162.3&quot;    urls = getUrl(url)    strUrl = urls.parsePage()    ress = []    for i in strUrl:        AV = getAvNum(i)        oid = AV.parsePage()        b=Bilibili(oid)        for j in b.param_page():            ress.append(j)    make_wordCould(ress)if __name__ == &#39;__main__&#39;:    main()</code></pre><p>具体文件可以到我的<a href="https://github.com/michaelminger/Bilibili" target="_blank" rel="noopener">github</a>上面下载</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> 网络爬虫 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> xpath </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>基于Bilibili热门视频Top100最热分区爬取与分析（报告）</title>
       <link href="/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-bao-gao-ban/"/>
       <url>/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-bao-gao-ban/</url>
@@ -306,6 +281,31 @@
         <tags>
             
             <tag> 文章 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）</title>
+      <link href="/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/"/>
+      <url>/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/</url>
+      
+        <content type="html"><![CDATA[<h2 id="网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析"><a href="#网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析" class="headerlink" title="网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析"></a>网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析</h2><h4 id="实验内容"><a href="#实验内容" class="headerlink" title="实验内容"></a>实验内容</h4><p>目标网站：Bilibili热门视频Top100</p><p>目标网址：<br><a href="https://www.bilibili.com/ranking?" target="_blank" rel="noopener">https://www.bilibili.com/ranking?</a>（每过几天都会变的哦）<br><img src="https://img-blog.csdnimg.cn/20200518053212353.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p><h4 id="任务要求"><a href="#任务要求" class="headerlink" title="任务要求"></a>任务要求</h4><p>实现对于Bilibili热门视频Top100弹幕的数据爬取与分析</p><h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><pre><code>from lxml import etreeimport timeimport jiebaimport numpy as npfrom PIL import Imageimport requestsimport refrom requests.exceptions import RequestExceptionfrom wordcloud import WordCloud as wcclass getUrl ():    def __init__(self,url):        self.url = url    def getTxt(self):        self.headers = {            &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;                }        try:            result = requests.get(self.url,headers=self.headers,timeout=30)            result.raise_for_status()            result.encoding = result.apparent_encoding            return result.text        except:            return &quot;&quot;        def parsePage(self):        res = self.getTxt()        newhtml =etree.HTML(res,etree.HTMLParser())        result=newhtml.xpath(&#39;//*[@id=&quot;app&quot;]/div[1]/div/div[1]/div[2]/div[3]/ul/li/div[2]/div[1]/a//@href&#39;)        return  resultclass getAvNum():    def __init__(self,url):        self.url = url    def getTxt(self):        self.headers = {            &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;                }        try:            result = requests.get(self.url,headers=self.headers,timeout=30)            result.raise_for_status()            result.encoding = result.apparent_encoding            return result.text        except:            return &quot;&quot;    def parsePage(self):        res = self.getTxt()        newhtml =etree.HTML(res,etree.HTMLParser())        rlist=newhtml.xpath(&#39;/html/head/meta[10]//@content&#39;)        resp = requests.get(rlist[0],headers=self.headers)        match_rule = r&#39;cid=(.*?)&amp;aid&#39;        oid = re.search(match_rule,resp.text).group().replace(&#39;cid=&#39;,&#39;&#39;).replace(&#39;&amp;aid&#39;,&#39;&#39;)        return  oidclass Bilibili():    def __init__(self,oid):        self.headers={        &#39;Host&#39;: &#39;api.bilibili.com&#39;,        &#39;Connection&#39;: &#39;keep-alive&#39;,        &#39;Cache-Control&#39;: &#39;max-age=0&#39;,        &#39;Upgrade-Insecure-Requests&#39;: &#39;1&#39;,        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36&#39;,        &#39;Accept&#39;: &#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8&#39;,        &#39;Accept-Encoding&#39;: &#39;gzip, deflate, br&#39;,        &#39;Accept-Language&#39;: &#39;zh-CN,zh;q=0.9&#39;,        &#39;Cookie&#39;: &#39;finger=edc6ecda; LIVE_BUVID=AUTO1415378023816310; stardustvideo=1; CURRENT_FNVAL=8; buvid3=0D8F3D74-987D-442D-99CF-42BC9A967709149017infoc; rpdid=olwimklsiidoskmqwipww; fts=1537803390&#39;        }        self.url=&#39;https://api.bilibili.com/x/v1/dm/list.so?oid=&#39;+str(oid)        self.barrage_reault=self.get_page()    def get_page(self):        try:            time.sleep(0.5)            response=requests.get(self.url,headers=self.headers)        except Exception as e:            print(&#39;获取xml内容失败,%s&#39; % e)            return False        else:            if response.status_code == 200:                with open(&#39;bilibili.xml&#39;,&#39;wb&#39;) as f:                    f.write(response.content)                return True            else:                return False    def param_page(self):        time.sleep(1)        if  self.barrage_reault:            html=etree.parse(&#39;bilibili.xml&#39;,etree.HTMLParser())            results=html.xpath(&#39;//d//text()&#39;)            return resultsdef remove_double_barrage(resultlist):    double_barrage=[]    results=[]    barrage=set()    for result in resultlist:        if result not in results:            results.append(result)        else:            double_barrage.append(result)            barrage.add(result)    return double_barrage,results,barragedef make_wordCould(resultlist):    double_barrages,results,barrages=remove_double_barrage(resultlist)    # 重词计数    with open(&#39;barrages.txt&#39;,&#39;w&#39;, -1, &#39;utf-8&#39;, None, None) as f:        for barrage in barrages:            amount=double_barrages.count(barrage)            stt = barrage+&#39;:&#39;+str(amount+1)+&#39;\n&#39;            f.write(stt)    # 设置停用词    stop_words=[&#39;【&#39;,&#39;】&#39;,&#39;,&#39;,&#39;.&#39;,&#39;?&#39;,&#39;!&#39;,&#39;。&#39;]    words=[]    if results:        for result in results:            for stop in stop_words:                result=&#39;&#39;.join(result.split(stop))            words.append(result)        # 列表拼接成字符串        words=&#39;&#39;.join(words)        words=jieba.cut(words)        words=&#39;&#39;.join(words)        luo=np.array(Image.open(&#39;洛天依.jpg&#39;))            w=wc(font_path=&#39;‪C:/Windows/Fonts/SIMYOU.TTF&#39;,background_color=&#39;white&#39;,width=1600,height=1600,max_words=2000,mask=luo)        w.generate(words)        w.to_file(&#39;luo.jpg&#39;)def main():    url=&quot;https://www.bilibili.com/ranking?spm_id_from=333.851.b_7072696d61727950616765546162.3&quot;    urls = getUrl(url)    strUrl = urls.parsePage()    ress = []    for i in strUrl:        AV = getAvNum(i)        oid = AV.parsePage()        b=Bilibili(oid)        for j in b.param_page():            ress.append(j)    make_wordCould(ress)if __name__ == &#39;__main__&#39;:    main()</code></pre><p>具体文件可以到我的<a href="https://github.com/michaelminger/Bilibili" target="_blank" rel="noopener">github</a>上面下载</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 网络爬虫 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> xpath </tag>
             
         </tags>
       
