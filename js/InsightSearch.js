@@ -17,7 +17,7 @@
 
     function searchItem (icon, title, slug, preview, url) {
         return $('<div>').addClass('ins-selectable').addClass('ins-search-item')
-            .append($('<header>').append($('<i>').addClass('icon').addClass('icon-' + icon)).append(title != null && title != '' ? title : CONFIG.TRANSLATION['UNTITLED'])
+            .append($('<header>').append($('<i>').addClass('fa').addClass('fa-' + icon)).append(title != null && title != '' ? title : CONFIG.TRANSLATION['UNTITLED'])
                 .append(slug ? $('<span>').addClass('ins-slug').text(slug) : null))
             .append(preview ? $('<p>').addClass('ins-search-preview').text(preview) : null)
             .attr('data-url', url);
@@ -153,12 +153,12 @@
         var WEIGHTS = weightFactory(keywords);
         var FILTERS = filterFactory(keywords);
         var posts = json.posts;
-        var pages = json.pages;
+        // var pages = json.pages;
         var tags = extractToSet(json, 'tags');
         var categories = extractToSet(json, 'categories');
         return {
-            posts: posts.filter(FILTERS.POST).sort(function (a, b) { return WEIGHTS.POST(b) - WEIGHTS.POST(a); }).slice(0, 5),
-            pages: pages.filter(FILTERS.PAGE).sort(function (a, b) { return WEIGHTS.PAGE(b) - WEIGHTS.PAGE(a); }).slice(0, 5),
+            posts: posts.filter(FILTERS.POST).sort(function (a, b) { return WEIGHTS.POST(b) - WEIGHTS.POST(a); }).slice(0, 20),
+            // pages: pages.filter(FILTERS.PAGE).sort(function (a, b) { return WEIGHTS.PAGE(b) - WEIGHTS.PAGE(a); }).slice(0, 5),
             categories: categories.filter(FILTERS.CATEGORY).sort(function (a, b) { return WEIGHTS.CATEGORY(b) - WEIGHTS.CATEGORY(a); }).slice(0, 5),
             tags: tags.filter(FILTERS.TAG).sort(function (a, b) { return WEIGHTS.TAG(b) - WEIGHTS.TAG(a); }).slice(0, 5)
         };
@@ -217,7 +217,10 @@
     });
 
 
-    $(document).on('click focus', '.search-form-input', function () {
+    $(document).on('click focus', '.search-field', function () {
+        $main.addClass('show');
+        $main.find('.ins-search-input').focus();
+    }).on('click focus', '.search-form-submit', function () {
         $main.addClass('show');
         $main.find('.ins-search-input').focus();
     }).on('click', '.ins-search-item', function () {
