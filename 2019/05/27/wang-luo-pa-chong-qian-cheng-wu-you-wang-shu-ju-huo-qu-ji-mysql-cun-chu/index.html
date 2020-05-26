@@ -26,8 +26,7 @@
     <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
     <link rel="stylesheet" type="text/css" href="/css/matery.css">
     <link rel="stylesheet" type="text/css" href="/css/my.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css">
-    <script src="//cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js"></script>
+    
     <script src="/libs/jquery/jquery.min.js"></script>
 
 </head>
@@ -462,9 +461,7 @@
 <p>（2）自主选择re、bs4、lxml中的一种解析方法对保存的的源代码读取并进行解析，成功找到目标数据所在的特定标签，进行网页结构的解析；</p>
 <p>（3）定义函数，将获取的目标数据保存到MYSQL库文件中。</p>
 <p>（4）使用框架式结构，通过参数传递实现整个特定数据的爬取。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><p class="code-caption" data-lang data-line_number="frontend" data-trim_indent="backend" data-label_position="outer" data-labels_left="Code" data-labels_right=":" data-labels_copy="Copy Code"><span class="code-caption-label"></span><a class="code-caption-copy">Copy Code</a></p>
-
-<pre><code>import requests
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
 import json
 import csv
 from requests.exceptions import RequestException
@@ -874,20 +871,20 @@ main()
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/05/27/wang-luo-pa-chong-piao-fang-wang-shu-ju-zhua-qu-ji-mysql-cun-chu/">
+                <a href="/2019/05/27/wang-luo-pa-chong-piao-fang-wang-shu-ju-zhua-qu-ji-cun-chu/">
                     <div class="card-image">
                         
-                        <img src="https://img-blog.csdnimg.cn/20200423214801795.png" class="responsive-img" alt="网络爬虫——票房网数据抓取及MYSQL存储">
+                        <img src="https://img-blog.csdnimg.cn/20200423214801795.png" class="responsive-img" alt="网络爬虫——票房网数据抓取及存储（初级）">
                         
-                        <span class="card-title">网络爬虫——票房网数据抓取及MYSQL存储</span>
+                        <span class="card-title">网络爬虫——票房网数据抓取及存储（初级）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            网络爬虫——票房网数据抓取及MYSQL存储实验内容目标网站：电影票房网
+                            网络爬虫——票房网数据抓取及存储实验内容目标网站：电影票房网
 目标网址：http://58921.com/daily/wangpiao
-任务要求目标数据：（1）名次（2）电影名称 （3）日期（4）票房 （5）总场次（6）废场（7）
+任务要求目标数据：（1）名次（2）电影名称 （3）日期（4）票房 （5）总场次（6）废场（7）人次（8）
                         
                     </div>
                     <div class="publish-info">
@@ -908,10 +905,6 @@ main()
                 </div>
                 
                 <div class="card-action article-tags">
-                    
-                    <a href="/tags/MYSQL/">
-                        <span class="chip bg-color">MYSQL</span>
-                    </a>
                     
                     <a href="/tags/票房/">
                         <span class="chip bg-color">票房</span>

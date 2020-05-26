@@ -26,8 +26,7 @@
     <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
     <link rel="stylesheet" type="text/css" href="/css/matery.css">
     <link rel="stylesheet" type="text/css" href="/css/my.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css">
-    <script src="//cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js"></script>
+    
     <script src="/libs/jquery/jquery.min.js"></script>
 
 </head>
@@ -463,9 +462,7 @@
 <p>（2）使用lxml库中的xpath方法解析源代码，提取上面所示的目标数据，并打印输出；</p>
 <p>（3）尝试着使用try..except方法及时捕获异常。</p>
 <p>（4）可以尝试将获取的数据保存到文本文件中。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><p class="code-caption" data-lang data-line_number="frontend" data-trim_indent="backend" data-label_position="outer" data-labels_left="Code" data-labels_right=":" data-labels_copy="Copy Code"><span class="code-caption-label"></span><a class="code-caption-copy">Copy Code</a></p>
-
-<pre><code>import requests
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
 from requests.exceptions import RequestException
 from lxml import etree
 def one_to_page(url):

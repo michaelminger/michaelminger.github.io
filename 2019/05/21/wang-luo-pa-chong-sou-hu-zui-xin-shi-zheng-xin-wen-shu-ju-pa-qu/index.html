@@ -26,8 +26,7 @@
     <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
     <link rel="stylesheet" type="text/css" href="/css/matery.css">
     <link rel="stylesheet" type="text/css" href="/css/my.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css">
-    <script src="//cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js"></script>
+    
     <script src="/libs/jquery/jquery.min.js"></script>
 
 </head>
@@ -455,9 +454,7 @@
 <p>（1）使用urllib库或者requests抓取网页源代码；</p>
 <p>（2）使用BeautifulSoup的CSS选择器方法对获取的源代码进行解析，并成功找到目标数据所在的特定标签，进行网页结构的解析；</p>
 <p>（3）利用框架结构，通过函数调用，参数传递，实现目标数据抓取，并尝试将结果写入文本文件中。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><p class="code-caption" data-lang data-line_number="frontend" data-trim_indent="backend" data-label_position="outer" data-labels_left="Code" data-labels_right=":" data-labels_copy="Copy Code"><span class="code-caption-label"></span><a class="code-caption-copy">Copy Code</a></p>
-
-<pre><code>import requests
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
 from bs4 import BeautifulSoup
 import bs4 
 
@@ -513,6 +510,7 @@ def main():
     printUniverse(ulist)
 
 main()
+
 </code></pre><h3 id="输出如下："><a href="#输出如下：" class="headerlink" title="输出如下："></a>输出如下：</h3><p><img src="https://img-blog.csdnimg.cn/20200413212248457.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 
             </div>
@@ -750,20 +748,20 @@ main()
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/05/27/wang-luo-pa-chong-piao-fang-wang-shu-ju-zhua-qu-ji-cun-chu/">
+                <a href="/2019/05/27/wang-luo-pa-chong-piao-fang-wang-shu-ju-zhua-qu-ji-mysql-cun-chu/">
                     <div class="card-image">
                         
-                        <img src="https://img-blog.csdnimg.cn/20200423214801795.png" class="responsive-img" alt="网络爬虫——票房网数据抓取及存储（初级）">
+                        <img src="https://img-blog.csdnimg.cn/20200423214801795.png" class="responsive-img" alt="网络爬虫——票房网数据抓取及MYSQL存储">
                         
-                        <span class="card-title">网络爬虫——票房网数据抓取及存储（初级）</span>
+                        <span class="card-title">网络爬虫——票房网数据抓取及MYSQL存储</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            网络爬虫——票房网数据抓取及存储实验内容目标网站：电影票房网
+                            网络爬虫——票房网数据抓取及MYSQL存储实验内容目标网站：电影票房网
 目标网址：http://58921.com/daily/wangpiao
-任务要求目标数据：（1）名次（2）电影名称 （3）日期（4）票房 （5）总场次（6）废场（7）人次（8）
+任务要求目标数据：（1）名次（2）电影名称 （3）日期（4）票房 （5）总场次（6）废场（7）
                         
                     </div>
                     <div class="publish-info">
@@ -784,6 +782,10 @@ main()
                 </div>
                 
                 <div class="card-action article-tags">
+                    
+                    <a href="/tags/MYSQL/">
+                        <span class="chip bg-color">MYSQL</span>
+                    </a>
                     
                     <a href="/tags/票房/">
                         <span class="chip bg-color">票房</span>

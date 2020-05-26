@@ -26,8 +26,7 @@
     <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
     <link rel="stylesheet" type="text/css" href="/css/matery.css">
     <link rel="stylesheet" type="text/css" href="/css/my.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css">
-    <script src="//cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js"></script>
+    
     <script src="/libs/jquery/jquery.min.js"></script>
 
 </head>
@@ -318,7 +317,7 @@
 
 <script>
     // 每天切换 banner 图.  Switch banner image every day.
-    $('.bg-cover').css('background-image', 'url(/medias/banner/2.jpg)');
+    $('.bg-cover').css('background-image', 'url(/medias/banner/3.jpg)');
 </script>
 
 
@@ -338,21 +337,21 @@
             
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-zui-re-fen-qu-pa-qu-yu-fen-xi/">
+                    <a href="/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/">
                         <div class="card-image">
                             
-                            <img src="https://img-blog.csdnimg.cn/20200518052631531.png" class="responsive-img" alt="基于Bilibili热门视频Top100最热分区爬取与分析">
+                            <img src="https://img-blog.csdnimg.cn/20200518052704174.png" class="responsive-img" alt="基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）">
                             
-                            <span class="card-title">基于Bilibili热门视频Top100最热分区爬取与分析</span>
+                            <span class="card-title">基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                网络爬虫——基于Bilibili热门视频Top100最热分区爬取与分析这个主要是配合之前报告使用的，这里就不多赘述了。先爬地址，再爬取地址里的分区，最后整合。csv存储。
-实验内容目标网站：Bilibili热门视频Top100
-目标网址：h
+                                网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析实验内容目标网站：Bilibili热门视频Top100
+目标网址：https://www.bilibili.com/ranking?（每过几天都会变的哦）
+任务要求实现
                             
                         </div>
                         <div class="publish-info">
@@ -592,11 +591,9 @@
                         <div class="summary block-with-text">
                             
                                 人工智能——mnist（手写识别）因为时间较久了，就不详细介绍了。简单的说，一开始对已有的大量数字图片进行训练生成模型。然后通过对一张手写的数字图片进行读取，进入模型匹配，输出结果。
-源码Copy Code
+源码# Python3
 
-# Python3
-
-# 使用
+# 使用LeNet5的七层卷积
                             
                         </div>
                         <div class="publish-info">

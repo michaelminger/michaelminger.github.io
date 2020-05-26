@@ -26,8 +26,7 @@
     <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
     <link rel="stylesheet" type="text/css" href="/css/matery.css">
     <link rel="stylesheet" type="text/css" href="/css/my.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css">
-    <script src="//cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js"></script>
+    
     <script src="/libs/jquery/jquery.min.js"></script>
 
 </head>
@@ -317,7 +316,7 @@
 
 <script>
     // 每天切换 banner 图.  Switch banner image every day.
-    $('.bg-cover').css('background-image', 'url(/medias/banner/2.jpg)');
+    $('.bg-cover').css('background-image', 'url(/medias/banner/3.jpg)');
 </script>
 
 
@@ -356,19 +355,19 @@
                 </a>
                 
                 
-                <a href="/categories/汇编/" title="汇编: 1">
+                <a href="/categories/算法/" title="算法: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #D5F5E3;">汇编
+                            style="background-color: #D5F5E3;">算法
                         <span class="tag-length">1</span>
                     </span>
                 </a>
                 
                 
-                <a href="/categories/算法/" title="算法: 1">
+                <a href="/categories/汇编/" title="汇编: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #E8F8F5;">算法
+                            style="background-color: #E8F8F5;">汇编
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -399,12 +398,10 @@
                         <div class="summary block-with-text">
                             
                                 网络爬虫——超级鹰源码下载超级鹰官方网址：https://www.chaojiying.com/将文件下载再解压，这里使用源码：
-源码：Copy Code
-
-#!/usr/bin/env python
+源码：#!/usr/bin/env python
 # coding:utf-8
 
-imp
+import request
                             
                         </div>
                         <div class="publish-info">
@@ -474,12 +471,12 @@ imp
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/CSV/">
-                            <span class="chip bg-color">CSV</span>
-                        </a>
-                        
                         <a href="/tags/Xpath/">
                             <span class="chip bg-color">Xpath</span>
+                        </a>
+                        
+                        <a href="/tags/CSV/">
+                            <span class="chip bg-color">CSV</span>
                         </a>
                         
                     </div>
@@ -535,53 +532,6 @@ imp
             
             <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2019/05/27/wang-luo-pa-chong-piao-fang-wang-shu-ju-zhua-qu-ji-cun-chu/">
-                        <div class="card-image tag-image">
-                            
-                            <img src="https://img-blog.csdnimg.cn/20200423214801795.png" class="responsive-img" alt="网络爬虫——票房网数据抓取及存储（初级）">
-                            
-                            <span class="card-title">网络爬虫——票房网数据抓取及存储（初级）</span>
-                        </div>
-                    </a>
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                网络爬虫——票房网数据抓取及存储实验内容目标网站：电影票房网
-目标网址：http://58921.com/daily/wangpiao
-任务要求目标数据：（1）名次（2）电影名称 （3）日期（4）票房 （5）总场次（6）废场（7）人次（8）
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-05-27
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/网络爬虫/" class="post-category">
-                                    网络爬虫
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/票房/">
-                            <span class="chip bg-color">票房</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
                     <a href="/2019/05/27/wang-luo-pa-chong-piao-fang-wang-shu-ju-zhua-qu-ji-mysql-cun-chu/">
                         <div class="card-image tag-image">
                             
@@ -621,6 +571,53 @@ imp
                         <a href="/tags/MYSQL/">
                             <span class="chip bg-color">MYSQL</span>
                         </a>
+                        
+                        <a href="/tags/票房/">
+                            <span class="chip bg-color">票房</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2019/05/27/wang-luo-pa-chong-piao-fang-wang-shu-ju-zhua-qu-ji-cun-chu/">
+                        <div class="card-image tag-image">
+                            
+                            <img src="https://img-blog.csdnimg.cn/20200423214801795.png" class="responsive-img" alt="网络爬虫——票房网数据抓取及存储（初级）">
+                            
+                            <span class="card-title">网络爬虫——票房网数据抓取及存储（初级）</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                网络爬虫——票房网数据抓取及存储实验内容目标网站：电影票房网
+目标网址：http://58921.com/daily/wangpiao
+任务要求目标数据：（1）名次（2）电影名称 （3）日期（4）票房 （5）总场次（6）废场（7）人次（8）
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-05-27
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/网络爬虫/" class="post-category">
+                                    网络爬虫
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
                         
                         <a href="/tags/票房/">
                             <span class="chip bg-color">票房</span>

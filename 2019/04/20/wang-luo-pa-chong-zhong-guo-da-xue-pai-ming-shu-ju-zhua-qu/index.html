@@ -26,8 +26,7 @@
     <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
     <link rel="stylesheet" type="text/css" href="/css/matery.css">
     <link rel="stylesheet" type="text/css" href="/css/my.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css">
-    <script src="//cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js"></script>
+    
     <script src="/libs/jquery/jquery.min.js"></script>
 
 </head>
@@ -457,9 +456,7 @@
 <p>第二，分析网页内容并提取有用数据到恰当的数据结构中；</p>
 <p>第三，利用数据结构展示或进一步处理数据。</p>
 <p>由于大学排名是一个典型的二维数据，因此，采用二维列表存储该排名所涉及的表单数据。具体来说，采用requests 库爬取网页内容，使用beautifulsoup4 库分析网页中数据，提取310 个学校的排名及相关数据，存储到二维列表中，最后采用用户偏好的方式打印出来。</p>
-<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><p class="code-caption" data-lang data-line_number="frontend" data-trim_indent="backend" data-label_position="outer" data-labels_left="Code" data-labels_right=":" data-labels_copy="Copy Code"><span class="code-caption-label"></span><a class="code-caption-copy">Copy Code</a></p>
-
-<pre><code>import requests
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><pre><code>import requests
 from bs4 import BeautifulSoup
 import bs4 
 
