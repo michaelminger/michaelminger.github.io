@@ -29,8 +29,7 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+</head>
 
 
 <body>
@@ -409,12 +408,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/MYSQL/">
-                                <span class="chip bg-color">MYSQL</span>
-                            </a>
-                        
                             <a href="/tags/二手房/">
                                 <span class="chip bg-color">二手房</span>
+                            </a>
+                        
+                            <a href="/tags/MYSQL/">
+                                <span class="chip bg-color">MYSQL</span>
                             </a>
                         
                     </div>
@@ -459,221 +458,9 @@
 <p>要求：</p>
 <p>（1）自选请求库和解析库获取目标数据；</p>
 <p>（2）第一个存储至txt或者csv中，第二个源码存储至Mysql中。<br><img src="https://img-blog.csdnimg.cn/20200423220000472.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
-<h3 id="源码（1）：csv-txt"><a href="#源码（1）：csv-txt" class="headerlink" title="源码（1）：csv,txt"></a>源码（1）：csv,txt</h3><pre><code>import requests
-import json
-import csv
-from requests.exceptions import RequestException
-from lxml import etree
-
-def getHtmlText(url):
-    headers = {
-        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
-    }
-    try:
-        result = requests.get(url,headers=headers,timeout=30)
-        result.raise_for_status()
-        result.encoding = result.apparent_encoding
-        return result.text
-    except:
-        return &quot;&quot;
-
-def cleanData(clist):
-    olist = []
-    for i in range(len(clist)):
-        olist.append(clist[i].replace(&quot; &quot;,&quot;&quot;).replace(&#39;\r&#39;,&quot;&quot;).replace(&quot;\n&quot;,&#39;&#39;).replace(&quot;\xa0\xa0&quot;,&#39;,&#39;))
-
-    return olist
-
-def parsePage(html):
-    ulist = []
-    clist = []
-
-    newhtml =etree.HTML(html,etree.HTMLParser())
-    titles =cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[2]/div/a//text()&#39;))
-    hrefs = cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[2]/div/a//@href&#39;, stream=True))
-    others =cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[2]/div[2]/span//text()&#39;))
-    addresss =cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[2]/div[3]/span//text()&#39;))
-    prices =cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[3]/span[2]//text()&#39;))
-
-    length = len(titles)   
-
-    for i in range(length):
-        ulist.append(titles[i])     
-        ulist.append(hrefs[i])
-        ulist.append(others[i*4+0])
-        ulist.append(others[i*4+1])
-        ulist.append(others[i*4+2])
-        ulist.append(others[i*4+3])
-        ulist.append(addresss[i])
-        ulist.append(prices[i])
-        clist.append(ulist)
-        ulist = []
-
-    return clist
-
-def txtdata(data):
-    with open(&#39;data.txt&#39;,&#39;w&#39;)as file:
-        for i in data:
-            for j in i:
-                print(j)
-        print(&#39;successful&#39;)
-
-def storedata(data):
-    with open(&#39;data.txt&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;)as file:
-        for i in data:
-            file.write(json.dumps(i,ensure_ascii=False)+&#39;\n&#39;)
-        print(&#39;ok&#39;)
-
-def csvdata(data): 
-    with open(&#39;data.csv&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;,newline=&#39;&#39;)as csvfile:
-        fieldnames = [&#39;标题&#39;,&#39;链接地址&#39;,&#39;厅室&#39;,&#39;面积&#39;,&#39;层数&#39;,&#39;建造时间&#39;,&#39;地址&#39;,&#39;单价&#39;]
-        writer = csv.DictWriter(csvfile,fieldnames=fieldnames)
-        writer.writeheader()
-        for i in data:
-            writer.writerow({&#39;标题&#39;:i[0],&#39;链接地址&#39;:i[1],&#39;厅室&#39;:i[2],&#39;面积&#39;:i[3],&#39;层数&#39;:i[4],&#39;建造时间&#39;:i[5],&#39;地址&#39;:i[6],&#39;单价&#39;:i[7]})
-        print(&#39;ok&#39;)
-
-def main():
-    url=&quot;https://qd.anjuke.com/sale/jiaozhoushi/?from=SearchBar&quot;
-    html=getHtmlText(url)
-    rlist=parsePage(html)
-
-    txtdata(rlist)
-    storedata(rlist)
-    csvdata(rlist)
-main()
-</code></pre><h3 id="源码（1）：MYSQL"><a href="#源码（1）：MYSQL" class="headerlink" title="源码（1）：MYSQL"></a>源码（1）：MYSQL</h3><pre><code>import requests
-import json
-import csv
-from requests.exceptions import RequestException
-from lxml import etree
-import pymysql 
-import pytesseract
-import traceback  
-
-def connectMysql():
-    return pymysql.connect(host=&#39;localhost&#39;,user=&#39;root&#39;,password=&#39;123456&#39;,port=3306,db=&#39;spiders&#39;)
-
-def createMysqlTable():
-    db = connectMysql()
-    cursor = db.cursor()
-    sql = &#39;create table if not exists data (\
-    标题 varchar(255) not null ,\
-    链接地址 varchar(255) not null ,\
-    厅室 varchar(255) not null,\
-    面积 varchar(255) not null,\
-    层数 varchar(255) not null,\
-    建造时间 varchar(255) not null,\
-    地址 varchar(255) not null,\
-    单价 varchar(255) not null,\
-    primary key(标题))&#39;
-    cursor.execute(sql)
-
-    print(&#39;ok&#39;)
-    db.close()
-
-def getHtmlText(url):
-    headers = {
-        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
-    }
-    try:
-        result = requests.get(url,headers=headers,timeout=30)
-        result.raise_for_status()
-        result.encoding = result.apparent_encoding
-        return result.text
-    except:
-        return &quot;&quot;
-
-def cleanData(clist):
-    olist = []
-    for i in range(len(clist)):
-        olist.append(clist[i].replace(&quot; &quot;,&quot;&quot;).replace(&#39;\r&#39;,&quot;&quot;).replace(&quot;\n&quot;,&#39;&#39;).replace(&quot;\xa0\xa0&quot;,&#39;,&#39;))
-
-    return olist
-
-def parsePage(html):
-    ulist = []
-    clist = []
-
-    newhtml =etree.HTML(html,etree.HTMLParser())
-    titles =cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[2]/div/a//text()&#39;))
-    hrefs = cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[2]/div/a//@href&#39;, stream=True))
-    others =cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[2]/div[2]/span//text()&#39;))
-    addresss =cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[2]/div[3]/span//text()&#39;))
-    prices =cleanData(newhtml.xpath(&#39;//*[@id=&quot;houselist-mod-new&quot;]/li/div[3]/span[2]//text()&#39;))
-
-    length = len(titles)   
-
-    for i in range(length):
-        ulist.append(titles[i])     
-        ulist.append(hrefs[i][0:100])
-        ulist.append(others[i*4+0])
-        ulist.append(others[i*4+1])
-        ulist.append(others[i*4+2])
-        ulist.append(others[i*4+3])
-        ulist.append(addresss[i])
-        ulist.append(prices[i])
-        clist.append(ulist)
-        ulist = []
-
-    return clist
-
-def txtdata(data):
-    with open(&#39;data.txt&#39;,&#39;w&#39;)as file:
-        for i in data:
-            for j in i:
-                print(j)
-        print(&#39;successful&#39;)
-
-def storedata(data):
-    with open(&#39;data.txt&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;)as file:
-        for i in data:
-            file.write(json.dumps(i,ensure_ascii=False)+&#39;\n&#39;)
-        print(&#39;ok&#39;)
-
-def csvdata(data): 
-    with open(&#39;data.csv&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;,newline=&#39;&#39;)as csvfile:
-        fieldnames = [&#39;标题&#39;,&#39;链接地址&#39;,&#39;厅室&#39;,&#39;面积&#39;,&#39;层数&#39;,&#39;建造时间&#39;,&#39;地址&#39;,&#39;单价&#39;]
-        writer = csv.DictWriter(csvfile,fieldnames=fieldnames)
-        writer.writeheader()
-        for i in data:
-            writer.writerow({&#39;标题&#39;:i[0],&#39;链接地址&#39;:i[1],&#39;厅室&#39;:i[2],&#39;面积&#39;:i[3],&#39;层数&#39;:i[4],&#39;建造时间&#39;:i[5],&#39;地址&#39;:i[6],&#39;单价&#39;:i[7]})
-        print(&#39;ok&#39;)
-def mysqlData(datas):
-
-    table = &#39;data&#39;
-    keys = &#39;标题,链接地址,厅室,面积,层数,建造时间,地址,单价&#39;
-
-    db = connectMysql()
-    cursor = db.cursor()
-    for data in datas:
-        values = &#39;,&#39;.join([&#39;%s&#39;]*len(data))
-        sql = &#39;INSERT INTO {table}({keys}) VALUES({values})&#39;.format(table=table,keys = keys ,values = values)
-        print(sql)
-        print(tuple(data))
-        try :
-            if cursor.execute(sql, tuple(data)):
-                print(&quot;Succcessful&quot;)
-                db.commit()
-        except:
-            traceback.print_exc()
-            print(&quot;Failed&quot;)
-            db.rollback()
-
-    db.close()
-
-def main():
-#     createMysqlTable()
-    url=&quot;https://qd.anjuke.com/sale/jiaozhoushi/?from=SearchBar&quot;
-    html=getHtmlText(url)
-    rlist=parsePage(html)
-
-#     txtdata(rlist)
-    storedata(rlist)
-    csvdata(rlist)
-    mysqlData(rlist)
-main()
-</code></pre><p><img src="https://img-blog.csdnimg.cn/20200423220435815.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200423220435749.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200423220435717.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200423220435486.jpg" alt="在这里插入图片描述"></p>
+<h3 id="源码（1）：csv-txt"><a href="#源码（1）：csv-txt" class="headerlink" title="源码（1）：csv,txt"></a>源码（1）：csv,txt</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"><span class="keyword">from</span> requests.exceptions <span class="keyword">import</span> RequestException</span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHtmlText</span><span class="params">(url)</span>:</span></span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69'</span>        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = requests.get(url,headers=headers,timeout=<span class="number">30</span>)</span><br><span class="line">        result.raise_for_status()</span><br><span class="line">        result.encoding = result.apparent_encoding</span><br><span class="line">        <span class="keyword">return</span> result.text</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cleanData</span><span class="params">(clist)</span>:</span></span><br><span class="line">    olist = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(clist)):</span><br><span class="line">        olist.append(clist[i].replace(<span class="string">" "</span>,<span class="string">""</span>).replace(<span class="string">'\r'</span>,<span class="string">""</span>).replace(<span class="string">"\n"</span>,<span class="string">''</span>).replace(<span class="string">"\xa0\xa0"</span>,<span class="string">','</span>))</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> olist</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parsePage</span><span class="params">(html)</span>:</span></span><br><span class="line">    ulist = []</span><br><span class="line">    clist = []</span><br><span class="line">    </span><br><span class="line">    newhtml =etree.HTML(html,etree.HTMLParser())</span><br><span class="line">    titles =cleanData(newhtml.xpath(<span class="string">'//*[@id="houselist-mod-new"]/li/div[2]/div/a//text()'</span>))</span><br><span class="line">    hrefs = cleanData(newhtml.xpath(<span class="string">'//*[@id="houselist-mod-new"]/li/div[2]/div/a//@href'</span>, stream=<span class="literal">True</span>))</span><br><span class="line">    others =cleanData(newhtml.xpath(<span class="string">'//*[@id="houselist-mod-new"]/li/div[2]/div[2]/span//text()'</span>))</span><br><span class="line">    addresss =cleanData(newhtml.xpath(<span class="string">'//*[@id="houselist-mod-new"]/li/div[2]/div[3]/span//text()'</span>))</span><br><span class="line">    prices =cleanData(newhtml.xpath(<span class="string">'//*[@id="houselist-mod-new"]/li/div[3]/span[2]//text()'</span>))</span><br><span class="line">    </span><br><span class="line">    length = len(titles)   </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(length):</span><br><span class="line">        ulist.append(titles[i])     </span><br><span class="line">        ulist.append(hrefs[i])</span><br><span class="line">        ulist.append(others[i*<span class="number">4</span>+<span class="number">0</span>])</span><br><span class="line">        ulist.append(others[i*<span class="number">4</span>+<span class="number">1</span>])</span><br><span class="line">        ulist.append(others[i*<span class="number">4</span>+<span class="number">2</span>])</span><br><span class="line">        ulist.append(others[i*<span class="number">4</span>+<span class="number">3</span>])</span><br><span class="line">        ulist.append(addresss[i])</span><br><span class="line">        ulist.append(prices[i])</span><br><span class="line">        clist.append(ulist)</span><br><span class="line">        ulist = []</span><br><span class="line">   </span><br><span class="line">    <span class="keyword">return</span> clist</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">txtdata</span><span class="params">(data)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">'data.txt'</span>,<span class="string">'w'</span>)<span class="keyword">as</span> file:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> i:</span><br><span class="line">                print(j)</span><br><span class="line">        print(<span class="string">'successful'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">storedata</span><span class="params">(data)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">'data.txt'</span>,<span class="string">'w'</span>,encoding = <span class="string">'utf-8'</span>)<span class="keyword">as</span> file:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">            file.write(json.dumps(i,ensure_ascii=<span class="literal">False</span>)+<span class="string">'\n'</span>)</span><br><span class="line">        print(<span class="string">'ok'</span>)</span><br><span class="line">        </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">csvdata</span><span class="params">(data)</span>:</span> </span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">'data.csv'</span>,<span class="string">'w'</span>,encoding = <span class="string">'utf-8'</span>,newline=<span class="string">''</span>)<span class="keyword">as</span> csvfile:</span><br><span class="line">        fieldnames = [<span class="string">'标题'</span>,<span class="string">'链接地址'</span>,<span class="string">'厅室'</span>,<span class="string">'面积'</span>,<span class="string">'层数'</span>,<span class="string">'建造时间'</span>,<span class="string">'地址'</span>,<span class="string">'单价'</span>]</span><br><span class="line">        writer = csv.DictWriter(csvfile,fieldnames=fieldnames)</span><br><span class="line">        writer.writeheader()</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">            writer.writerow(&#123;<span class="string">'标题'</span>:i[<span class="number">0</span>],<span class="string">'链接地址'</span>:i[<span class="number">1</span>],<span class="string">'厅室'</span>:i[<span class="number">2</span>],<span class="string">'面积'</span>:i[<span class="number">3</span>],<span class="string">'层数'</span>:i[<span class="number">4</span>],<span class="string">'建造时间'</span>:i[<span class="number">5</span>],<span class="string">'地址'</span>:i[<span class="number">6</span>],<span class="string">'单价'</span>:i[<span class="number">7</span>]&#125;)</span><br><span class="line">        print(<span class="string">'ok'</span>)</span><br><span class="line">            </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    url=<span class="string">"https://qd.anjuke.com/sale/jiaozhoushi/?from=SearchBar"</span></span><br><span class="line">    html=getHtmlText(url)</span><br><span class="line">    rlist=parsePage(html)</span><br><span class="line">    </span><br><span class="line">    txtdata(rlist)</span><br><span class="line">    storedata(rlist)</span><br><span class="line">    csvdata(rlist)</span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<h3 id="源码（1）：MYSQL"><a href="#源码（1）：MYSQL" class="headerlink" title="源码（1）：MYSQL"></a>源码（1）：MYSQL</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"><span class="keyword">from</span> requests.exceptions <span class="keyword">import</span> RequestException</span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"><span class="keyword">import</span> pymysql </span><br><span class="line"><span class="keyword">import</span> pytesseract</span><br><span class="line"><span class="keyword">import</span> traceback  </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">connectMysql</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> pymysql.connect(host=<span class="string">'localhost'</span>,user=<span class="string">'root'</span>,password=<span class="string">'123456'</span>,port=<span class="number">3306</span>,db=<span class="string">'spiders'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">createMysqlTable</span><span class="params">()</span>:</span></span><br><span class="line">    db = connectMysql()</span><br><span class="line">    cursor = db.cursor()</span><br><span class="line">    sql = <span class="string">'create table if not exists data (\</span></span><br><span class="line"><span class="string">    标题 varchar(255) not null ,\</span></span><br><span class="line"><span class="string">    链接地址 varchar(255) not null ,\</span></span><br><span class="line"><span class="string">    厅室 varchar(255) not null,\</span></span><br><span class="line"><span class="string">    面积 varchar(255) not null,\</span></span><br><span class="line"><span class="string">    层数 varchar(255) not null,\</span></span><br><span class="line"><span class="string">    建造时间 varchar(255) not null,\</span></span><br><span class="line"><span class="string">    地址 varchar(255) not null,\</span></span><br><span class="line"><span class="string">    单价 varchar(255) not null,\</span></span><br><span class="line"><span class="string">    primary key(标题))'</span></span><br><span class="line">    cursor.execute(sql)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'ok'</span>)</span><br><span class="line">    db.close()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHtmlText</span><span class="params">(url)</span>:</span></span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69'</span>        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = requests.get(url,headers=headers,timeout=<span class="number">30</span>)</span><br><span class="line">        result.raise_for_status()</span><br><span class="line">        result.encoding = result.apparent_encoding</span><br><span class="line">        <span class="keyword">return</span> result.text</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cleanData</span><span class="params">(clist)</span>:</span></span><br><span class="line">    olist = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(clist)):</span><br><span class="line">        olist.append(clist[i].replace(<span class="string">" "</span>,<span class="string">""</span>).replace(<span class="string">'\r'</span>,<span class="string">""</span>).replace(<span class="string">"\n"</span>,<span class="string">''</span>).replace(<span class="string">"\xa0\xa0"</span>,<span class="string">','</span>))</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> olist</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parsePage</span><span class="params">(html)</span>:</span></span><br><span class="line">    ulist = []</span><br><span class="line">    clist = []</span><br><span class="line">    </span><br><span class="line">    newhtml =etree.HTML(html,etree.HTMLParser())</span><br><span class="line">    titles =cleanData(newhtml.xpath(<span class="string">'//*[@id="houselist-mod-new"]/li/div[2]/div/a//text()'</span>))</span><br><span class="line">    hrefs = cleanData(newhtml.xpath(<span class="string">'//*[@id="houselist-mod-new"]/li/div[2]/div/a//@href'</span>, stream=<span class="literal">True</span>))</span><br><span class="line">    others =cleanData(newhtml.xpath(<span class="string">'//*[@id="houselist-mod-new"]/li/div[2]/div[2]/span//text()'</span>))</span><br><span class="line">    addresss =cleanData(newhtml.xpath(<span class="string">'//*[@id="houselist-mod-new"]/li/div[2]/div[3]/span//text()'</span>))</span><br><span class="line">    prices =cleanData(newhtml.xpath(<span class="string">'//*[@id="houselist-mod-new"]/li/div[3]/span[2]//text()'</span>))</span><br><span class="line">    </span><br><span class="line">    length = len(titles)   </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(length):</span><br><span class="line">        ulist.append(titles[i])     </span><br><span class="line">        ulist.append(hrefs[i][<span class="number">0</span>:<span class="number">100</span>])</span><br><span class="line">        ulist.append(others[i*<span class="number">4</span>+<span class="number">0</span>])</span><br><span class="line">        ulist.append(others[i*<span class="number">4</span>+<span class="number">1</span>])</span><br><span class="line">        ulist.append(others[i*<span class="number">4</span>+<span class="number">2</span>])</span><br><span class="line">        ulist.append(others[i*<span class="number">4</span>+<span class="number">3</span>])</span><br><span class="line">        ulist.append(addresss[i])</span><br><span class="line">        ulist.append(prices[i])</span><br><span class="line">        clist.append(ulist)</span><br><span class="line">        ulist = []</span><br><span class="line">   </span><br><span class="line">    <span class="keyword">return</span> clist</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">txtdata</span><span class="params">(data)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">'data.txt'</span>,<span class="string">'w'</span>)<span class="keyword">as</span> file:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> i:</span><br><span class="line">                print(j)</span><br><span class="line">        print(<span class="string">'successful'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">storedata</span><span class="params">(data)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">'data.txt'</span>,<span class="string">'w'</span>,encoding = <span class="string">'utf-8'</span>)<span class="keyword">as</span> file:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">            file.write(json.dumps(i,ensure_ascii=<span class="literal">False</span>)+<span class="string">'\n'</span>)</span><br><span class="line">        print(<span class="string">'ok'</span>)</span><br><span class="line">        </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">csvdata</span><span class="params">(data)</span>:</span> </span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">'data.csv'</span>,<span class="string">'w'</span>,encoding = <span class="string">'utf-8'</span>,newline=<span class="string">''</span>)<span class="keyword">as</span> csvfile:</span><br><span class="line">        fieldnames = [<span class="string">'标题'</span>,<span class="string">'链接地址'</span>,<span class="string">'厅室'</span>,<span class="string">'面积'</span>,<span class="string">'层数'</span>,<span class="string">'建造时间'</span>,<span class="string">'地址'</span>,<span class="string">'单价'</span>]</span><br><span class="line">        writer = csv.DictWriter(csvfile,fieldnames=fieldnames)</span><br><span class="line">        writer.writeheader()</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">            writer.writerow(&#123;<span class="string">'标题'</span>:i[<span class="number">0</span>],<span class="string">'链接地址'</span>:i[<span class="number">1</span>],<span class="string">'厅室'</span>:i[<span class="number">2</span>],<span class="string">'面积'</span>:i[<span class="number">3</span>],<span class="string">'层数'</span>:i[<span class="number">4</span>],<span class="string">'建造时间'</span>:i[<span class="number">5</span>],<span class="string">'地址'</span>:i[<span class="number">6</span>],<span class="string">'单价'</span>:i[<span class="number">7</span>]&#125;)</span><br><span class="line">        print(<span class="string">'ok'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mysqlData</span><span class="params">(datas)</span>:</span></span><br><span class="line">    </span><br><span class="line">    table = <span class="string">'data'</span></span><br><span class="line">    keys = <span class="string">'标题,链接地址,厅室,面积,层数,建造时间,地址,单价'</span></span><br><span class="line">    </span><br><span class="line">    db = connectMysql()</span><br><span class="line">    cursor = db.cursor()</span><br><span class="line">    <span class="keyword">for</span> data <span class="keyword">in</span> datas:</span><br><span class="line">        values = <span class="string">','</span>.join([<span class="string">'%s'</span>]*len(data))</span><br><span class="line">        sql = <span class="string">'INSERT INTO &#123;table&#125;(&#123;keys&#125;) VALUES(&#123;values&#125;)'</span>.format(table=table,keys = keys ,values = values)</span><br><span class="line">        print(sql)</span><br><span class="line">        print(tuple(data))</span><br><span class="line">        <span class="keyword">try</span> :</span><br><span class="line">            <span class="keyword">if</span> cursor.execute(sql, tuple(data)):</span><br><span class="line">                print(<span class="string">"Succcessful"</span>)</span><br><span class="line">                db.commit()</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            traceback.print_exc()</span><br><span class="line">            print(<span class="string">"Failed"</span>)</span><br><span class="line">            db.rollback()</span><br><span class="line">    </span><br><span class="line">    db.close()</span><br><span class="line">                </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line"><span class="comment">#     createMysqlTable()</span></span><br><span class="line">    url=<span class="string">"https://qd.anjuke.com/sale/jiaozhoushi/?from=SearchBar"</span></span><br><span class="line">    html=getHtmlText(url)</span><br><span class="line">    rlist=parsePage(html)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#     txtdata(rlist)</span></span><br><span class="line">    storedata(rlist)</span><br><span class="line">    csvdata(rlist)</span><br><span class="line">    mysqlData(rlist)</span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20200423220435815.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200423220435749.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200423220435717.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200423220435486.jpg" alt="在这里插入图片描述"></p>
 
             </div>
             <hr/>
@@ -737,12 +524,12 @@ main()
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/MYSQL/">
-                                    <span class="chip bg-color">MYSQL</span>
-                                </a>
-                            
                                 <a href="/tags/二手房/">
                                     <span class="chip bg-color">二手房</span>
+                                </a>
+                            
+                                <a href="/tags/MYSQL/">
+                                    <span class="chip bg-color">MYSQL</span>
                                 </a>
                             
                         </div>
@@ -914,25 +701,24 @@ main()
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/05/27/wang-luo-pa-chong-qian-cheng-wu-you-wang-shu-ju-huo-qu-ji-mysql-cun-chu/">
+                <a href="/2019/06/02/wang-luo-pa-chong-chang-jian-wen-ti-hui-zong/">
                     <div class="card-image">
                         
-                        <img src="https://img-blog.csdnimg.cn/20200413221530218.jpg" class="responsive-img" alt="网络爬虫——前程无忧网数据获取及MYSQL存储">
+                        <img src="https://img-blog.csdnimg.cn/202004132128304.png" class="responsive-img" alt="网络爬虫常见问题汇总">
                         
-                        <span class="card-title">网络爬虫——前程无忧网数据获取及MYSQL存储</span>
+                        <span class="card-title">网络爬虫常见问题汇总</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            网络爬虫——前程无忧网数据获取及MYSQL存储实验内容1目标网站：前程无忧招聘网
-目标网址：https://search.51job.com/list/120000,000000,0000,00,9,99,Python,2,1.html
-目
+                            网络爬虫常见问题汇总问题一：使用requests库或者urllib库获取源代码时无法正常显示中文解决方法：
+（1）requests库的文本中有两种类型，一种是文本类型，使用text属性，一种是针对音频、视频、图片等二进制数据类型，使用con
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2019-05-27
+                            <i class="far fa-clock fa-fw icon-date"></i>2019-06-02
                         </span>
                         <span class="publish-author">
                             
@@ -949,12 +735,8 @@ main()
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/前程无忧/">
-                        <span class="chip bg-color">前程无忧</span>
-                    </a>
-                    
-                    <a href="/tags/MYSQL/">
-                        <span class="chip bg-color">MYSQL</span>
+                    <a href="/tags/问题/">
+                        <span class="chip bg-color">问题</span>
                     </a>
                     
                 </div>
@@ -968,20 +750,20 @@ main()
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/05/27/wang-luo-pa-chong-piao-fang-wang-shu-ju-zhua-qu-ji-mysql-cun-chu/">
+                <a href="/2019/05/27/wang-luo-pa-chong-qian-cheng-wu-you-wang-shu-ju-huo-qu-ji-mysql-cun-chu/">
                     <div class="card-image">
                         
-                        <img src="https://img-blog.csdnimg.cn/20200423214801795.png" class="responsive-img" alt="网络爬虫——票房网数据抓取及MYSQL存储">
+                        <img src="https://img-blog.csdnimg.cn/20200413221530218.jpg" class="responsive-img" alt="网络爬虫——前程无忧网数据获取及MYSQL存储">
                         
-                        <span class="card-title">网络爬虫——票房网数据抓取及MYSQL存储</span>
+                        <span class="card-title">网络爬虫——前程无忧网数据获取及MYSQL存储</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            网络爬虫——票房网数据抓取及MYSQL存储实验内容目标网站：电影票房网
-目标网址：http://58921.com/daily/wangpiao
-任务要求目标数据：（1）名次（2）电影名称 （3）日期（4）票房 （5）总场次（6）废场（7）
+                            网络爬虫——前程无忧网数据获取及MYSQL存储实验内容1目标网站：前程无忧招聘网
+目标网址：https://search.51job.com/list/120000,000000,0000,00,9,99,Python,2,1.html
+目
                         
                     </div>
                     <div class="publish-info">
@@ -1007,8 +789,8 @@ main()
                         <span class="chip bg-color">MYSQL</span>
                     </a>
                     
-                    <a href="/tags/票房/">
-                        <span class="chip bg-color">票房</span>
+                    <a href="/tags/前程无忧/">
+                        <span class="chip bg-color">前程无忧</span>
                     </a>
                     
                 </div>

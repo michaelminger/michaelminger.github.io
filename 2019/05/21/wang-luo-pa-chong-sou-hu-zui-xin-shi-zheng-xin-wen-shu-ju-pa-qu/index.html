@@ -29,8 +29,7 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+</head>
 
 
 <body>
@@ -455,64 +454,8 @@
 <p>（1）使用urllib库或者requests抓取网页源代码；</p>
 <p>（2）使用BeautifulSoup的CSS选择器方法对获取的源代码进行解析，并成功找到目标数据所在的特定标签，进行网页结构的解析；</p>
 <p>（3）利用框架结构，通过函数调用，参数传递，实现目标数据抓取，并尝试将结果写入文本文件中。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
-from bs4 import BeautifulSoup
-import bs4 
-
-def getHtmlText(url):
-    headers = {
-        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
-    }
-    try:
-        result = requests.get(url,headers=headers,timeout=30)
-        result.raise_for_status()
-        result.encoding = result.apparent_encoding
-        return result.text
-    except:
-        print(&quot;A&quot;)
-        return &quot;&quot;
-
-def findUniverse(ulist , html):
-    soup = BeautifulSoup(html,&quot;html.parser&quot;)
-
-    for div in soup.find(attrs=[&#39;class&#39;,&#39;news-list clearfix&#39;]).children:
-        if isinstance(div ,bs4.element.Tag):
-            list_0 = div.find(&#39;h4&#39;).find(&#39;a&#39;).get(&#39;href&#39;)
-            list_1 = div.find(&#39;h4&#39;).string.replace(&quot; &quot;,&#39;&#39;).replace(&quot;\n&quot;,&#39;&#39;)
-            ulist.append([list_0,list_1])
-
-def findSame(ulist,html):
-    soup = BeautifulSoup(html,&quot;html.parser&quot;)
-
-    for div in soup.find(attrs=[&#39;class&#39;,&#39;second-nav&#39;]).children:
-        if isinstance(div ,bs4.element.Tag):
-            ulist.append(div.find(&#39;a&#39;).get(&#39;href&#39;))
-    return ulist
-
-def printUniverse(ulist):
-    tplt = &#39;{0:30}\t{1:18}&#39;
-    print(tplt.format(&quot;网址&quot;,&quot;名称&quot;,chr(12288)))
-    for i in range(len(ulist)):
-        u = ulist[i]
-        print(tplt.format(u[0],u[1],chr(12288)))
-
-def main():
-    ulist = []
-    ulist_Same = []
-
-    url = &#39;https://www.sohu.com/c/8/1460?spm=smpc.null.side-nav.14.1585491604691ZcX26aI&#39;    
-    html = getHtmlText(url)
-    ulist_Same = findSame(ulist_Same,html)
-
-    for i in range(len(ulist_Same) - 2 ):
-        url = &#39;https://www.sohu.com&#39; + ulist_Same[i+1]
-        html = getHtmlText(url)    
-        findUniverse(ulist,html)
-    printUniverse(ulist)
-
-main()
-
-</code></pre><h3 id="输出如下："><a href="#输出如下：" class="headerlink" title="输出如下："></a>输出如下：</h3><p><img src="https://img-blog.csdnimg.cn/20200413212248457.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> bs4 </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> getHtmlText(url):</span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69'</span>        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = requests.get(url,headers=headers,timeout=<span class="number">30</span>)</span><br><span class="line">        result.raise_for_status()</span><br><span class="line">        result.encoding = result.apparent_encoding</span><br><span class="line">        <span class="keyword">return</span> result.text</span><br><span class="line">    except:</span><br><span class="line">        <span class="keyword">print</span>(<span class="string">"A"</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> findUniverse(ulist , html):</span><br><span class="line">    soup = BeautifulSoup(html,<span class="string">"html.parser"</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> <span class="keyword">div</span> in soup.<span class="keyword">find</span>(attrs=[<span class="string">'class'</span>,<span class="string">'news-list clearfix'</span>]).children:</span><br><span class="line">        <span class="keyword">if</span> isinstance(<span class="keyword">div</span> ,bs4.element.Tag):</span><br><span class="line">            list_0 = <span class="keyword">div</span>.<span class="keyword">find</span>(<span class="string">'h4'</span>).<span class="keyword">find</span>(<span class="string">'a'</span>).get(<span class="string">'href'</span>)</span><br><span class="line">            list_1 = <span class="keyword">div</span>.<span class="keyword">find</span>(<span class="string">'h4'</span>).string.replace(<span class="string">" "</span>,<span class="string">''</span>).replace(<span class="string">"\n"</span>,<span class="string">''</span>)</span><br><span class="line">            ulist.<span class="keyword">append</span>([list_0,list_1])</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> findSame(ulist,html):</span><br><span class="line">    soup = BeautifulSoup(html,<span class="string">"html.parser"</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> <span class="keyword">div</span> in soup.<span class="keyword">find</span>(attrs=[<span class="string">'class'</span>,<span class="string">'second-nav'</span>]).children:</span><br><span class="line">        <span class="keyword">if</span> isinstance(<span class="keyword">div</span> ,bs4.element.Tag):</span><br><span class="line">            ulist.<span class="keyword">append</span>(<span class="keyword">div</span>.<span class="keyword">find</span>(<span class="string">'a'</span>).get(<span class="string">'href'</span>))</span><br><span class="line">    <span class="keyword">return</span> ulist</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> printUniverse(ulist):</span><br><span class="line">    tplt = <span class="string">'&#123;0:30&#125;\t&#123;1:18&#125;'</span></span><br><span class="line">    <span class="keyword">print</span>(tplt.format(<span class="string">"网址"</span>,<span class="string">"名称"</span>,chr(<span class="number">12288</span>)))</span><br><span class="line">    <span class="keyword">for</span> i in range(len(ulist)):</span><br><span class="line">        u = ulist[i]</span><br><span class="line">        <span class="keyword">print</span>(tplt.format(u[<span class="number">0</span>],u[<span class="number">1</span>],chr(<span class="number">12288</span>)))</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> main():</span><br><span class="line">    ulist = []</span><br><span class="line">    ulist_Same = []</span><br><span class="line">    </span><br><span class="line">    url = <span class="string">'https://www.sohu.com/c/8/1460?spm=smpc.null.side-nav.14.1585491604691ZcX26aI'</span>    </span><br><span class="line">    html = getHtmlText(url)</span><br><span class="line">    ulist_Same = findSame(ulist_Same,html)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i in range(len(ulist_Same) - <span class="number">2</span> ):</span><br><span class="line">        url = <span class="string">'https://www.sohu.com'</span> + ulist_Same[i+<span class="number">1</span>]</span><br><span class="line">        html = getHtmlText(url)    </span><br><span class="line">        findUniverse(ulist,html)</span><br><span class="line">    printUniverse(ulist)</span><br><span class="line">    </span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<h3 id="输出如下："><a href="#输出如下：" class="headerlink" title="输出如下："></a>输出如下：</h3><p><img src="https://img-blog.csdnimg.cn/20200413212248457.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 
             </div>
             <hr/>

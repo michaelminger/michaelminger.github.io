@@ -29,8 +29,7 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+</head>
 
 
 <body>
@@ -452,41 +451,8 @@
             <div id="articleContent">
                 <h2 id="网络爬虫——豆瓣读书数据抓取——RE（正则表达式）"><a href="#网络爬虫——豆瓣读书数据抓取——RE（正则表达式）" class="headerlink" title="网络爬虫——豆瓣读书数据抓取——RE（正则表达式）"></a>网络爬虫——豆瓣读书数据抓取——RE（正则表达式）</h2><p>目标网址：<a href="https://book.douban.com/" target="_blank" rel="noopener">https://book.douban.com/</a></p>
 <p>目标数据：（1）书名（2）书的链接地址（3）作者（4）发行时间（5）出版社<br><img src="https://img-blog.csdnimg.cn/20200413214442366.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>分析网页结构，通过获取网页源代码，使用re库解析网页结构，完成豆瓣读书项目中目标数据的爬取。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
-import re
-
-def getcode(url):
-    url = url
-    headers = {
-        &#39;User-Agent&#39;:&#39;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3756.400 QQBrowser/10.5.4039.400&#39;
-    }
-    response = requests.get(url,headers=headers)
-    response.encoding = &#39;utf_8&#39;
-    code = response.text
-    return code
-
-def parse_page(code):
-    ulist = []
-    pattern = re.compile(&#39;&lt;div class=&quot;cover&quot;&gt;.*?&lt;a href=&quot;(.*?)&quot; title=&quot;(.*?)&quot;&gt;.*?&lt;div class=&quot;author&quot;&gt;(.*?)&lt;/div&gt;.*?&lt;span class=&quot;year&quot;&gt;(.*?)&lt;/span&gt;.*?&lt;span class=&quot;publisher&quot;&gt;(.*?)&lt;/span&gt;&#39;,re.S)
-    items = re.findall(pattern,code)
-# print(items)
-    for item in items:
-        ulist.append([item[1],item[0].strip(),item[2].strip(),item[3].strip(),item[4].strip()])
-
-    return (ulist)
-
-def main():
-    ulist = []
-    url = &quot;https://book.douban.com/&quot;
-    code = getcode(url)
-    ulist = parse_page(code)
-
-    print(len(ulist))
-    print()
-    for i in range(len(ulist)):
-        print(ulist[i])
-main()
-</code></pre><p>输出如下：<br><img src="https://img-blog.csdnimg.cn/20200413220242245.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getcode</span></span>(url):</span><br><span class="line">    url = url</span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="symbol">'User</span>-<span class="type">Agent</span>':<span class="symbol">'Mozilla</span>/<span class="number">5.0</span> (<span class="type">Windows</span> <span class="type">NT</span> <span class="number">10.0</span>; <span class="type">WOW64</span>) <span class="type">AppleWebKit</span>/<span class="number">537.36</span> (<span class="type">KHTML</span>, like <span class="type">Gecko</span>) <span class="type">Chrome</span>/<span class="number">70.0</span><span class="number">.3538</span><span class="number">.25</span> <span class="type">Safari</span>/<span class="number">537.36</span> <span class="type">Core</span>/<span class="number">1.70</span><span class="number">.3756</span><span class="number">.400</span> <span class="type">QQBrowser</span>/<span class="number">10.5</span><span class="number">.4039</span><span class="number">.400</span>'</span><br><span class="line">    &#125;</span><br><span class="line">    response = requests.get(url,headers=headers)</span><br><span class="line">    response.encoding = <span class="symbol">'utf_</span>8'</span><br><span class="line">    code = response.text</span><br><span class="line">    <span class="keyword">return</span> code</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_page</span></span>(code):</span><br><span class="line">    ulist = []</span><br><span class="line">    pattern = re.compile('&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"cover"</span>&gt;.*?&lt;a href=<span class="string">"(.*?)"</span> title=<span class="string">"(.*?)"</span>&gt;.*?&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"author"</span>&gt;(.*?)&lt;/div&gt;.*?&lt;span <span class="class"><span class="keyword">class</span></span>=<span class="string">"year"</span>&gt;(.*?)&lt;/span&gt;.*?&lt;span <span class="class"><span class="keyword">class</span></span>=<span class="string">"publisher"</span>&gt;(.*?)&lt;/span&gt;',re.<span class="type">S</span>)</span><br><span class="line">    items = re.findall(pattern,code)</span><br><span class="line"># print(items)</span><br><span class="line">    <span class="keyword">for</span> item in items:</span><br><span class="line">        ulist.append([item[<span class="number">1</span>],item[<span class="number">0</span>].strip(),item[<span class="number">2</span>].strip(),item[<span class="number">3</span>].strip(),item[<span class="number">4</span>].strip()])</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> (ulist)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span></span>():</span><br><span class="line">    ulist = []</span><br><span class="line">    url = <span class="string">"https://book.douban.com/"</span></span><br><span class="line">    code = getcode(url)</span><br><span class="line">    ulist = parse_page(code)</span><br><span class="line">   </span><br><span class="line">    print(len(ulist))</span><br><span class="line">    print()</span><br><span class="line">    <span class="keyword">for</span> i in range(len(ulist)):</span><br><span class="line">        print(ulist[i])</span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<p>输出如下：<br><img src="https://img-blog.csdnimg.cn/20200413220242245.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 
             </div>
             <hr/>

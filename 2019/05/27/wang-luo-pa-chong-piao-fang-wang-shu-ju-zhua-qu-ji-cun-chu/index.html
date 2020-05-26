@@ -29,8 +29,7 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+</head>
 
 
 <body>
@@ -458,96 +457,8 @@
 <p>（2）自主选择re、bs4、lxml中的一种解析方法对保存的的源代码读取并进行解析，成功找到目标数据所在的特定标签，进行网页结构的解析；</p>
 <p>（3）定义函数，将获取的目标数据保存到csv文件中。</p>
 <p>（4）使用框架式结构，通过参数传递实现整个特定数据的爬取。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
-import json
-import csv
-from requests.exceptions import RequestException
-from lxml import etree
-
-def getHtmlText(url):
-    headers = {
-        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
-    }
-    try:
-        result = requests.get(url,headers=headers,timeout=30)
-        result.raise_for_status()
-        result.encoding = result.apparent_encoding
-        return result.text
-    except:
-        return &quot;&quot;
-
-def parsePage(html):
-    ulist = []
-    clist = []
-    rlist = []
-    ilist = []
-
-    newhtml =etree.HTML(html,etree.HTMLParser())
-    result=newhtml.xpath(&#39;//*[@id=&quot;content&quot;]/div[2]/table/tbody/tr/td//text()&#39;)
-    imgs = newhtml.xpath(&#39;//*[@id=&quot;content&quot;]/div[2]/table/tbody/tr/td/a/img/@src&#39;, stream=True)
-    j = 0 
-
-    for img in imgs:
-        j=j+1
-        with open(str(j)+&#39;.png&#39;, &#39;wb&#39;) as fd:
-            picture=requests.get(img).content
-            fd.write(picture)  
-
-    for i in range(len(imgs)):  
-            str_ = str(i+1)+&#39;.png&#39;
-            text = pytesseract.image_to_string(Image.open(str_))
-            ilist.append(text.replace(&quot; &quot;,&quot;.&quot;).replace(&quot;M&quot;,&quot;亿&quot;).replace(&quot;a&quot;,&quot;亿&quot;))
-#     print(ilist)        
-    for i in range(len(result)):
-        ulist.append(result[i].replace(&quot; &quot;,&quot;&quot;).replace(&#39;\r&#39;,&quot;&quot;).replace(&quot;\n&quot;,&#39;&#39;))
-
-    while &#39;&#39; in ulist:
-        ulist.remove(&#39;&#39;)
-
-    length = len(ulist)
-    weight = int(length / 8 )
-
-    for i in range(weight):
-        for j in range(8):
-            clist.append(ulist[i*8+j])
-        clist.append(ilist[i])
-        rlist.append(clist)
-        clist = []
-
-    return rlist
-
-# def txtdata(data):
-#     with open(&#39;top20.txt&#39;,&#39;w&#39;)as file:
-#         for i in data:
-#             for j in i:
-#                 print(j)
-#         print(&#39;successful&#39;)
-
-def storedata(data):
-    with open(&#39;top20.txt&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;)as file:
-        for i in data:
-            file.write(json.dumps(i,ensure_ascii=False)+&#39;\n&#39;)
-        print(&#39;ok&#39;)
-
-def csvdata(data):
-    with open(&#39;top20.csv&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;,newline=&#39;&#39;)as csvfile:
-        fieldnames = [&#39;名次&#39;,&#39;电影名称&#39;,&#39;日期&#39;,&#39;票房&#39;,&#39;总场次&#39;,&#39;废场&#39;,&#39;人次&#39;,&#39;上座率&#39;,&#39;票价（元）&#39;]
-        writer = csv.DictWriter(csvfile,fieldnames=fieldnames)
-        writer.writeheader()
-        for i in data:
-            writer.writerow({&#39;名次&#39;:i[0],&#39;电影名称&#39;:i[1],&#39;日期&#39;:i[2],&#39;票房&#39;:i[8],&#39;总场次&#39;:i[3],&#39;废场&#39;:i[4],&#39;人次&#39;:i[5],&#39;上座率&#39;:i[6],&#39;票价（元）&#39;:i[7]})
-        print(&#39;ok&#39;)
-
-def main():
-    url=&quot;http://58921.com/daily/wangpiao&quot;
-    html=getHtmlText(url)
-    rlist=parsePage(html)
-
-#     txtdata(rlist)
-    storedata(rlist)
-    csvdata(rlist)
-main()
-</code></pre><h3 id="结果输出："><a href="#结果输出：" class="headerlink" title="结果输出："></a>结果输出：</h3><p><img src="https://img-blog.csdnimg.cn/20200413222149472.jpg#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import json</span><br><span class="line">import csv</span><br><span class="line">from requests.exceptions import RequestException</span><br><span class="line">from lxml import etree</span><br><span class="line"></span><br><span class="line">def getHtmlText(url):</span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69'</span>        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = requests.<span class="built_in">get</span>(url,headers=headers,timeout=<span class="number">30</span>)</span><br><span class="line">        result.raise_for_status()</span><br><span class="line">        result.encoding = result.apparent_encoding</span><br><span class="line">        <span class="keyword">return</span> result.text</span><br><span class="line">    excep<span class="variable">t:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line"></span><br><span class="line">def parsePage(html):</span><br><span class="line">    ulist = []</span><br><span class="line">    <span class="keyword">clist</span> = []</span><br><span class="line">    rlist = []</span><br><span class="line">    <span class="keyword">ilist</span> = []</span><br><span class="line">    </span><br><span class="line">    newhtml =etree.HTML(html,etree.HTMLParser())</span><br><span class="line">    result=newhtml.xpath(<span class="string">'//*[@id="content"]/div[2]/table/tbody/tr/td//text()'</span>)</span><br><span class="line">    imgs = newhtml.xpath(<span class="string">'//*[@id="content"]/div[2]/table/tbody/tr/td/a/img/@src'</span>, stream=True)</span><br><span class="line">    <span class="keyword">j</span> = <span class="number">0</span> </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> img in img<span class="variable">s:</span></span><br><span class="line">        <span class="keyword">j</span>=<span class="keyword">j</span>+<span class="number">1</span></span><br><span class="line">        with <span class="keyword">open</span>(str(<span class="keyword">j</span>)+<span class="string">'.png'</span>, <span class="string">'wb'</span>) <span class="keyword">as</span> fd:</span><br><span class="line">            picture=requests.<span class="built_in">get</span>(img).content</span><br><span class="line">            fd.<span class="keyword">write</span>(picture)  </span><br><span class="line">      </span><br><span class="line">    <span class="keyword">for</span> i in <span class="built_in">range</span>(<span class="built_in">len</span>(imgs)):  </span><br><span class="line">            str_ = str(i+<span class="number">1</span>)+<span class="string">'.png'</span></span><br><span class="line">            text = pytesseract.image_to_string(Image.<span class="keyword">open</span>(str_))</span><br><span class="line">            <span class="keyword">ilist</span>.<span class="keyword">append</span>(text.replace(<span class="string">" "</span>,<span class="string">"."</span>).replace(<span class="string">"M"</span>,<span class="string">"亿"</span>).replace(<span class="string">"a"</span>,<span class="string">"亿"</span>))</span><br><span class="line">#     <span class="keyword">print</span>(<span class="keyword">ilist</span>)        </span><br><span class="line">    <span class="keyword">for</span> i in <span class="built_in">range</span>(<span class="built_in">len</span>(result)):</span><br><span class="line">        ulist.<span class="keyword">append</span>(result[i].replace(<span class="string">" "</span>,<span class="string">""</span>).replace(<span class="string">'\r'</span>,<span class="string">""</span>).replace(<span class="string">"\n"</span>,<span class="string">''</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="string">''</span> in ulis<span class="variable">t:</span></span><br><span class="line">        ulist.<span class="built_in">remove</span>(<span class="string">''</span>)</span><br><span class="line">    </span><br><span class="line">    length = <span class="built_in">len</span>(ulist)</span><br><span class="line">    weight = <span class="keyword">int</span>(length / <span class="number">8</span> )</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i in <span class="built_in">range</span>(weight):</span><br><span class="line">        <span class="keyword">for</span> <span class="keyword">j</span> in <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">            <span class="keyword">clist</span>.<span class="keyword">append</span>(ulist[i*<span class="number">8</span>+<span class="keyword">j</span>])</span><br><span class="line">        <span class="keyword">clist</span>.<span class="keyword">append</span>(<span class="keyword">ilist</span>[i])</span><br><span class="line">        rlist.<span class="keyword">append</span>(<span class="keyword">clist</span>)</span><br><span class="line">        <span class="keyword">clist</span> = []</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> rlist</span><br><span class="line"></span><br><span class="line"># def txtdata(data):</span><br><span class="line">#     with <span class="keyword">open</span>(<span class="string">'top20.txt'</span>,<span class="string">'w'</span>)<span class="keyword">as</span> <span class="keyword">file</span>:</span><br><span class="line">#         <span class="keyword">for</span> i in dat<span class="variable">a:</span></span><br><span class="line">#             <span class="keyword">for</span> <span class="keyword">j</span> in i:</span><br><span class="line">#                 <span class="keyword">print</span>(<span class="keyword">j</span>)</span><br><span class="line">#         <span class="keyword">print</span>(<span class="string">'successful'</span>)</span><br><span class="line"></span><br><span class="line">def storedata(data):</span><br><span class="line">    with <span class="keyword">open</span>(<span class="string">'top20.txt'</span>,<span class="string">'w'</span>,encoding = <span class="string">'utf-8'</span>)<span class="keyword">as</span> <span class="keyword">file</span>:</span><br><span class="line">        <span class="keyword">for</span> i in dat<span class="variable">a:</span></span><br><span class="line">            <span class="keyword">file</span>.<span class="keyword">write</span>(json.dumps(i,ensure_ascii=False)+<span class="string">'\n'</span>)</span><br><span class="line">        <span class="keyword">print</span>(<span class="string">'ok'</span>)</span><br><span class="line">        </span><br><span class="line">def csvdata(data):</span><br><span class="line">    with <span class="keyword">open</span>(<span class="string">'top20.csv'</span>,<span class="string">'w'</span>,encoding = <span class="string">'utf-8'</span>,newline=<span class="string">''</span>)<span class="keyword">as</span> csvfile:</span><br><span class="line">        fieldnames = [<span class="string">'名次'</span>,<span class="string">'电影名称'</span>,<span class="string">'日期'</span>,<span class="string">'票房'</span>,<span class="string">'总场次'</span>,<span class="string">'废场'</span>,<span class="string">'人次'</span>,<span class="string">'上座率'</span>,<span class="string">'票价（元）'</span>]</span><br><span class="line">        writer = csv.DictWriter(csvfile,fieldnames=fieldnames)</span><br><span class="line">        writer.writeheader()</span><br><span class="line">        <span class="keyword">for</span> i in dat<span class="variable">a:</span></span><br><span class="line">            writer.writerow(&#123;<span class="string">'名次'</span>:i[<span class="number">0</span>],<span class="string">'电影名称'</span>:i[<span class="number">1</span>],<span class="string">'日期'</span>:i[<span class="number">2</span>],<span class="string">'票房'</span>:i[<span class="number">8</span>],<span class="string">'总场次'</span>:i[<span class="number">3</span>],<span class="string">'废场'</span>:i[<span class="number">4</span>],<span class="string">'人次'</span>:i[<span class="number">5</span>],<span class="string">'上座率'</span>:i[<span class="number">6</span>],<span class="string">'票价（元）'</span>:i[<span class="number">7</span>]&#125;)</span><br><span class="line">        <span class="keyword">print</span>(<span class="string">'ok'</span>)</span><br><span class="line">            </span><br><span class="line">def main():</span><br><span class="line">    url=<span class="string">"http://58921.com/daily/wangpiao"</span></span><br><span class="line">    html=getHtmlText(url)</span><br><span class="line">    rlist=parsePage(html)</span><br><span class="line">    </span><br><span class="line">#     txtdata(rlist)</span><br><span class="line">    storedata(rlist)</span><br><span class="line">    csvdata(rlist)</span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<h3 id="结果输出："><a href="#结果输出：" class="headerlink" title="结果输出："></a>结果输出：</h3><p><img src="https://img-blog.csdnimg.cn/20200413222149472.jpg#pic_center" alt="在这里插入图片描述"></p>
 <p><img src="https://img-blog.csdnimg.cn/20200423215045899.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200423215045907.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 
             </div>

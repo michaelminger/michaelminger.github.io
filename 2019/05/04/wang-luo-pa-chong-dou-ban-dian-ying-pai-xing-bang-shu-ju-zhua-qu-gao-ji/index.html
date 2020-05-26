@@ -29,8 +29,7 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+</head>
 
 
 <body>
@@ -457,61 +456,8 @@
 <p>（3）定义函数，将获取的目标数据打印输出，有能力的同学可以试着将结果写入文件中。</p>
 <p>（4）使用框架式结构，通过参数传递实现整个特定数据的爬取。</p>
 <p>可以选择定义全局列表，将目标数据获取后添加到列表中，同时，注意观察分页时url的变化，以便获取整个的排行榜数据。建议通过for循环传递变化参数实现。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
-from bs4 import BeautifulSoup
-import bs4 
-
-def getHtmlText(url):
-    headers = {
-        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
-    }
-    try:
-        result = requests.get(url,headers=headers,timeout=30)
-        result.raise_for_status()
-        result.encoding = result.apparent_encoding
-        result=(result.text.replace(&#39;&lt;br&gt;&#39;,&#39;&#39;)).replace(&#39;&lt;br/&gt;&#39;,&#39;&#39;)
-        return result
-    except:
-        return &quot;&quot;
-
-def findUniverse(ulist , html):
-    soup = BeautifulSoup(html,&quot;html.parser&quot;)   
-    list_ = [0,0,0,0,0,0,0]
-
-    for li in soup.find(attrs=[&#39;class&#39;,&#39;grid_view&#39;]).children:
-        if isinstance(li ,bs4.element.Tag):
-            list_[0] = li.find(&#39;em&#39;).string
-            list_[1] = li.find(attrs=[&#39;class&#39;,&#39;title&#39;]).string
-            list_[2] = li.find(attrs=[&#39;class&#39;,&#39;bd&#39;]).find(attrs=[&#39;class&#39;,&#39;&#39;]).string.strip().split(&quot; &quot;)[1].replace(&quot; &quot;,&#39;&#39;)
-            list_[3] = li.find(attrs=[&#39;class&#39;,&#39;bd&#39;]).find(attrs=[&#39;class&#39;,&#39;&#39;]).string.strip().split(&quot; &quot;)[4].replace(&quot; &quot;,&#39;&#39;)      
-            list_[4] = li.find(attrs=[&#39;class&#39;,&#39;star&#39;]).span.find_next_sibling().string.strip()
-            list_[5] = li.find(attrs=[&#39;class&#39;,&#39;star&#39;]).span.find_next_sibling().find_next_sibling().find_next_sibling().string.strip()
-            if li.find(attrs=[&#39;class&#39;,&#39;quote&#39;]) is  not None:
-                list_[6] = li.find(attrs=[&#39;class&#39;,&#39;quote&#39;]).span.string
-            else:
-                list_[6] = None
-
-            ulist.append([list_[0],list_[1],list_[2],list_[3],list_[4],list_[5],list_[6]])
-
-def printUniverse(ulist):
-    tplt = &#39;{0:^4}\t{1:^10}\t{2:10}\t{3:10}\t{4:10}\t{5:10}&#39;
-    print(tplt.format(&quot;排名&quot;,&quot;电影名称&quot;,&quot;导演&quot;,&quot;主演&quot;,&quot;评分&quot;,&quot;评价人数&quot;,chr(12288)))
-    for i in range(len(ulist)):
-        u = ulist[i]
-        print(tplt.format(u[0],u[1],u[2],u[3],u[4],u[5],chr(12288)))
-
-def main():
-    ulist = [] 
-    for i in range(10):
-        url =  &#39;https://movie.douban.com/top250?start=&#39; + str( 25 * i ) 
-        html = getHtmlText(url)
-        findUniverse(ulist,html)
-
-    printUniverse(ulist)
-
-main()
-
-</code></pre><p>输出如下：<br><img src="https://img-blog.csdnimg.cn/2020041321124824.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from bs4 import <span class="symbol">BeautifulSoup</span></span><br><span class="line">import bs4 </span><br><span class="line"></span><br><span class="line">def getHtmlText(url):</span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69'</span>        </span><br><span class="line">    &#125;</span><br><span class="line">    try:</span><br><span class="line">        result = requests.get(url,headers=headers,timeout=<span class="number">30</span>)</span><br><span class="line">        result.raise_for_status()</span><br><span class="line">        result.encoding = result.apparent_encoding</span><br><span class="line">        result=(result.text.replace(<span class="string">'&lt;br&gt;'</span>,<span class="string">''</span>)).replace(<span class="string">'&lt;br/&gt;'</span>,<span class="string">''</span>)</span><br><span class="line">        return result</span><br><span class="line">    except:</span><br><span class="line">        return <span class="string">""</span></span><br><span class="line">            </span><br><span class="line">def findUniverse(ulist , html):</span><br><span class="line">    soup = <span class="symbol">BeautifulSoup</span>(html,<span class="string">"html.parser"</span>)   </span><br><span class="line">    list_ = [<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>]</span><br><span class="line">    </span><br><span class="line">    for li in soup.find(attrs=[<span class="string">'class'</span>,<span class="string">'grid_view'</span>]).children:</span><br><span class="line">        if isinstance(li ,bs4.element.<span class="symbol">Tag</span>):</span><br><span class="line">            list_[<span class="number">0</span>] = li.find(<span class="string">'em'</span>).string</span><br><span class="line">            list_[<span class="number">1</span>] = li.find(attrs=[<span class="string">'class'</span>,<span class="string">'title'</span>]).string</span><br><span class="line">            list_[<span class="number">2</span>] = li.find(attrs=[<span class="string">'class'</span>,<span class="string">'bd'</span>]).find(attrs=[<span class="string">'class'</span>,<span class="string">''</span>]).string.strip().split(<span class="string">" "</span>)[<span class="number">1</span>].replace(<span class="string">" "</span>,<span class="string">''</span>)</span><br><span class="line">            list_[<span class="number">3</span>] = li.find(attrs=[<span class="string">'class'</span>,<span class="string">'bd'</span>]).find(attrs=[<span class="string">'class'</span>,<span class="string">''</span>]).string.strip().split(<span class="string">" "</span>)[<span class="number">4</span>].replace(<span class="string">" "</span>,<span class="string">''</span>)      </span><br><span class="line">            list_[<span class="number">4</span>] = li.find(attrs=[<span class="string">'class'</span>,<span class="string">'star'</span>]).span.find_next_sibling().string.strip()</span><br><span class="line">            list_[<span class="number">5</span>] = li.find(attrs=[<span class="string">'class'</span>,<span class="string">'star'</span>]).span.find_next_sibling().find_next_sibling().find_next_sibling().string.strip()</span><br><span class="line">            if li.find(attrs=[<span class="string">'class'</span>,<span class="string">'quote'</span>]) is  not <span class="symbol">None</span>:</span><br><span class="line">                list_[<span class="number">6</span>] = li.find(attrs=[<span class="string">'class'</span>,<span class="string">'quote'</span>]).span.string</span><br><span class="line">            else:</span><br><span class="line">                list_[<span class="number">6</span>] = <span class="symbol">None</span></span><br><span class="line">            </span><br><span class="line">            ulist.append([list_[<span class="number">0</span>],list_[<span class="number">1</span>],list_[<span class="number">2</span>],list_[<span class="number">3</span>],list_[<span class="number">4</span>],list_[<span class="number">5</span>],list_[<span class="number">6</span>]])</span><br><span class="line">            </span><br><span class="line">def printUniverse(ulist):</span><br><span class="line">    tplt = <span class="string">'&#123;0:^4&#125;\t&#123;1:^10&#125;\t&#123;2:10&#125;\t&#123;3:10&#125;\t&#123;4:10&#125;\t&#123;5:10&#125;'</span></span><br><span class="line">    print(tplt.format(<span class="string">"排名"</span>,<span class="string">"电影名称"</span>,<span class="string">"导演"</span>,<span class="string">"主演"</span>,<span class="string">"评分"</span>,<span class="string">"评价人数"</span>,chr(<span class="number">12288</span>)))</span><br><span class="line">    for i in range(len(ulist)):</span><br><span class="line">        u = ulist[i]</span><br><span class="line">        print(tplt.format(u[<span class="number">0</span>],u[<span class="number">1</span>],u[<span class="number">2</span>],u[<span class="number">3</span>],u[<span class="number">4</span>],u[<span class="number">5</span>],chr(<span class="number">12288</span>)))</span><br><span class="line">        </span><br><span class="line">def main():</span><br><span class="line">    ulist = [] </span><br><span class="line">    for i in range(<span class="number">10</span>):</span><br><span class="line">        url =  <span class="string">'https://movie.douban.com/top250?start='</span> + str( <span class="number">25</span> * i ) </span><br><span class="line">        html = getHtmlText(url)</span><br><span class="line">        findUniverse(ulist,html)</span><br><span class="line">        </span><br><span class="line">    printUniverse(ulist)</span><br><span class="line">        </span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<p>输出如下：<br><img src="https://img-blog.csdnimg.cn/2020041321124824.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 
             </div>
             <hr/>

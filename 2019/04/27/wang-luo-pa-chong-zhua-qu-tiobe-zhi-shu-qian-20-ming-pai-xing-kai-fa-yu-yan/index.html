@@ -29,8 +29,7 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+</head>
 
 
 <body>
@@ -463,51 +462,8 @@
 <p>（2）使用lxml库中的xpath方法解析源代码，提取上面所示的目标数据，并打印输出；</p>
 <p>（3）尝试着使用try..except方法及时捕获异常。</p>
 <p>（4）可以尝试将获取的数据保存到文本文件中。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
-from requests.exceptions import RequestException
-from lxml import etree
-def one_to_page(url):
-    headers={
-        &#39;user-agent&#39;:&#39;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3756.400 QQBrowser/10.5.4039.400&#39;
-    }
-    try:
-        response=requests.get(url,headers=headers)
-        body=response.text
-        return body
-    except RequestException as e:
-        print(&#39;request is error!&#39;,e)
-def parsePage(html):
-    htmlNew = etree.HTML(html,etree.HTMLParser())
-    result = htmlNew.xpath(&#39;//table[contains(@class,&quot;table-top20&quot;)]/tbody/tr//text()&#39;)
-    pos = 0
-    for i in range(20):
-        if i == 0:
-            yield result[i:5]
-        else:
-            yield result[pos:pos+5]
-        pos += 5
-def printRank(data):
-    for i in data:
-        rank = {
-            &quot;2020年3月&quot;:i[0],
-            &quot;2019年3月&quot;:i[1],
-            &quot;编程语言&quot;:i[2],
-            &quot;评分&quot;:i[3],
-            &quot;变化率&quot;:i[4],    
-        }
-        print(rank)
-def printRankEasy(data):
-    tplt = &quot;{0:^10}\t{1:^10}\t{2:^20}\t{3:^10}\t{4:^10}&quot;
-    print(tplt.format(&quot;2020年3月&quot;,&quot;2019年3月&quot;,&quot;编程语言&quot;,&quot;评分&quot;,&quot;变化率&quot;,chr(12288)))
-    for i in data:
-        print(tplt.format(i[0],i[1],i[2],i[3],i[4],chr(12288)))
-def main():
-    url = &#39;https://www.tiobe.com/tiobe-index/&#39;
-    html = one_to_page(url)
-    data = parsePage(html)
-    printRankEasy(data)
-main()
-</code></pre><p>输出如下<br><img src="https://img-blog.csdnimg.cn/20200413221221131.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> requests.exceptions <span class="keyword">import</span> RequestException</span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">one_to_page</span><span class="params">(url)</span>:</span></span><br><span class="line">    headers=&#123;</span><br><span class="line">        <span class="string">'user-agent'</span>:<span class="string">'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3756.400 QQBrowser/10.5.4039.400'</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        response=requests.get(url,headers=headers)</span><br><span class="line">        body=response.text</span><br><span class="line">        <span class="keyword">return</span> body</span><br><span class="line">    <span class="keyword">except</span> RequestException <span class="keyword">as</span> e:</span><br><span class="line">        print(<span class="string">'request is error!'</span>,e)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parsePage</span><span class="params">(html)</span>:</span></span><br><span class="line">    htmlNew = etree.HTML(html,etree.HTMLParser())</span><br><span class="line">    result = htmlNew.xpath(<span class="string">'//table[contains(@class,"table-top20")]/tbody/tr//text()'</span>)</span><br><span class="line">    pos = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">20</span>):</span><br><span class="line">        <span class="keyword">if</span> i == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">yield</span> result[i:<span class="number">5</span>]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">yield</span> result[pos:pos+<span class="number">5</span>]</span><br><span class="line">        pos += <span class="number">5</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printRank</span><span class="params">(data)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">        rank = &#123;</span><br><span class="line">            <span class="string">"2020年3月"</span>:i[<span class="number">0</span>],</span><br><span class="line">            <span class="string">"2019年3月"</span>:i[<span class="number">1</span>],</span><br><span class="line">            <span class="string">"编程语言"</span>:i[<span class="number">2</span>],</span><br><span class="line">            <span class="string">"评分"</span>:i[<span class="number">3</span>],</span><br><span class="line">            <span class="string">"变化率"</span>:i[<span class="number">4</span>],    </span><br><span class="line">        &#125;</span><br><span class="line">        print(rank)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printRankEasy</span><span class="params">(data)</span>:</span></span><br><span class="line">    tplt = <span class="string">"&#123;0:^10&#125;\t&#123;1:^10&#125;\t&#123;2:^20&#125;\t&#123;3:^10&#125;\t&#123;4:^10&#125;"</span></span><br><span class="line">    print(tplt.format(<span class="string">"2020年3月"</span>,<span class="string">"2019年3月"</span>,<span class="string">"编程语言"</span>,<span class="string">"评分"</span>,<span class="string">"变化率"</span>,chr(<span class="number">12288</span>)))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">        print(tplt.format(i[<span class="number">0</span>],i[<span class="number">1</span>],i[<span class="number">2</span>],i[<span class="number">3</span>],i[<span class="number">4</span>],chr(<span class="number">12288</span>)))</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    url = <span class="string">'https://www.tiobe.com/tiobe-index/'</span></span><br><span class="line">    html = one_to_page(url)</span><br><span class="line">    data = parsePage(html)</span><br><span class="line">    printRankEasy(data)</span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<p>输出如下<br><img src="https://img-blog.csdnimg.cn/20200413221221131.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 
             </div>
             <hr/>
