@@ -453,7 +453,7 @@
                 <h2 id="网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析"><a href="#网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析" class="headerlink" title="网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析"></a>网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析</h2><h4 id="实验内容"><a href="#实验内容" class="headerlink" title="实验内容"></a>实验内容</h4><p>目标网站：Bilibili热门视频Top100</p>
 <p>目标网址：<br><a href="https://www.bilibili.com/ranking?" target="_blank" rel="noopener">https://www.bilibili.com/ranking?</a>（每过几天都会变的哦）<br><img src="https://img-blog.csdnimg.cn/20200518053212353.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h4 id="任务要求"><a href="#任务要求" class="headerlink" title="任务要求"></a>任务要求</h4><p>实现对于Bilibili热门视频Top100弹幕的数据爬取与分析</p>
-<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><pre><code>from lxml import etree
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><pre class="line-numbers language-py"><code class="language-py">from lxml import etree
 import time
 import jieba
 import numpy as np
@@ -469,7 +469,7 @@ class getUrl ():
 
     def getTxt(self):
         self.headers = {
-            &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69'        
         }
         try:
             result = requests.get(self.url,headers=self.headers,timeout=30)
@@ -477,13 +477,13 @@ class getUrl ():
             result.encoding = result.apparent_encoding
             return result.text
         except:
-            return &quot;&quot;    
+            return ""    
 
     def parsePage(self):
         res = self.getTxt()
         newhtml =etree.HTML(res,etree.HTMLParser())
 
-        result=newhtml.xpath(&#39;//*[@id=&quot;app&quot;]/div[1]/div/div[1]/div[2]/div[3]/ul/li/div[2]/div[1]/a//@href&#39;)
+        result=newhtml.xpath('//*[@id="app"]/div[1]/div/div[1]/div[2]/div[3]/ul/li/div[2]/div[1]/a//@href')
 
         return  result
 
@@ -494,7 +494,7 @@ class getAvNum():
 
     def getTxt(self):
         self.headers = {
-            &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69'        
         }
         try:
             result = requests.get(self.url,headers=self.headers,timeout=30)
@@ -502,16 +502,16 @@ class getAvNum():
             result.encoding = result.apparent_encoding
             return result.text
         except:
-            return &quot;&quot;
+            return ""
 
     def parsePage(self):
         res = self.getTxt()
         newhtml =etree.HTML(res,etree.HTMLParser())
-        rlist=newhtml.xpath(&#39;/html/head/meta[10]//@content&#39;)
+        rlist=newhtml.xpath('/html/head/meta[10]//@content')
 
         resp = requests.get(rlist[0],headers=self.headers)
-        match_rule = r&#39;cid=(.*?)&amp;aid&#39;
-        oid = re.search(match_rule,resp.text).group().replace(&#39;cid=&#39;,&#39;&#39;).replace(&#39;&amp;aid&#39;,&#39;&#39;)
+        match_rule = r'cid=(.*?)&aid'
+        oid = re.search(match_rule,resp.text).group().replace('cid=','').replace('&aid','')
 
         return  oid
 
@@ -519,18 +519,18 @@ class Bilibili():
 
     def __init__(self,oid):
         self.headers={
-        &#39;Host&#39;: &#39;api.bilibili.com&#39;,
-        &#39;Connection&#39;: &#39;keep-alive&#39;,
-        &#39;Cache-Control&#39;: &#39;max-age=0&#39;,
-        &#39;Upgrade-Insecure-Requests&#39;: &#39;1&#39;,
-        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36&#39;,
-        &#39;Accept&#39;: &#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8&#39;,
-        &#39;Accept-Encoding&#39;: &#39;gzip, deflate, br&#39;,
-        &#39;Accept-Language&#39;: &#39;zh-CN,zh;q=0.9&#39;,
-        &#39;Cookie&#39;: &#39;finger=edc6ecda; LIVE_BUVID=AUTO1415378023816310; stardustvideo=1; CURRENT_FNVAL=8; buvid3=0D8F3D74-987D-442D-99CF-42BC9A967709149017infoc; rpdid=olwimklsiidoskmqwipww; fts=1537803390&#39;
+        'Host': 'api.bilibili.com',
+        'Connection': 'keep-alive',
+        'Cache-Control': 'max-age=0',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept-Language': 'zh-CN,zh;q=0.9',
+        'Cookie': 'finger=edc6ecda; LIVE_BUVID=AUTO1415378023816310; stardustvideo=1; CURRENT_FNVAL=8; buvid3=0D8F3D74-987D-442D-99CF-42BC9A967709149017infoc; rpdid=olwimklsiidoskmqwipww; fts=1537803390'
 
         }
-        self.url=&#39;https://api.bilibili.com/x/v1/dm/list.so?oid=&#39;+str(oid)
+        self.url='https://api.bilibili.com/x/v1/dm/list.so?oid='+str(oid)
         self.barrage_reault=self.get_page()
 
     def get_page(self):
@@ -538,11 +538,11 @@ class Bilibili():
             time.sleep(0.5)
             response=requests.get(self.url,headers=self.headers)
         except Exception as e:
-            print(&#39;获取xml内容失败,%s&#39; % e)
+            print('获取xml内容失败,%s' % e)
             return False
         else:
             if response.status_code == 200:
-                with open(&#39;bilibili.xml&#39;,&#39;wb&#39;) as f:
+                with open('bilibili.xml','wb') as f:
                     f.write(response.content)
                 return True
             else:
@@ -551,8 +551,8 @@ class Bilibili():
     def param_page(self):
         time.sleep(1)
         if  self.barrage_reault:
-            html=etree.parse(&#39;bilibili.xml&#39;,etree.HTMLParser())
-            results=html.xpath(&#39;//d//text()&#39;)
+            html=etree.parse('bilibili.xml',etree.HTMLParser())
+            results=html.xpath('//d//text()')
             return results
 
 def remove_double_barrage(resultlist):
@@ -571,31 +571,31 @@ def remove_double_barrage(resultlist):
 def make_wordCould(resultlist):
     double_barrages,results,barrages=remove_double_barrage(resultlist)
     # 重词计数
-    with open(&#39;barrages.txt&#39;,&#39;w&#39;, -1, &#39;utf-8&#39;, None, None) as f:
+    with open('barrages.txt','w', -1, 'utf-8', None, None) as f:
         for barrage in barrages:
             amount=double_barrages.count(barrage)
-            stt = barrage+&#39;:&#39;+str(amount+1)+&#39;\n&#39;
+            stt = barrage+':'+str(amount+1)+'\n'
             f.write(stt)
 
     # 设置停用词
-    stop_words=[&#39;【&#39;,&#39;】&#39;,&#39;,&#39;,&#39;.&#39;,&#39;?&#39;,&#39;!&#39;,&#39;。&#39;]
+    stop_words=['【','】',',','.','?','!','。']
     words=[]
     if results:
         for result in results:
             for stop in stop_words:
-                result=&#39;&#39;.join(result.split(stop))
+                result=''.join(result.split(stop))
             words.append(result)
         # 列表拼接成字符串
-        words=&#39;&#39;.join(words)
+        words=''.join(words)
         words=jieba.cut(words)
-        words=&#39;&#39;.join(words)
-        luo=np.array(Image.open(&#39;洛天依.jpg&#39;))    
-        w=wc(font_path=&#39;‪C:/Windows/Fonts/SIMYOU.TTF&#39;,background_color=&#39;white&#39;,width=1600,height=1600,max_words=2000,mask=luo)
+        words=''.join(words)
+        luo=np.array(Image.open('洛天依.jpg'))    
+        w=wc(font_path='‪C:/Windows/Fonts/SIMYOU.TTF',background_color='white',width=1600,height=1600,max_words=2000,mask=luo)
         w.generate(words)
-        w.to_file(&#39;luo.jpg&#39;)
+        w.to_file('luo.jpg')
 
 def main():
-    url=&quot;https://www.bilibili.com/ranking?spm_id_from=333.851.b_7072696d61727950616765546162.3&quot;
+    url="https://www.bilibili.com/ranking?spm_id_from=333.851.b_7072696d61727950616765546162.3"
     urls = getUrl(url)
     strUrl = urls.parsePage()
     ress = []
@@ -607,9 +607,10 @@ def main():
             ress.append(j)
     make_wordCould(ress)
 
-if __name__ == &#39;__main__&#39;:
+if __name__ == '__main__':
     main()
-</code></pre><p>具体文件可以到我的<a href="https://github.com/michaelminger/Bilibili" target="_blank" rel="noopener">github</a>上面下载</p>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>具体文件可以到我的<a href="https://github.com/michaelminger/Bilibili" target="_blank" rel="noopener">github</a>上面下载</p>
 
             </div>
             <hr/>
@@ -846,23 +847,25 @@ if __name__ == &#39;__main__&#39;:
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-bao-gao-ban/">
+                <a href="/2019/05/04/wang-luo-pa-chong-dou-ban-dian-ying-pai-xing-bang-shu-ju-zhua-qu-gao-ji/">
                     <div class="card-image">
                         
-                        <img src="https://img-blog.csdnimg.cn/20200518061152313.png" class="responsive-img" alt="基于Bilibili热门视频Top100最热分区爬取与分析（报告）">
+                        <img src="https://img-blog.csdnimg.cn/2020041321124824.jpg" class="responsive-img" alt="豆瓣电影排行榜数据抓取（高级）——BS4">
                         
-                        <span class="card-title">基于Bilibili热门视频Top100最热分区爬取与分析（报告）</span>
+                        <span class="card-title">豆瓣电影排行榜数据抓取（高级）——BS4</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            一、研究背景能够在观看视频的过程中发表自己的评论，并且评论可以在你所希望的时间点、位置以滑行或停留的方式出现在视频中，所有观看视频的人都可以看见评论，这样一类的评论叫做弹幕，此类网站叫弹幕网站。弹幕视频系统源自日本弹幕视频分享网站（nico
+                            网络爬虫——豆瓣电影排行榜数据抓取（高级）目标网址：豆瓣电影排行：https://movie.douban.com/top250?start=
+目标数据描述：排名、电影名称、导演、主演、评价人数等信息，将尽可能多的数据抓取保存任务明细：
+（
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2019-05-03
+                            <i class="far fa-clock fa-fw icon-date"></i>2019-05-04
                         </span>
                         <span class="publish-author">
                             
@@ -879,8 +882,8 @@ if __name__ == &#39;__main__&#39;:
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/文章/">
-                        <span class="chip bg-color">文章</span>
+                    <a href="/tags/BS4/">
+                        <span class="chip bg-color">BS4</span>
                     </a>
                     
                 </div>
@@ -894,20 +897,18 @@ if __name__ == &#39;__main__&#39;:
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-zui-re-fen-qu-pa-qu-yu-fen-xi/">
+                <a href="/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-bao-gao-ban/">
                     <div class="card-image">
                         
-                        <img src="https://img-blog.csdnimg.cn/20200518052631531.png" class="responsive-img" alt="基于Bilibili热门视频Top100最热分区爬取与分析">
+                        <img src="https://img-blog.csdnimg.cn/20200518061152313.png" class="responsive-img" alt="基于Bilibili热门视频Top100最热分区爬取与分析（报告）">
                         
-                        <span class="card-title">基于Bilibili热门视频Top100最热分区爬取与分析</span>
+                        <span class="card-title">基于Bilibili热门视频Top100最热分区爬取与分析（报告）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            网络爬虫——基于Bilibili热门视频Top100最热分区爬取与分析这个主要是配合之前报告使用的，这里就不多赘述了。先爬地址，再爬取地址里的分区，最后整合。csv存储。
-实验内容目标网站：Bilibili热门视频Top100
-目标网址：h
+                            一、研究背景能够在观看视频的过程中发表自己的评论，并且评论可以在你所希望的时间点、位置以滑行或停留的方式出现在视频中，所有观看视频的人都可以看见评论，这样一类的评论叫做弹幕，此类网站叫弹幕网站。弹幕视频系统源自日本弹幕视频分享网站（nico
                         
                     </div>
                     <div class="publish-info">
@@ -929,8 +930,8 @@ if __name__ == &#39;__main__&#39;:
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/xpath/">
-                        <span class="chip bg-color">xpath</span>
+                    <a href="/tags/文章/">
+                        <span class="chip bg-color">文章</span>
                     </a>
                     
                 </div>
