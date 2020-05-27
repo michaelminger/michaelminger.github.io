@@ -74,9 +74,9 @@
       <category term="网络爬虫" scheme="http://ailous.top/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/"/>
     
     
-      <category term="Xpath" scheme="http://ailous.top/tags/Xpath/"/>
-    
       <category term="CSV" scheme="http://ailous.top/tags/CSV/"/>
+    
+      <category term="Xpath" scheme="http://ailous.top/tags/Xpath/"/>
     
   </entry>
   
@@ -227,6 +227,26 @@
   </entry>
   
   <entry>
+    <title>基于Bilibili热门视频Top100最热分区爬取与分析（报告）</title>
+    <link href="http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-bao-gao-ban/"/>
+    <id>http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-bao-gao-ban/</id>
+    <published>2019-05-03T05:47:40.000Z</published>
+    <updated>2020-05-26T03:50:14.229Z</updated>
+    
+    <summary type="html">
+    
+      互联网屏蔽了用户的设备差异，因此网络视频服务商可以获得格式统一、更加规范的用户使用数据，根据不同用户的使用数据完成视频推荐。
+    
+    </summary>
+    
+      <category term="网络爬虫" scheme="http://ailous.top/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/"/>
+    
+    
+      <category term="文章" scheme="http://ailous.top/tags/%E6%96%87%E7%AB%A0/"/>
+    
+  </entry>
+  
+  <entry>
     <title>基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）</title>
     <link href="http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/"/>
     <id>http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/</id>
@@ -263,26 +283,6 @@
     
     
       <category term="xpath" scheme="http://ailous.top/tags/xpath/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>基于Bilibili热门视频Top100最热分区爬取与分析（报告）</title>
-    <link href="http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-bao-gao-ban/"/>
-    <id>http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-bao-gao-ban/</id>
-    <published>2019-05-03T05:47:40.000Z</published>
-    <updated>2020-05-26T03:50:14.229Z</updated>
-    
-    <summary type="html">
-    
-      互联网屏蔽了用户的设备差异，因此网络视频服务商可以获得格式统一、更加规范的用户使用数据，根据不同用户的使用数据完成视频推荐。
-    
-    </summary>
-    
-      <category term="网络爬虫" scheme="http://ailous.top/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/"/>
-    
-    
-      <category term="文章" scheme="http://ailous.top/tags/%E6%96%87%E7%AB%A0/"/>
     
   </entry>
   
@@ -373,7 +373,7 @@
     <link href="http://ailous.top/2018/12/09/ren-gong-zhi-neng-mnist-shou-xie-shi-bie/"/>
     <id>http://ailous.top/2018/12/09/ren-gong-zhi-neng-mnist-shou-xie-shi-bie/</id>
     <published>2018-12-09T05:47:40.000Z</published>
-    <updated>2020-05-27T07:31:20.566Z</updated>
+    <updated>2020-05-27T07:35:59.218Z</updated>
     
     <summary type="html">
     
@@ -417,22 +417,33 @@
   </entry>
   
   <entry>
-    <title>算法——最长公共子序列</title>
-    <link href="http://ailous.top/2018/12/09/suan-fa-zui-chang-gong-gong-zi-xu-lie/"/>
-    <id>http://ailous.top/2018/12/09/suan-fa-zui-chang-gong-gong-zi-xu-lie/</id>
+    <title>嵌入式——1138纯净版代码（12864液晶）</title>
+    <link href="http://ailous.top/2018/12/09/qian-ru-shi-1138-chun-jing-ban-dai-ma-12864-ye-jing/"/>
+    <id>http://ailous.top/2018/12/09/qian-ru-shi-1138-chun-jing-ban-dai-ma-12864-ye-jing/</id>
     <published>2018-12-09T05:47:40.000Z</published>
-    <updated>2020-05-26T03:50:26.344Z</updated>
+    <updated>2020-05-27T07:37:34.676Z</updated>
     
     <summary type="html">
     
-      字符序列的子序列是指从给定字符序列中随意地（不一定连续）去掉若干个字符（可能一个也不去掉）后所形成的字符序列。
+      
+      
+        
+        
+          &lt;p&gt;这些是我自己常用的代码，比官方的要简洁些，主要是自用，还有相关模块，使用代码。&lt;/p&gt;
+&lt;p&gt;具体文件可以去我github上下载。&lt;br&gt;&lt;img
+        
+      
     
     </summary>
     
-      <category term="算法" scheme="http://ailous.top/categories/%E7%AE%97%E6%B3%95/"/>
+      <category term="嵌入式" scheme="http://ailous.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
     
     
-      <category term="公共子序列" scheme="http://ailous.top/tags/%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/"/>
+      <category term="1138" scheme="http://ailous.top/tags/1138/"/>
+    
+      <category term="12864" scheme="http://ailous.top/tags/12864/"/>
+    
+      <category term="lcd" scheme="http://ailous.top/tags/lcd/"/>
     
   </entry>
   
