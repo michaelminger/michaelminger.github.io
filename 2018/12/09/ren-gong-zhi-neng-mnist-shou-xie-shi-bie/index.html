@@ -455,14 +455,14 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="人工智能——mnist（手写识别）"><a href="#人工智能——mnist（手写识别）" class="headerlink" title="人工智能——mnist（手写识别）"></a>人工智能——mnist（手写识别）</h2><p>因为时间较久了，就不详细介绍了。<br>简单的说，一开始对已有的大量数字图片进行训练生成模型。然后通过对一张手写的数字图片进行读取，进入模型匹配，输出结果。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code># Python3
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre class="line-numbers language-py"><code class="language-py"># Python3
 
 # 使用LeNet5的七层卷积神经网络用于MNIST手写数字识别
 
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 
-mnist = input_data.read_data_sets(&quot;MNIST_data&quot;, one_hot=True)
+mnist = input_data.read_data_sets("MNIST_data", one_hot=True)
 
 # 为输入图像和目标输出类别创建节点
 x = tf.placeholder(tf.float32, shape=[None, 784]) # 训练所需数据  占位符
@@ -482,13 +482,13 @@ def bias_variable(shape):
 # x 的第一个参数为图片的数量，第二、三个参数分别为图片高度和宽度，第四个参数为图片通道数。
 # W 的前两个参数为卷积核尺寸，第三个参数为图像通道数，第四个参数为卷积核数量
 # strides为卷积步长，其第一、四个参数必须为1，因为卷积层的步长只对矩阵的长和宽有效
-# padding表示卷积的形式，即是否考虑边界。&quot;SAME&quot;是考虑边界，不足的时候用0去填充周围，&quot;VALID&quot;则不考虑
+# padding表示卷积的形式，即是否考虑边界。"SAME"是考虑边界，不足的时候用0去填充周围，"VALID"则不考虑
 def conv2d(x, W):
-  return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding=&#39;SAME&#39;)
+  return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
 
 # x 参数的格式同tf.nn.conv2d中的x，ksize为池化层过滤器的尺度，strides为过滤器步长
 def max_pool_2x2(x):
-  return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding=&#39;SAME&#39;)
+  return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
 #把x更改为4维张量，第1维代表样本数量，第2维和第3维代表图像长宽， 第4维代表图像通道数
 x_image = tf.reshape(x, [-1,28,28,1]) # -1表示任意数量的样本数,大小为28x28，深度为1的张量
@@ -519,7 +519,7 @@ h_pool2_flat = tf.reshape(h_pool2, [-1, 7*7*64])
 h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
 
 # 在输出层之前加入dropout以减少过拟合
-keep_prob = tf.placeholder(&quot;float&quot;)
+keep_prob = tf.placeholder("float")
 h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
 
 # 第六层：全连接层
@@ -543,7 +543,7 @@ train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
 correct_prediction = tf.equal(tf.argmax(y_conv,1), tf.argmax(y_,1))
 
 # 统计测试准确率， 将correct_prediction的布尔值转换为浮点数来代表对、错，并取平均值。
-accuracy = tf.reduce_mean(tf.cast(correct_prediction, &quot;float&quot;))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
 saver = tf.train.Saver() # 定义saver
 
@@ -556,15 +556,16 @@ with tf.Session() as sess:
       if i%100 == 0:
         # 评估模型准确度，此阶段不使用Dropout
         train_accuracy = accuracy.eval(feed_dict={x:batch[0], y_: batch[1], keep_prob: 1.0})
-        print(&quot;step %d, training accuracy %g&quot;%(i, train_accuracy))
+        print("step %d, training accuracy %g"%(i, train_accuracy))
 
       # 训练模型，此阶段使用50%的Dropout
       train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
 
-    saver.save(sess, &#39;./save/model.ckpt&#39;) #模型储存位置
+    saver.save(sess, './save/model.ckpt') #模型储存位置
 
-    print(&quot;test accuracy %g&quot;%accuracy.eval(feed_dict={x: mnist.test.images [0:2000], y_: mnist.test.labels [0:2000], keep_prob: 1.0}))
-</code></pre>
+    print("test accuracy %g"%accuracy.eval(feed_dict={x: mnist.test.images [0:2000], y_: mnist.test.labels [0:2000], keep_prob: 1.0}))
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
             </div>
             <hr/>
 
@@ -853,20 +854,19 @@ with tf.Session() as sess:
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2018/12/09/suan-fa-zui-chang-gong-gong-zi-xu-lie/">
+                <a href="/2018/12/09/qian-ru-shi-lm3s1138-jie-shao/">
                     <div class="card-image">
                         
-                        <img src="https://img-blog.csdnimg.cn/20200424073104637.jpg" class="responsive-img" alt="算法——最长公共子序列">
+                        <img src="https://img-blog.csdnimg.cn/2020052714052491.jpg" class="responsive-img" alt="嵌入式—LM3S1138介绍">
                         
-                        <span class="card-title">算法——最长公共子序列</span>
+                        <span class="card-title">嵌入式—LM3S1138介绍</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            算法——最长公共子序列链接：https://ac.nowcoder.com/acm/problem/19978
-来源：牛客网
-题目描述字符序列的子序列是指从给定字符序列中随意地（不一定连续）去掉若干个字符（可能一个也不去掉）后所形成的字符序
+                            嵌入式—LM3S1138介绍这是我用的较久的一款芯片，无论是电赛还是课程设计，兼容性都很好，现在想把所有数据整理一下，这是开发板的相关文档。后面会有相关代码介绍，和案例介绍。
+EasyARM1138——内嵌 USB 仿真器的 Cortex-
                         
                     </div>
                     <div class="publish-info">
@@ -877,8 +877,8 @@ with tf.Session() as sess:
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/算法/" class="post-category">
-                                    算法
+                            <a href="/categories/嵌入式/" class="post-category">
+                                    嵌入式
                                 </a>
                             
                             
@@ -888,8 +888,8 @@ with tf.Session() as sess:
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/公共子序列/">
-                        <span class="chip bg-color">公共子序列</span>
+                    <a href="/tags/1138/">
+                        <span class="chip bg-color">1138</span>
                     </a>
                     
                 </div>

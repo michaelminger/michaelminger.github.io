@@ -4,7 +4,7 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="豆瓣电影排行榜数据抓取（高级）——BS4">
+    <meta name="keywords" content="1138">
     <meta name="description" content="大地茫茫一片真干净">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>豆瓣电影排行榜数据抓取（高级）——BS4 | Michaelming&#39;s Blog</title>
+    <title>嵌入式—LM3S1138介绍 | Michaelming&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -287,12 +287,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://img-blog.csdnimg.cn/2020041321124824.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://img-blog.csdnimg.cn/2020052714052491.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">豆瓣电影排行榜数据抓取（高级）——BS4</h1>
+                    <h1 class="description center-align post-title">嵌入式—LM3S1138介绍</h1>
                 </div>
             </div>
         </div>
@@ -409,8 +409,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/BS4/">
-                                <span class="chip bg-color">BS4</span>
+                            <a href="/tags/1138/">
+                                <span class="chip bg-color">1138</span>
                             </a>
                         
                     </div>
@@ -421,8 +421,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/网络爬虫/" class="post-category">
-                                网络爬虫
+                            <a href="/categories/嵌入式/" class="post-category">
+                                嵌入式
                             </a>
                         
                     </div>
@@ -434,7 +434,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-05-04
+                    2018-12-09
                 </div>
                 
 
@@ -450,68 +450,17 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="网络爬虫——豆瓣电影排行榜数据抓取（高级）"><a href="#网络爬虫——豆瓣电影排行榜数据抓取（高级）" class="headerlink" title="网络爬虫——豆瓣电影排行榜数据抓取（高级）"></a>网络爬虫——豆瓣电影排行榜数据抓取（高级）</h2><h3 id="目标网址："><a href="#目标网址：" class="headerlink" title="目标网址："></a>目标网址：</h3><p>豆瓣电影排行：<a href="https://movie.douban.com/top250?start=" target="_blank" rel="noopener">https://movie.douban.com/top250?start=</a></p>
-<p>目标数据描述：排名、电影名称、导演、主演、评价人数等信息，将尽可能多的数据抓取保存<br><img src="https://img-blog.csdnimg.cn/20200413210123780.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>任务明细：</p>
-<p>（1）使用requests库实现该网站网页源代码的获取；</p>
-<p>（2）使用BeautifulSoup对获取的源代码进行解析，并成功找到目标数据所在的特定标签，进行网页结构的解析；</p>
-<p>（3）定义函数，将获取的目标数据打印输出，有能力的同学可以试着将结果写入文件中。</p>
-<p>（4）使用框架式结构，通过参数传递实现整个特定数据的爬取。</p>
-<p>可以选择定义全局列表，将目标数据获取后添加到列表中，同时，注意观察分页时url的变化，以便获取整个的排行榜数据。建议通过for循环传递变化参数实现。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
-from bs4 import BeautifulSoup
-import bs4 
-
-def getHtmlText(url):
-    headers = {
-        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
-    }
-    try:
-        result = requests.get(url,headers=headers,timeout=30)
-        result.raise_for_status()
-        result.encoding = result.apparent_encoding
-        result=(result.text.replace(&#39;&lt;br&gt;&#39;,&#39;&#39;)).replace(&#39;&lt;br/&gt;&#39;,&#39;&#39;)
-        return result
-    except:
-        return &quot;&quot;
-
-def findUniverse(ulist , html):
-    soup = BeautifulSoup(html,&quot;html.parser&quot;)   
-    list_ = [0,0,0,0,0,0,0]
-
-    for li in soup.find(attrs=[&#39;class&#39;,&#39;grid_view&#39;]).children:
-        if isinstance(li ,bs4.element.Tag):
-            list_[0] = li.find(&#39;em&#39;).string
-            list_[1] = li.find(attrs=[&#39;class&#39;,&#39;title&#39;]).string
-            list_[2] = li.find(attrs=[&#39;class&#39;,&#39;bd&#39;]).find(attrs=[&#39;class&#39;,&#39;&#39;]).string.strip().split(&quot; &quot;)[1].replace(&quot; &quot;,&#39;&#39;)
-            list_[3] = li.find(attrs=[&#39;class&#39;,&#39;bd&#39;]).find(attrs=[&#39;class&#39;,&#39;&#39;]).string.strip().split(&quot; &quot;)[4].replace(&quot; &quot;,&#39;&#39;)      
-            list_[4] = li.find(attrs=[&#39;class&#39;,&#39;star&#39;]).span.find_next_sibling().string.strip()
-            list_[5] = li.find(attrs=[&#39;class&#39;,&#39;star&#39;]).span.find_next_sibling().find_next_sibling().find_next_sibling().string.strip()
-            if li.find(attrs=[&#39;class&#39;,&#39;quote&#39;]) is  not None:
-                list_[6] = li.find(attrs=[&#39;class&#39;,&#39;quote&#39;]).span.string
-            else:
-                list_[6] = None
-
-            ulist.append([list_[0],list_[1],list_[2],list_[3],list_[4],list_[5],list_[6]])
-
-def printUniverse(ulist):
-    tplt = &#39;{0:^4}\t{1:^10}\t{2:10}\t{3:10}\t{4:10}\t{5:10}&#39;
-    print(tplt.format(&quot;排名&quot;,&quot;电影名称&quot;,&quot;导演&quot;,&quot;主演&quot;,&quot;评分&quot;,&quot;评价人数&quot;,chr(12288)))
-    for i in range(len(ulist)):
-        u = ulist[i]
-        print(tplt.format(u[0],u[1],u[2],u[3],u[4],u[5],chr(12288)))
-
-def main():
-    ulist = [] 
-    for i in range(10):
-        url =  &#39;https://movie.douban.com/top250?start=&#39; + str( 25 * i ) 
-        html = getHtmlText(url)
-        findUniverse(ulist,html)
-
-    printUniverse(ulist)
-
-main()
-
-</code></pre><p>输出如下：<br><img src="https://img-blog.csdnimg.cn/2020041321124824.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+                <h1 id="嵌入式—LM3S1138介绍"><a href="#嵌入式—LM3S1138介绍" class="headerlink" title="嵌入式—LM3S1138介绍"></a>嵌入式—LM3S1138介绍</h1><p>这是我用的较久的一款芯片，无论是电赛还是课程设计，兼容性都很好，现在想把所有数据整理一下，这是开发板的相关文档。后面会有相关代码介绍，和案例介绍。</p>
+<p>EasyARM1138——内嵌 USB 仿真器的 Cortex-M3 开发板<br> EasyARM1138 是专门针对广大电子信息专业在校大学生而设计的一款基于 ARM<br>Cortex™-M3 先进内核的高性能、低价格开发板，用于教学、毕业设计、电子竞赛，等等。<br>也是广大单片机爱好者、开发工程师首选的 Cortex™-M3 开发板。<br> EasyARM1138 的核心MCU是美国Luminary Micro公司的Stellaris®（群星）系列ARM之<br>LM3S1138。该芯片采用的是国际上最优秀的MCU内核设计公司ARM最新推出的先进Cortex<br>™-M3 处理器；由国内最大、技术最强的晶圆制造公司台积电（TSMC）代工；经世界上最<br>专业的封装测试公司（OSE、i2a/IPAC）层层把关，确保产品的可靠性。Stellaris®（群星）</p>
+<p>系列ARM芯片在电磁兼容性方面的优势明显。</p>
+<h4 id="【产品图片】"><a href="#【产品图片】" class="headerlink" title="【产品图片】"></a>【产品图片】</h4><p><img src="https://img-blog.csdnimg.cn/2020052714052491.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70" alt="LM3S1138"></p>
+<h4 id="【功能特点】"><a href="#【功能特点】" class="headerlink" title="【功能特点】"></a>【功能特点】</h4><p>● 强大的 MCU 内核<br> ◆ 32 位 ARM Cortex™-M3 内核（ARM v7M 架构）<br> ◆ 兼容 Thumb 的 Thumb-2 指令集，提高代码密度 25%以上<br> ◆ 50MHz 运行频率，1.25 DMIPS/MHz，加快 35%以上<br> ◆ 单周期乘法指令，2～12 周期硬件除法指令<br> ◆ 快速可嵌套中断，6～12 个时钟周期<br> ◆ 具有 MPU 保护设定访问规则<br> ◆ 64KB 单周期 Flash, 16KB 单周期 SRAM<br> ◆ 内置可编程的 LDO 输出 2.25V～2.75V，步进 50mV<br> ◆ 支持非对齐数据的访问，有效地压缩数据到内存<br> ◆ 支持位操作，最大限度使用内存，并提供创新的外设控制<br> ◆ 内置系统节拍定时器（SysTick），方便操作系统移植</p>
+<h4 id="●-丰富的外设资源"><a href="#●-丰富的外设资源" class="headerlink" title="● 丰富的外设资源"></a>● 丰富的外设资源</h4><p> ◆ 7 组 GPIO，可配置为输入、输出、开漏、弱上拉等模式<br> ◆ 4 个 32 位 Timer，每个都可拆分为 2 个独立的 16 位子定时器，<br> 具有定时、捕获、PWM、RTC 等丰富功能<br> ◆ 3 路全双工 UART，位速率高达 3.125Mbps，16 单元接收 FIFO<br> 和发送 FIFO，支持串行红外协议（IrDA SIR）<br> ◆ 2 路I2C，支持 100kbps标准模式、400kbps快速模式<br> ◆ 2 路 SSI，兼容 Freescale SPI、MICROWIRE、Texas Instruments<br> 串行通信协议，位速率高达 25Mbps<br> ◆ 6 路 16 位 PWM，通过 CCP 管脚能产生高达 25MHz 的方波<br> ◆ 3 个模拟比较器<br> ◆ 8 通道 10 位 ADC，采样速率可达 1M/s，附带温度传感器<br> ◆ 内置看门狗定时器（WatchDog Timer），确保芯片可靠运行</p>
+<h4 id="●-内嵌-USB-接口的下载仿真器"><a href="#●-内嵌-USB-接口的下载仿真器" class="headerlink" title="● 内嵌 USB 接口的下载仿真器"></a>● 内嵌 USB 接口的下载仿真器</h4><p> ◆ 仅需插入一根 USB 电缆就能实现“三合一”功能：<br> 5V 供电、程序下载与在线仿真、UART 串行通信<br> ◆ 不再要求电脑具有串口或并口，无论台式机还是笔记本电脑，<br> 只要拥有 USB 1.1 或 USB 2.0 接口就能运用自如<br> ◆ 除了能够下载仿真自身以外，保留的 JTAG 接口还可以<br> 用来仿真其它 LM3S 系列开发板，短接 JP2 短接器的<br>GND 和 U-RST，还可实现 JTAG 接口对内仿真功能<br> ◆ USB 接口提供虚拟 UART 的功能，不需要额外的接口电路</p>
+<h4 id="●-简明的外围电路设计，调试时无需任何连线和跳线，操作极为方便"><a href="#●-简明的外围电路设计，调试时无需任何连线和跳线，操作极为方便" class="headerlink" title="● 简明的外围电路设计，调试时无需任何连线和跳线，操作极为方便"></a>● 简明的外围电路设计，调试时无需任何连线和跳线，操作极为方便</h4><p> ◆ 5 只 LED 指示灯<br> ◆ 3 只 KEY<br> ◆ 1 只交流蜂鸣器，可演奏动听乐曲，如《梁祝》<br> ◆ 两排插针引出全部 GPIO 资源，以及 ADC0～7、5V/3.3V/GND<br> ◆ GPIO 插针间距正好为 2000mil(50.8mm)，很容易插接在万用板<br> 或其它自制的电路板上，为教学实验提供了极大方便</p>
+<h4 id="●-在软件上采用“C-语言＋驱动库”的新概念开发模式"><a href="#●-在软件上采用“C-语言＋驱动库”的新概念开发模式" class="headerlink" title="● 在软件上采用“C 语言＋驱动库”的新概念开发模式"></a>● 在软件上采用“C 语言＋驱动库”的新概念开发模式</h4><p> 由于 Luminary Micro 官方免费提供了基于 C 语言（符合 ANSI C 标准）的驱动库软件<br>包，并且源代码是公开的，因此用户完全可以摒弃晦涩难懂的汇编语言，也不需要掌握底层<br>寄存器的操作细节，只要懂 C 语言就能轻松玩转 LM3S 系列 ARM。这也使得 32 位 ARM 的<br>入门门槛大大降低。以下是操作 GPIO 端口点亮 LED 的示例，非常简捷：<br> SysCtlPeriEnable(SYSCTL_PERIPH_GPIOG); // 第 1 步：使能 GPIOG 端口<br>GPIOPinTypeOut(GPIO_PORTG_BASE , GPIO_PIN_3); // 第 2 步：设置 PG3 为输出<br>GPIOPinWrite(GPIO_PORTG_BASE , GPIO_PIN_3 , 0x00); // 第 3 步：令 PG3 = 0，点亮 LED </p>
+<h4 id="●-从基础实验到课题设计"><a href="#●-从基础实验到课题设计" class="headerlink" title="● 从基础实验到课题设计"></a>● 从基础实验到课题设计</h4><p> ◆ GPIO 实验：LED 闪烁发光、GPIO 中断、按键控制<br> ◆ Timer 实验：定时/计数、脉冲捕获、RTC 时钟、PWM 方波<br> ◆ 串行通信：UART、I2C、SSI(兼容SPI)、RS-485<br>2<br>广州致远电子有限公司 电话：020-22644252 传真：020-38601859 <a href="http://www.embedtools.com" target="_blank" rel="noopener">http://www.embedtools.com</a><br> ◆ 串行红外通信实验（IrDA SIR）<br> ◆ 模拟功能：模拟比较器信号检测，10 位 ADC 数据采集<br> ◆ 片内温度传感器实验<br> ◆ 大容量 SD 卡读写实验<br> ◆ 支持各类电机实验：直流电机、步进电机、三相电机，<br> 提供运动控制 PID 算法<br> ◆ PWM 语音播放：能够对声音信号进行采集、存储和播放</p>
+<h4 id="●-开发软件"><a href="#●-开发软件" class="headerlink" title="● 开发软件"></a>● 开发软件</h4><p> ◆ IAR Embedded Workbench for ARM 4.42A 或 5.11(内嵌 USB 下载仿真器，推荐)<br> ◆ Keil µVision3(无需 U-LINK 仿真器)<br> ◆ 支持 µC/OS II 操作系统(提供移植代码)<br> ◆ 提供《Stellaris 外设驱动库》快速安装方法及 C 语言源代码</p>
 
             </div>
             <hr/>
@@ -537,7 +486,7 @@ main()
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://ailous.top/2019/05/04/wang-luo-pa-chong-dou-ban-dian-ying-pai-xing-bang-shu-ju-zhua-qu-gao-ji/">http://ailous.top/2019/05/04/wang-luo-pa-chong-dou-ban-dian-ying-pai-xing-bang-shu-ju-zhua-qu-gao-ji/</a>
+                    <a href="http://ailous.top/2018/12/09/qian-ru-shi-lm3s1138-jie-shao/">http://ailous.top/2018/12/09/qian-ru-shi-lm3s1138-jie-shao/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -575,8 +524,8 @@ main()
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/BS4/">
-                                    <span class="chip bg-color">BS4</span>
+                                <a href="/tags/1138/">
+                                    <span class="chip bg-color">1138</span>
                                 </a>
                             
                         </div>
@@ -748,31 +697,33 @@ main()
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/05/21/wang-luo-pa-chong-sou-hu-zui-xin-shi-zheng-xin-wen-shu-ju-pa-qu/">
+                <a href="/2018/12/09/ren-gong-zhi-neng-mnist-shou-xie-shi-bie/">
                     <div class="card-image">
                         
-                        <img src="https://img-blog.csdnimg.cn/20200413211744198.jpg" class="responsive-img" alt="网络爬虫——搜狐最新时政新闻数据爬取——BS4">
+                        <img src="https://upload-images.jianshu.io/upload_images/127313-6ee7f73fd968d278.png" class="responsive-img" alt="人工智能——mnist（手写识别）">
                         
-                        <span class="card-title">网络爬虫——搜狐最新时政新闻数据爬取——BS4</span>
+                        <span class="card-title">人工智能——mnist（手写识别）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            网络爬虫——搜狐最新时政新闻数据爬取目标网址：https://www.sohu.com/c/8/1460?spm=smpc.null.side-nav.14.1584869506422WxyU9iK
-目标数据描述：（1）标题 （2）链接地址
+                            人工智能——mnist（手写识别）因为时间较久了，就不详细介绍了。简单的说，一开始对已有的大量数字图片进行训练生成模型。然后通过对一张手写的数字图片进行读取，进入模型匹配，输出结果。
+源码# Python3
+
+# 使用LeNet5的七层卷积
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2019-05-21
+                            <i class="far fa-clock fa-fw icon-date"></i>2018-12-09
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/网络爬虫/" class="post-category">
-                                    网络爬虫
+                            <a href="/categories/人工智能/" class="post-category">
+                                    人工智能
                                 </a>
                             
                             
@@ -782,8 +733,12 @@ main()
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/BS4/">
-                        <span class="chip bg-color">BS4</span>
+                    <a href="/tags/手写识别/">
+                        <span class="chip bg-color">手写识别</span>
+                    </a>
+                    
+                    <a href="/tags/mnist/">
+                        <span class="chip bg-color">mnist</span>
                     </a>
                     
                 </div>
@@ -797,32 +752,32 @@ main()
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/">
+                <a href="/2018/12/09/suan-fa-zui-chang-gong-gong-zi-xu-lie/">
                     <div class="card-image">
                         
-                        <img src="https://img-blog.csdnimg.cn/20200518052704174.png" class="responsive-img" alt="基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）">
+                        <img src="https://img-blog.csdnimg.cn/20200424073104637.jpg" class="responsive-img" alt="算法——最长公共子序列">
                         
-                        <span class="card-title">基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）</span>
+                        <span class="card-title">算法——最长公共子序列</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析实验内容目标网站：Bilibili热门视频Top100
-目标网址：https://www.bilibili.com/ranking?（每过几天都会变的哦）
-任务要求实现
+                            算法——最长公共子序列链接：https://ac.nowcoder.com/acm/problem/19978
+来源：牛客网
+题目描述字符序列的子序列是指从给定字符序列中随意地（不一定连续）去掉若干个字符（可能一个也不去掉）后所形成的字符序
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-05-03
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-12-09
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/网络爬虫/" class="post-category">
-                                    网络爬虫
+                            <a href="/categories/算法/" class="post-category">
+                                    算法
                                 </a>
                             
                             
@@ -832,8 +787,8 @@ main()
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/xpath/">
-                        <span class="chip bg-color">xpath</span>
+                    <a href="/tags/公共子序列/">
+                        <span class="chip bg-color">公共子序列</span>
                     </a>
                     
                 </div>
