@@ -227,26 +227,6 @@
   </entry>
   
   <entry>
-    <title>基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）</title>
-    <link href="http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/"/>
-    <id>http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/</id>
-    <published>2019-05-03T05:47:40.000Z</published>
-    <updated>2020-05-27T07:48:54.811Z</updated>
-    
-    <summary type="html">
-    
-      这个主要是配合之前报告使用的，这里就不多赘述了。
-    
-    </summary>
-    
-      <category term="网络爬虫" scheme="http://ailous.top/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/"/>
-    
-    
-      <category term="xpath" scheme="http://ailous.top/tags/xpath/"/>
-    
-  </entry>
-  
-  <entry>
     <title>基于Bilibili热门视频Top100最热分区爬取与分析（报告）</title>
     <link href="http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-bao-gao-ban/"/>
     <id>http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-bao-gao-ban/</id>
@@ -263,6 +243,26 @@
     
     
       <category term="文章" scheme="http://ailous.top/tags/%E6%96%87%E7%AB%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）</title>
+    <link href="http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/"/>
+    <id>http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/</id>
+    <published>2019-05-03T05:47:40.000Z</published>
+    <updated>2020-05-27T07:48:54.811Z</updated>
+    
+    <summary type="html">
+    
+      这个主要是配合之前报告使用的，这里就不多赘述了。
+    
+    </summary>
+    
+      <category term="网络爬虫" scheme="http://ailous.top/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/"/>
+    
+    
+      <category term="xpath" scheme="http://ailous.top/tags/xpath/"/>
     
   </entry>
   
@@ -423,11 +423,11 @@
   </entry>
   
   <entry>
-    <title>嵌入式——1138纯净版代码（UART2A）</title>
-    <link href="http://ailous.top/2018/12/09/qian-ru-shi-1138-chun-jing-ban-dai-ma-uart2a/"/>
-    <id>http://ailous.top/2018/12/09/qian-ru-shi-1138-chun-jing-ban-dai-ma-uart2a/</id>
+    <title>嵌入式——1138纯净版代码（12864液晶）</title>
+    <link href="http://ailous.top/2018/12/09/qian-ru-shi-1138-chun-jing-ban-dai-ma-12864-ye-jing/"/>
+    <id>http://ailous.top/2018/12/09/qian-ru-shi-1138-chun-jing-ban-dai-ma-12864-ye-jing/</id>
     <published>2018-12-09T05:47:40.000Z</published>
-    <updated>2020-05-27T07:38:35.253Z</updated>
+    <updated>2020-05-27T07:37:34.676Z</updated>
     
     <summary type="html">
     
@@ -436,8 +436,7 @@
         
         
           &lt;p&gt;这些是我自己常用的代码，比官方的要简洁些，主要是自用，还有相关模块，使用代码。&lt;/p&gt;
-&lt;p&gt;具体文件可以去我github上下载。&lt;/p&gt;
-&lt;h4 id=&quot;UART-简介&quot;&gt;&lt;a href=&quot;#UART-简介&quot; class=&quot;headerlink&quot; title=&quot;UART
+&lt;p&gt;具体文件可以去我github上下载。&lt;br&gt;&lt;img
         
       
     
@@ -448,7 +447,9 @@
     
       <category term="1138" scheme="http://ailous.top/tags/1138/"/>
     
-      <category term="UART2A" scheme="http://ailous.top/tags/UART2A/"/>
+      <category term="12864" scheme="http://ailous.top/tags/12864/"/>
+    
+      <category term="lcd" scheme="http://ailous.top/tags/lcd/"/>
     
   </entry>
   
