@@ -397,6 +397,36 @@
   </entry>
   
   <entry>
+    <title>嵌入式——1138纯净版代码（PWM）</title>
+    <link href="http://ailous.top/2018/12/09/qian-ru-shi-1138-chun-jing-ban-dai-ma-pwm/"/>
+    <id>http://ailous.top/2018/12/09/qian-ru-shi-1138-chun-jing-ban-dai-ma-pwm/</id>
+    <published>2018-12-09T05:47:40.000Z</published>
+    <updated>2020-05-27T07:38:05.460Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;这些是我自己常用的代码，比官方的要简洁些，主要是自用，还有相关模块，使用代码。&lt;/p&gt;
+&lt;p&gt;具体文件可以去我github上下载。&lt;/p&gt;
+&lt;h4 id=&quot;pwm简介&quot;&gt;&lt;a href=&quot;#pwm简介&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="嵌入式" scheme="http://ailous.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
+    
+    
+      <category term="1138" scheme="http://ailous.top/tags/1138/"/>
+    
+      <category term="PWM" scheme="http://ailous.top/tags/PWM/"/>
+    
+  </entry>
+  
+  <entry>
     <title>嵌入式—LM3S1138介绍</title>
     <link href="http://ailous.top/2018/12/09/qian-ru-shi-lm3s1138-jie-shao/"/>
     <id>http://ailous.top/2018/12/09/qian-ru-shi-lm3s1138-jie-shao/</id>
@@ -419,37 +449,6 @@
     
     
       <category term="1138" scheme="http://ailous.top/tags/1138/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>嵌入式——1138纯净版代码（12864液晶）</title>
-    <link href="http://ailous.top/2018/12/09/qian-ru-shi-1138-chun-jing-ban-dai-ma-12864-ye-jing/"/>
-    <id>http://ailous.top/2018/12/09/qian-ru-shi-1138-chun-jing-ban-dai-ma-12864-ye-jing/</id>
-    <published>2018-12-09T05:47:40.000Z</published>
-    <updated>2020-05-27T07:37:34.676Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;这些是我自己常用的代码，比官方的要简洁些，主要是自用，还有相关模块，使用代码。&lt;/p&gt;
-&lt;p&gt;具体文件可以去我github上下载。&lt;br&gt;&lt;img
-        
-      
-    
-    </summary>
-    
-      <category term="嵌入式" scheme="http://ailous.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
-    
-    
-      <category term="1138" scheme="http://ailous.top/tags/1138/"/>
-    
-      <category term="12864" scheme="http://ailous.top/tags/12864/"/>
-    
-      <category term="lcd" scheme="http://ailous.top/tags/lcd/"/>
     
   </entry>
   
