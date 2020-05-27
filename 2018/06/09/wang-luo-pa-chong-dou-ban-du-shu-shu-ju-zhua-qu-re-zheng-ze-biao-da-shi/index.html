@@ -452,22 +452,22 @@
             <div id="articleContent">
                 <h2 id="网络爬虫——豆瓣读书数据抓取——RE（正则表达式）"><a href="#网络爬虫——豆瓣读书数据抓取——RE（正则表达式）" class="headerlink" title="网络爬虫——豆瓣读书数据抓取——RE（正则表达式）"></a>网络爬虫——豆瓣读书数据抓取——RE（正则表达式）</h2><p>目标网址：<a href="https://book.douban.com/" target="_blank" rel="noopener">https://book.douban.com/</a></p>
 <p>目标数据：（1）书名（2）书的链接地址（3）作者（4）发行时间（5）出版社<br><img src="https://img-blog.csdnimg.cn/20200413214442366.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>分析网页结构，通过获取网页源代码，使用re库解析网页结构，完成豆瓣读书项目中目标数据的爬取。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre class="line-numbers language-py"><code class="language-py">import requests
 import re
 
 def getcode(url):
     url = url
     headers = {
-        &#39;User-Agent&#39;:&#39;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3756.400 QQBrowser/10.5.4039.400&#39;
+        'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3756.400 QQBrowser/10.5.4039.400'
     }
     response = requests.get(url,headers=headers)
-    response.encoding = &#39;utf_8&#39;
+    response.encoding = 'utf_8'
     code = response.text
     return code
 
 def parse_page(code):
     ulist = []
-    pattern = re.compile(&#39;&lt;div class=&quot;cover&quot;&gt;.*?&lt;a href=&quot;(.*?)&quot; title=&quot;(.*?)&quot;&gt;.*?&lt;div class=&quot;author&quot;&gt;(.*?)&lt;/div&gt;.*?&lt;span class=&quot;year&quot;&gt;(.*?)&lt;/span&gt;.*?&lt;span class=&quot;publisher&quot;&gt;(.*?)&lt;/span&gt;&#39;,re.S)
+    pattern = re.compile('<div class="cover">.*?<a href="(.*?)" title="(.*?)">.*?<div class="author">(.*?)</div>.*?<span class="year">(.*?)</span>.*?<span class="publisher">(.*?)</span>',re.S)
     items = re.findall(pattern,code)
 # print(items)
     for item in items:
@@ -477,7 +477,7 @@ def parse_page(code):
 
 def main():
     ulist = []
-    url = &quot;https://book.douban.com/&quot;
+    url = "https://book.douban.com/"
     code = getcode(url)
     ulist = parse_page(code)
 
@@ -486,7 +486,8 @@ def main():
     for i in range(len(ulist)):
         print(ulist[i])
 main()
-</code></pre><p>输出如下：<br><img src="https://img-blog.csdnimg.cn/20200413220242245.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>输出如下：<br><img src="https://img-blog.csdnimg.cn/20200413220242245.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 
             </div>
             <hr/>

@@ -470,263 +470,267 @@
 <p>现在知道图片的内容表示和风格表示在卷积神经网络中是可分离的。也就是说，我们可以独立地操纵这两种表示来产生新的有感知意义上的图片。</p>
 <p>风格迁移图片是通过寻找一个同时匹配照片内容和对应的艺术风格的图片的方法而生成的。这些合成图片在保留原始照片的全局布置的同时，继承了各种艺术图片的不同艺术风格。风格表示是一个多层次的表达，包括了神经网络结构的多个层次。当风格表示只包含了少量的低层结构，（简单理解为训练模型次数少，模型特征不够强势）风格的就变得更加局部化，产生不同的视觉效果。当风格表示由网络的高层结构表示时，图像的结构会在更大的范围内和这种风格匹配（特征强势，会改变整个图的风格），产生别样的感觉。<br>理论上简单理解了，开始操作。</p>
 <p> 这里建立py文件 models.py，下面内容我会写在注释里。</p>
-<pre><code># 导入必须的包
-import tensorflow as tf
-import numpy as np
-import settings
-import scipy.io
-import scipy.misc
+<pre class="line-numbers language-py"><code class="language-py">    # 导入必须的包
+    import tensorflow as tf
+    import numpy as np
+    import settings
+    import scipy.io
+    import scipy.misc
 
-class Model(object):
-    def __init__(self, content_path, style_path):
-        self.content = self.loadimg(content_path)  # 加载内容图片
-        self.style = self.loadimg(style_path)  # 加载风格图片
-        self.random_img = self.get_random_img()  # 生成噪音内容图片
-        self.net = self.vggnet()  # 建立vgg网络
+    class Model(object):
+        def __init__(self, content_path, style_path):
+            self.content = self.loadimg(content_path)  # 加载内容图片
+            self.style = self.loadimg(style_path)  # 加载风格图片
+            self.random_img = self.get_random_img()  # 生成噪音内容图片
+            self.net = self.vggnet()  # 建立vgg网络
 
-    def vggnet(self):
-            # 读取预训练的vgg模型
-            # 这里装的是misc，安装opencv的也亦可以使用opencv等其他方法
-        vgg = scipy.io.loadmat(settings.VGG_MODEL_PATH) 
-        vgg_layers = vgg[&#39;layers&#39;][0]
-        net = {}
-            # 使用预训练的模型参数构建vgg网络的卷积层和池化层
-        # 全连接层不需要
-        # 注意，除了input之外，这里参数都为常量，不训练vgg的参数（权重比），这个以及训练完不需调整。
-        # 需要进行训练的是input，它即是我们最终生成的图像
-        net[&#39;input&#39;] = tf.Variable(np.zeros([1, settings.IMAGE_HEIGHT, settings.IMAGE_WIDTH, 3]), dtype=tf.float32)
-        # 参数对应的层数可以参考vgg模型图
-        net[&#39;conv1_1&#39;] = self.conv_relu(net[&#39;input&#39;], self.get_wb(vgg_layers, 0))
-        net[&#39;conv1_2&#39;] = self.conv_relu(net[&#39;conv1_1&#39;], self.get_wb(vgg_layers, 2))
-        net[&#39;pool1&#39;] = self.pool(net[&#39;conv1_2&#39;])
-        net[&#39;conv2_1&#39;] = self.conv_relu(net[&#39;pool1&#39;], self.get_wb(vgg_layers, 5))
-        net[&#39;conv2_2&#39;] = self.conv_relu(net[&#39;conv2_1&#39;], self.get_wb(vgg_layers, 7))
-        net[&#39;pool2&#39;] = self.pool(net[&#39;conv2_2&#39;])
-        net[&#39;conv3_1&#39;] = self.conv_relu(net[&#39;pool2&#39;], self.get_wb(vgg_layers, 10))
-        net[&#39;conv3_2&#39;] = self.conv_relu(net[&#39;conv3_1&#39;], self.get_wb(vgg_layers, 12))
-        net[&#39;conv3_3&#39;] = self.conv_relu(net[&#39;conv3_2&#39;], self.get_wb(vgg_layers, 14))
-        net[&#39;conv3_4&#39;] = self.conv_relu(net[&#39;conv3_3&#39;], self.get_wb(vgg_layers, 16))
-        net[&#39;pool3&#39;] = self.pool(net[&#39;conv3_4&#39;])
-        net[&#39;conv4_1&#39;] = self.conv_relu(net[&#39;pool3&#39;], self.get_wb(vgg_layers, 19))
-           net[&#39;conv4_2&#39;] = self.conv_relu(net[&#39;conv4_1&#39;], self.get_wb(vgg_layers, 21))
-        net[&#39;conv4_3&#39;] = self.conv_relu(net[&#39;conv4_2&#39;], self.get_wb(vgg_layers, 23))
-        net[&#39;conv4_4&#39;] = self.conv_relu(net[&#39;conv4_3&#39;], self.get_wb(vgg_layers, 25))
-        net[&#39;pool4&#39;] = self.pool(net[&#39;conv4_4&#39;])
-        net[&#39;conv5_1&#39;] = self.conv_relu(net[&#39;pool4&#39;], self.get_wb(vgg_layers, 28))
-        net[&#39;conv5_2&#39;] = self.conv_relu(net[&#39;conv5_1&#39;], self.get_wb(vgg_layers, 30))
-        net[&#39;conv5_3&#39;] = self.conv_relu(net[&#39;conv5_2&#39;], self.get_wb(vgg_layers, 32))
-        net[&#39;conv5_4&#39;] = self.conv_relu(net[&#39;conv5_3&#39;], self.get_wb(vgg_layers, 34))
-        net[&#39;pool5&#39;] = self.pool(net[&#39;conv5_4&#39;])
-        return net
+        def vggnet(self):
+                # 读取预训练的vgg模型
+                # 这里装的是misc，安装opencv的也亦可以使用opencv等其他方法
+            vgg = scipy.io.loadmat(settings.VGG_MODEL_PATH) 
+            vgg_layers = vgg['layers'][0]
+            net = {}
+                # 使用预训练的模型参数构建vgg网络的卷积层和池化层
+            # 全连接层不需要
+            # 注意，除了input之外，这里参数都为常量，不训练vgg的参数（权重比），这个以及训练完不需调整。
+            # 需要进行训练的是input，它即是我们最终生成的图像
+            net['input'] = tf.Variable(np.zeros([1, settings.IMAGE_HEIGHT, settings.IMAGE_WIDTH, 3]), dtype=tf.float32)
+            # 参数对应的层数可以参考vgg模型图
+            net['conv1_1'] = self.conv_relu(net['input'], self.get_wb(vgg_layers, 0))
+            net['conv1_2'] = self.conv_relu(net['conv1_1'], self.get_wb(vgg_layers, 2))
+            net['pool1'] = self.pool(net['conv1_2'])
+            net['conv2_1'] = self.conv_relu(net['pool1'], self.get_wb(vgg_layers, 5))
+            net['conv2_2'] = self.conv_relu(net['conv2_1'], self.get_wb(vgg_layers, 7))
+            net['pool2'] = self.pool(net['conv2_2'])
+            net['conv3_1'] = self.conv_relu(net['pool2'], self.get_wb(vgg_layers, 10))
+            net['conv3_2'] = self.conv_relu(net['conv3_1'], self.get_wb(vgg_layers, 12))
+            net['conv3_3'] = self.conv_relu(net['conv3_2'], self.get_wb(vgg_layers, 14))
+            net['conv3_4'] = self.conv_relu(net['conv3_3'], self.get_wb(vgg_layers, 16))
+            net['pool3'] = self.pool(net['conv3_4'])
+            net['conv4_1'] = self.conv_relu(net['pool3'], self.get_wb(vgg_layers, 19))
+               net['conv4_2'] = self.conv_relu(net['conv4_1'], self.get_wb(vgg_layers, 21))
+            net['conv4_3'] = self.conv_relu(net['conv4_2'], self.get_wb(vgg_layers, 23))
+            net['conv4_4'] = self.conv_relu(net['conv4_3'], self.get_wb(vgg_layers, 25))
+            net['pool4'] = self.pool(net['conv4_4'])
+            net['conv5_1'] = self.conv_relu(net['pool4'], self.get_wb(vgg_layers, 28))
+            net['conv5_2'] = self.conv_relu(net['conv5_1'], self.get_wb(vgg_layers, 30))
+            net['conv5_3'] = self.conv_relu(net['conv5_2'], self.get_wb(vgg_layers, 32))
+            net['conv5_4'] = self.conv_relu(net['conv5_3'], self.get_wb(vgg_layers, 34))
+            net['pool5'] = self.pool(net['conv5_4'])
+            return net
 
-    def conv_relu(self, input, wb):
-        &quot;&quot;&quot;
-        进行先卷积、后relu的运算
-        :param input: 输入层
-        :param wb: wb[0],wb[1] == w,b
-        :return: relu后的结果
-        &quot;&quot;&quot;
-        conv = tf.nn.conv2d(input, wb[0], strides=[1, 1, 1, 1], padding=&#39;SAME&#39;)
-        relu = tf.nn.relu(conv + wb[1])
-        return relu
+        def conv_relu(self, input, wb):
+            """
+            进行先卷积、后relu的运算
+            :param input: 输入层
+            :param wb: wb[0],wb[1] == w,b
+            :return: relu后的结果
+            """
+            conv = tf.nn.conv2d(input, wb[0], strides=[1, 1, 1, 1], padding='SAME')
+            relu = tf.nn.relu(conv + wb[1])
+            return relu
 
-    def pool(self, input):
-        &quot;&quot;&quot;
-        进行max_pool操作
-        :param input: 输入层
-        :return: 池化后的结果
-        &quot;&quot;&quot;
-        return tf.nn.max_pool(input, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding=&#39;SAME&#39;)
+        def pool(self, input):
+            """
+            进行max_pool操作
+            :param input: 输入层
+            :return: 池化后的结果
+            """
+            return tf.nn.max_pool(input, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
-    def get_wb(self, layers, i):
-        &quot;&quot;&quot;
-        从预训练好的vgg模型中读取参数
-        :param layers: 训练好的vgg模型
-        :param i: vgg指定层数
-        :return: 该层的w,b
-        &quot;&quot;&quot;
-        w = tf.constant(layers[i][0][0][0][0][0])
-        bias = layers[i][0][0][0][0][1]
-        b = tf.constant(np.reshape(bias, (bias.size)))
-        return w, b
+        def get_wb(self, layers, i):
+            """
+            从预训练好的vgg模型中读取参数
+            :param layers: 训练好的vgg模型
+            :param i: vgg指定层数
+            :return: 该层的w,b
+            """
+            w = tf.constant(layers[i][0][0][0][0][0])
+            bias = layers[i][0][0][0][0][1]
+            b = tf.constant(np.reshape(bias, (bias.size)))
+            return w, b
 
-    def get_random_img(self):
-        &quot;&quot;&quot;
-        根据噪音和内容图片，生成一张随机图片
-        :return:
-        &quot;&quot;&quot;
-        noise_image = np.random.uniform(-20, 20, [1, settings.IMAGE_HEIGHT, settings.IMAGE_WIDTH, 3])
-        random_img = noise_image * settings.NOISE + self.content * (1 - settings.NOISE)
-        return random_img
+        def get_random_img(self):
+            """
+            根据噪音和内容图片，生成一张随机图片
+            :return:
+            """
+            noise_image = np.random.uniform(-20, 20, [1, settings.IMAGE_HEIGHT, settings.IMAGE_WIDTH, 3])
+            random_img = noise_image * settings.NOISE + self.content * (1 - settings.NOISE)
+            return random_img
 
-    def loadimg(self, path):
-        &quot;&quot;&quot;
-        加载一张图片，将其转化为符合要求的格式
-        :param path:
-        :return:
-        &quot;&quot;&quot;
-        # 读取图片
-        image = scipy.misc.imread(path)
-        # 重新设定图片大小
-        image = scipy.misc.imresize(image, [settings.IMAGE_HEIGHT, settings.IMAGE_WIDTH])
-        # 改变数组形状，其实就是把它变成一个batch_size=1的batch
-        image = np.reshape(image, (1, settings.IMAGE_HEIGHT, settings.IMAGE_WIDTH, 3))
-        # 减去均值，使其数据分布接近0
-        image = image - settings.IMAGE_MEAN_VALUE
-        return image
+        def loadimg(self, path):
+            """
+            加载一张图片，将其转化为符合要求的格式
+            :param path:
+            :return:
+            """
+            # 读取图片
+            image = scipy.misc.imread(path)
+            # 重新设定图片大小
+            image = scipy.misc.imresize(image, [settings.IMAGE_HEIGHT, settings.IMAGE_WIDTH])
+            # 改变数组形状，其实就是把它变成一个batch_size=1的batch
+            image = np.reshape(image, (1, settings.IMAGE_HEIGHT, settings.IMAGE_WIDTH, 3))
+            # 减去均值，使其数据分布接近0
+            image = image - settings.IMAGE_MEAN_VALUE
+            return image
 
-if __name__ == &#39;__main__&#39;:
-    Model(settings.CONTENT_IMAGE, settings.STYLE_IMAGE)
-</code></pre><h4 id="3-模型训练"><a href="#3-模型训练" class="headerlink" title="3.模型训练"></a>3.模型训练</h4><p>但是实际上，图片的内容和风格是不能够被完全分离的。当我们合成图片时，我们通常找不出一张能够匹配某个图片内容和另一种图片风格的图片。在我们合成图片的过程中，我们需要最小化的损失函数包含内容和风格，但它们是分开的。因此，我们需要平滑地调整内容和风格的权重比例。当损失函数分配在内容和风格的权重不同时，合成产生的图片效果也完全不一样。我们需要适当地调整内容表示和风格表示的权重比来产生具有视觉感染力的图片。是否能够找到合适的权重比是能否产生令人满意的图片的关键因素。</p>
+    if __name__ == '__main__':
+        Model(settings.CONTENT_IMAGE, settings.STYLE_IMAGE)
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="3-模型训练"><a href="#3-模型训练" class="headerlink" title="3.模型训练"></a>3.模型训练</h4><p>但是实际上，图片的内容和风格是不能够被完全分离的。当我们合成图片时，我们通常找不出一张能够匹配某个图片内容和另一种图片风格的图片。在我们合成图片的过程中，我们需要最小化的损失函数包含内容和风格，但它们是分开的。因此，我们需要平滑地调整内容和风格的权重比例。当损失函数分配在内容和风格的权重不同时，合成产生的图片效果也完全不一样。我们需要适当地调整内容表示和风格表示的权重比来产生具有视觉感染力的图片。是否能够找到合适的权重比是能否产生令人满意的图片的关键因素。</p>
 <p>就是将输入层的Variable训练到满意的比例，最开始输入一张噪音图片，然后不断地根据内容loss和风格loss对其进行调整，直到一定次数后，该图片兼具了风格图片的风格以及内容图片的内容。当训练结束时，输入层的参数就是我们生成的图片。</p>
 <p>这里建立py文件 train.py，下面内容我会写在注释里。</p>
-<pre><code># -*- coding: utf-8 -*-
-import tensorflow as tf
-import settings
-import models
-import numpy as np
-import scipy.misc
+<pre class="line-numbers language-py"><code class="language-py">    # -*- coding: utf-8 -*-
+    import tensorflow as tf
+    import settings
+    import models
+    import numpy as np
+    import scipy.misc
 
-def loss(sess, model):
-    &quot;&quot;&quot;
-    定义模型的损失函数
-    :param sess: tf session
-    :param model: 神经网络模型
-    :return: 内容损失和风格损失的加权和损失
-    &quot;&quot;&quot;
-    # 先计算内容损失函数
-    # 获取定义内容损失的vgg层名称列表及权重
-    content_layers = settings.CONTENT_LOSS_LAYERS
-    # 将内容图片作为输入，方便后面提取内容图片在各层中的特征矩阵
-    sess.run(tf.assign(model.net[&#39;input&#39;], model.content))
-    # 内容损失累加量
-    content_loss = 0.0
-    # 逐个取出衡量内容损失的vgg层名称及对应权重
-    for layer_name, weight in content_layers:
-        # 提取内容图片在layer_name层中的特征矩阵
-        p = sess.run(model.net[layer_name])
-        # 提取噪音图片在layer_name层中的特征矩阵
-        x = model.net[layer_name]
-        # 长x宽
-        M = p.shape[1] * p.shape[2]
-        # 信道数
-        N = p.shape[3]
-        # 根据公式计算损失，并进行累加
-        content_loss += (1.0 / (2 * M * N)) * tf.reduce_sum(tf.pow(p - x, 2)) * weight
-    # 将损失对层数取平均
-    content_loss /= len(content_layers)
+    def loss(sess, model):
+        """
+        定义模型的损失函数
+        :param sess: tf session
+        :param model: 神经网络模型
+        :return: 内容损失和风格损失的加权和损失
+        """
+        # 先计算内容损失函数
+        # 获取定义内容损失的vgg层名称列表及权重
+        content_layers = settings.CONTENT_LOSS_LAYERS
+        # 将内容图片作为输入，方便后面提取内容图片在各层中的特征矩阵
+        sess.run(tf.assign(model.net['input'], model.content))
+        # 内容损失累加量
+        content_loss = 0.0
+        # 逐个取出衡量内容损失的vgg层名称及对应权重
+        for layer_name, weight in content_layers:
+            # 提取内容图片在layer_name层中的特征矩阵
+            p = sess.run(model.net[layer_name])
+            # 提取噪音图片在layer_name层中的特征矩阵
+            x = model.net[layer_name]
+            # 长x宽
+            M = p.shape[1] * p.shape[2]
+            # 信道数
+            N = p.shape[3]
+            # 根据公式计算损失，并进行累加
+            content_loss += (1.0 / (2 * M * N)) * tf.reduce_sum(tf.pow(p - x, 2)) * weight
+        # 将损失对层数取平均
+        content_loss /= len(content_layers)
 
-    # 再计算风格损失函数
-    style_layers = settings.STYLE_LOSS_LAYERS
-    # 将风格图片作为输入，方便后面提取风格图片在各层中的特征矩阵
-    sess.run(tf.assign(model.net[&#39;input&#39;], model.style))
-    # 风格损失累加量
-    style_loss = 0.0
-    # 逐个取出衡量风格损失的vgg层名称及对应权重
-    for layer_name, weight in style_layers:
-        # 提取风格图片在layer_name层中的特征矩阵
-        a = sess.run(model.net[layer_name])
-        # 提取噪音图片在layer_name层中的特征矩阵
-        x = model.net[layer_name]
-        # 长x宽
-        M = a.shape[1] * a.shape[2]
-        # 信道数
-        N = a.shape[3]
-        # 求风格图片特征的gram矩阵
-        A = gram(a, M, N)
-        # 求噪音图片特征的gram矩阵
-        G = gram(x, M, N)
-        # 根据公式计算损失，并进行累加
-        style_loss += (1.0 / (4 * M * M * N * N)) * tf.reduce_sum(tf.pow(G - A, 2)) * weight
-    # 将损失对层数取平均
-    style_loss /= len(style_layers)
-    # 将内容损失和风格损失加权求和，构成总损失函数
-    loss = settings.ALPHA * content_loss + settings.BETA * style_loss
-    return loss
+        # 再计算风格损失函数
+        style_layers = settings.STYLE_LOSS_LAYERS
+        # 将风格图片作为输入，方便后面提取风格图片在各层中的特征矩阵
+        sess.run(tf.assign(model.net['input'], model.style))
+        # 风格损失累加量
+        style_loss = 0.0
+        # 逐个取出衡量风格损失的vgg层名称及对应权重
+        for layer_name, weight in style_layers:
+            # 提取风格图片在layer_name层中的特征矩阵
+            a = sess.run(model.net[layer_name])
+            # 提取噪音图片在layer_name层中的特征矩阵
+            x = model.net[layer_name]
+            # 长x宽
+            M = a.shape[1] * a.shape[2]
+            # 信道数
+            N = a.shape[3]
+            # 求风格图片特征的gram矩阵
+            A = gram(a, M, N)
+            # 求噪音图片特征的gram矩阵
+            G = gram(x, M, N)
+            # 根据公式计算损失，并进行累加
+            style_loss += (1.0 / (4 * M * M * N * N)) * tf.reduce_sum(tf.pow(G - A, 2)) * weight
+        # 将损失对层数取平均
+        style_loss /= len(style_layers)
+        # 将内容损失和风格损失加权求和，构成总损失函数
+        loss = settings.ALPHA * content_loss + settings.BETA * style_loss
+        return loss
 
-def gram(x, size, deep):
-    &quot;&quot;&quot;
-    创建给定矩阵的格莱姆矩阵，用来衡量风格
-    :param x:给定矩阵
-    :param size:矩阵的行数与列数的乘积
-    :param deep:矩阵信道数
-    :return:格莱姆矩阵
-    &quot;&quot;&quot;
-    # 改变shape为（size,deep）
-    x = tf.reshape(x, (size, deep))
-    # 求xTx
-    g = tf.matmul(tf.transpose(x), x)
-    return g
+    def gram(x, size, deep):
+        """
+        创建给定矩阵的格莱姆矩阵，用来衡量风格
+        :param x:给定矩阵
+        :param size:矩阵的行数与列数的乘积
+        :param deep:矩阵信道数
+        :return:格莱姆矩阵
+        """
+        # 改变shape为（size,deep）
+        x = tf.reshape(x, (size, deep))
+        # 求xTx
+        g = tf.matmul(tf.transpose(x), x)
+        return g
 
-def train():
-    # 创建一个模型
-    model = models.Model(settings.CONTENT_IMAGE, settings.STYLE_IMAGE)
-    # 创建session
-    with tf.Session() as sess:
-        # 全局初始化
-        sess.run(tf.global_variables_initializer())
-        # 定义损失函数
-        cost = loss(sess, model)
-        # 创建优化器
-        optimizer = tf.train.AdamOptimizer(1.0).minimize(cost)
-        # 再初始化一次（主要针对于第一次初始化后又定义的运算，不然可能会报错）
-        sess.run(tf.global_variables_initializer())
-        # 使用噪声图片进行训练
-        sess.run(tf.assign(model.net[&#39;input&#39;], model.random_img))
-        # 迭代指定次数
-        for step in range(settings.TRAIN_STEPS):
-            # 进行一次反向传播
-            sess.run(optimizer)
-            # 每隔一定次数，输出一下进度，并保存当前训练结果
-            if step % 50 == 0:
-                print(&#39;step {} is down.&#39;.format(step))
-                # 取出input的内容，这是生成的图片
-                img = sess.run(model.net[&#39;input&#39;])
-                # 训练过程是减去均值的，这里要加上
-                img += settings.IMAGE_MEAN_VALUE
-                # 这里是一个batch_size=1的batch，所以img[0]才是图片内容
-                img = img[0]
-                # 将像素值限定在0-255，并转为整型
-                img = np.clip(img, 0, 255).astype(np.uint8)
-                # 保存图片
-                scipy.misc.imsave(&#39;{}-{}.jpg&#39;.format(settings.OUTPUT_IMAGE,step), img)
-        # 保存最终训练结果
-        img = sess.run(model.net[&#39;input&#39;])
-        img += settings.IMAGE_MEAN_VALUE
-        img = img[0]
-        img = np.clip(img, 0, 255).astype(np.uint8)
-        scipy.misc.imsave(&#39;{}.jpg&#39;.format(settings.OUTPUT_IMAGE), img)
+    def train():
+        # 创建一个模型
+        model = models.Model(settings.CONTENT_IMAGE, settings.STYLE_IMAGE)
+        # 创建session
+        with tf.Session() as sess:
+            # 全局初始化
+            sess.run(tf.global_variables_initializer())
+            # 定义损失函数
+            cost = loss(sess, model)
+            # 创建优化器
+            optimizer = tf.train.AdamOptimizer(1.0).minimize(cost)
+            # 再初始化一次（主要针对于第一次初始化后又定义的运算，不然可能会报错）
+            sess.run(tf.global_variables_initializer())
+            # 使用噪声图片进行训练
+            sess.run(tf.assign(model.net['input'], model.random_img))
+            # 迭代指定次数
+            for step in range(settings.TRAIN_STEPS):
+                # 进行一次反向传播
+                sess.run(optimizer)
+                # 每隔一定次数，输出一下进度，并保存当前训练结果
+                if step % 50 == 0:
+                    print('step {} is down.'.format(step))
+                    # 取出input的内容，这是生成的图片
+                    img = sess.run(model.net['input'])
+                    # 训练过程是减去均值的，这里要加上
+                    img += settings.IMAGE_MEAN_VALUE
+                    # 这里是一个batch_size=1的batch，所以img[0]才是图片内容
+                    img = img[0]
+                    # 将像素值限定在0-255，并转为整型
+                    img = np.clip(img, 0, 255).astype(np.uint8)
+                    # 保存图片
+                    scipy.misc.imsave('{}-{}.jpg'.format(settings.OUTPUT_IMAGE,step), img)
+            # 保存最终训练结果
+            img = sess.run(model.net['input'])
+            img += settings.IMAGE_MEAN_VALUE
+            img = img[0]
+            img = np.clip(img, 0, 255).astype(np.uint8)
+            scipy.misc.imsave('{}.jpg'.format(settings.OUTPUT_IMAGE), img)
 
-if __name__ == &#39;__main__&#39;:
-    train()
-</code></pre><h4 id="4-系统文件配置这里建立py文件-setting-py。"><a href="#4-系统文件配置这里建立py文件-setting-py。" class="headerlink" title="4.系统文件配置这里建立py文件 setting.py。"></a>4.系统文件配置这里建立py文件 setting.py。</h4><pre><code># -*- coding: utf-8 -*-
-# 内容图片路径
-CONTENT_IMAGE = &#39;content/qd.jpg&#39; # 路径/图片 自己在工程文件夹下建立。
-# 风格图片路径
-STYLE_IMAGE = &#39;style/painting.jpg&#39; # 路径/图片 自己在工程文件夹下建立。
-# 输出图片路径
-OUTPUT_IMAGE = &#39;output/output&#39; # 路径/图片开始名 自己在工程文件夹下建立。
-# 预训练的vgg模型路径
-VGG_MODEL_PATH = &#39;imagenet-vgg-verydeep-19.mat&#39; # 直接置于工程文件夹即可。
-# 图片宽度
-IMAGE_WIDTH = 450
-# 图片高度
-IMAGE_HEIGHT = 300
-# 定义计算内容损失的vgg层名称及对应权重的列表
-CONTENT_LOSS_LAYERS = [(&#39;conv4_2&#39;, 0.5),(&#39;conv5_2&#39;,0.5)]
-# 定义计算风格损失的vgg层名称及对应权重的列表
-STYLE_LOSS_LAYERS = [(&#39;conv1_1&#39;, 0.2), (&#39;conv2_1&#39;, 0.2), (&#39;conv3_1&#39;, 0.2), (&#39;conv4_1&#39;, 0.2), (&#39;conv5_1&#39;, 0.2)]
-# 噪音比率
-NOISE = 0.5
-# 图片RGB均值
-IMAGE_MEAN_VALUE = [128.0, 128.0, 128.0]
-# 内容损失权重
-ALPHA = 1
-# 风格损失权重
-BETA = 500
-# 训练次数
-TRAIN_STEPS = 3000  # 这里推荐几百次就行，确实时间太长。
-</code></pre>
+    if __name__ == '__main__':
+        train()
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="4-系统文件配置这里建立py文件-setting-py。"><a href="#4-系统文件配置这里建立py文件-setting-py。" class="headerlink" title="4.系统文件配置这里建立py文件 setting.py。"></a>4.系统文件配置这里建立py文件 setting.py。</h4><pre class="line-numbers language-py"><code class="language-py">    # -*- coding: utf-8 -*-
+    # 内容图片路径
+    CONTENT_IMAGE = 'content/qd.jpg' # 路径/图片 自己在工程文件夹下建立。
+    # 风格图片路径
+    STYLE_IMAGE = 'style/painting.jpg' # 路径/图片 自己在工程文件夹下建立。
+    # 输出图片路径
+    OUTPUT_IMAGE = 'output/output' # 路径/图片开始名 自己在工程文件夹下建立。
+    # 预训练的vgg模型路径
+    VGG_MODEL_PATH = 'imagenet-vgg-verydeep-19.mat' # 直接置于工程文件夹即可。
+    # 图片宽度
+    IMAGE_WIDTH = 450
+    # 图片高度
+    IMAGE_HEIGHT = 300
+    # 定义计算内容损失的vgg层名称及对应权重的列表
+    CONTENT_LOSS_LAYERS = [('conv4_2', 0.5),('conv5_2',0.5)]
+    # 定义计算风格损失的vgg层名称及对应权重的列表
+    STYLE_LOSS_LAYERS = [('conv1_1', 0.2), ('conv2_1', 0.2), ('conv3_1', 0.2), ('conv4_1', 0.2), ('conv5_1', 0.2)]
+    # 噪音比率
+    NOISE = 0.5
+    # 图片RGB均值
+    IMAGE_MEAN_VALUE = [128.0, 128.0, 128.0]
+    # 内容损失权重
+    ALPHA = 1
+    # 风格损失权重
+    BETA = 500
+    # 训练次数
+    TRAIN_STEPS = 3000  # 这里推荐几百次就行，确实时间太长。
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
             </div>
             <hr/>
 

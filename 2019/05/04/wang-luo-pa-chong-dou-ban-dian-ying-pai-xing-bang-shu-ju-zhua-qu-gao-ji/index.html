@@ -457,45 +457,45 @@
 <p>（3）定义函数，将获取的目标数据打印输出，有能力的同学可以试着将结果写入文件中。</p>
 <p>（4）使用框架式结构，通过参数传递实现整个特定数据的爬取。</p>
 <p>可以选择定义全局列表，将目标数据获取后添加到列表中，同时，注意观察分页时url的变化，以便获取整个的排行榜数据。建议通过for循环传递变化参数实现。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre><code>import requests
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><pre class="line-numbers language-py"><code class="language-py">import requests
 from bs4 import BeautifulSoup
 import bs4 
 
 def getHtmlText(url):
     headers = {
-        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69'        
     }
     try:
         result = requests.get(url,headers=headers,timeout=30)
         result.raise_for_status()
         result.encoding = result.apparent_encoding
-        result=(result.text.replace(&#39;&lt;br&gt;&#39;,&#39;&#39;)).replace(&#39;&lt;br/&gt;&#39;,&#39;&#39;)
+        result=(result.text.replace('<br>','')).replace('<br/>','')
         return result
     except:
-        return &quot;&quot;
+        return ""
 
 def findUniverse(ulist , html):
-    soup = BeautifulSoup(html,&quot;html.parser&quot;)   
+    soup = BeautifulSoup(html,"html.parser")   
     list_ = [0,0,0,0,0,0,0]
 
-    for li in soup.find(attrs=[&#39;class&#39;,&#39;grid_view&#39;]).children:
+    for li in soup.find(attrs=['class','grid_view']).children:
         if isinstance(li ,bs4.element.Tag):
-            list_[0] = li.find(&#39;em&#39;).string
-            list_[1] = li.find(attrs=[&#39;class&#39;,&#39;title&#39;]).string
-            list_[2] = li.find(attrs=[&#39;class&#39;,&#39;bd&#39;]).find(attrs=[&#39;class&#39;,&#39;&#39;]).string.strip().split(&quot; &quot;)[1].replace(&quot; &quot;,&#39;&#39;)
-            list_[3] = li.find(attrs=[&#39;class&#39;,&#39;bd&#39;]).find(attrs=[&#39;class&#39;,&#39;&#39;]).string.strip().split(&quot; &quot;)[4].replace(&quot; &quot;,&#39;&#39;)      
-            list_[4] = li.find(attrs=[&#39;class&#39;,&#39;star&#39;]).span.find_next_sibling().string.strip()
-            list_[5] = li.find(attrs=[&#39;class&#39;,&#39;star&#39;]).span.find_next_sibling().find_next_sibling().find_next_sibling().string.strip()
-            if li.find(attrs=[&#39;class&#39;,&#39;quote&#39;]) is  not None:
-                list_[6] = li.find(attrs=[&#39;class&#39;,&#39;quote&#39;]).span.string
+            list_[0] = li.find('em').string
+            list_[1] = li.find(attrs=['class','title']).string
+            list_[2] = li.find(attrs=['class','bd']).find(attrs=['class','']).string.strip().split(" ")[1].replace(" ",'')
+            list_[3] = li.find(attrs=['class','bd']).find(attrs=['class','']).string.strip().split(" ")[4].replace(" ",'')      
+            list_[4] = li.find(attrs=['class','star']).span.find_next_sibling().string.strip()
+            list_[5] = li.find(attrs=['class','star']).span.find_next_sibling().find_next_sibling().find_next_sibling().string.strip()
+            if li.find(attrs=['class','quote']) is  not None:
+                list_[6] = li.find(attrs=['class','quote']).span.string
             else:
                 list_[6] = None
 
             ulist.append([list_[0],list_[1],list_[2],list_[3],list_[4],list_[5],list_[6]])
 
 def printUniverse(ulist):
-    tplt = &#39;{0:^4}\t{1:^10}\t{2:10}\t{3:10}\t{4:10}\t{5:10}&#39;
-    print(tplt.format(&quot;排名&quot;,&quot;电影名称&quot;,&quot;导演&quot;,&quot;主演&quot;,&quot;评分&quot;,&quot;评价人数&quot;,chr(12288)))
+    tplt = '{0:^4}\t{1:^10}\t{2:10}\t{3:10}\t{4:10}\t{5:10}'
+    print(tplt.format("排名","电影名称","导演","主演","评分","评价人数",chr(12288)))
     for i in range(len(ulist)):
         u = ulist[i]
         print(tplt.format(u[0],u[1],u[2],u[3],u[4],u[5],chr(12288)))
@@ -503,7 +503,7 @@ def printUniverse(ulist):
 def main():
     ulist = [] 
     for i in range(10):
-        url =  &#39;https://movie.douban.com/top250?start=&#39; + str( 25 * i ) 
+        url =  'https://movie.douban.com/top250?start=' + str( 25 * i ) 
         html = getHtmlText(url)
         findUniverse(ulist,html)
 
@@ -511,7 +511,8 @@ def main():
 
 main()
 
-</code></pre><p>输出如下：<br><img src="https://img-blog.csdnimg.cn/2020041321124824.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>输出如下：<br><img src="https://img-blog.csdnimg.cn/2020041321124824.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MTEwODUxNQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 
             </div>
             <hr/>
@@ -797,18 +798,20 @@ main()
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-bao-gao-ban/">
+                <a href="/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-zui-re-fen-qu-pa-qu-yu-fen-xi/">
                     <div class="card-image">
                         
-                        <img src="https://img-blog.csdnimg.cn/20200518061152313.png" class="responsive-img" alt="基于Bilibili热门视频Top100最热分区爬取与分析（报告）">
+                        <img src="https://img-blog.csdnimg.cn/20200518052631531.png" class="responsive-img" alt="基于Bilibili热门视频Top100最热分区爬取与分析">
                         
-                        <span class="card-title">基于Bilibili热门视频Top100最热分区爬取与分析（报告）</span>
+                        <span class="card-title">基于Bilibili热门视频Top100最热分区爬取与分析</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            一、研究背景能够在观看视频的过程中发表自己的评论，并且评论可以在你所希望的时间点、位置以滑行或停留的方式出现在视频中，所有观看视频的人都可以看见评论，这样一类的评论叫做弹幕，此类网站叫弹幕网站。弹幕视频系统源自日本弹幕视频分享网站（nico
+                            网络爬虫——基于Bilibili热门视频Top100最热分区爬取与分析这个主要是配合之前报告使用的，这里就不多赘述了。先爬地址，再爬取地址里的分区，最后整合。csv存储。
+实验内容目标网站：Bilibili热门视频Top100
+目标网址：h
                         
                     </div>
                     <div class="publish-info">
@@ -830,8 +833,8 @@ main()
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/文章/">
-                        <span class="chip bg-color">文章</span>
+                    <a href="/tags/xpath/">
+                        <span class="chip bg-color">xpath</span>
                     </a>
                     
                 </div>

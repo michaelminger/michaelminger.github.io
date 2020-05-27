@@ -453,7 +453,7 @@
                 <h2 id="网络爬虫——基于Bilibili热门视频Top100最热分区爬取与分析"><a href="#网络爬虫——基于Bilibili热门视频Top100最热分区爬取与分析" class="headerlink" title="网络爬虫——基于Bilibili热门视频Top100最热分区爬取与分析"></a>网络爬虫——基于Bilibili热门视频Top100最热分区爬取与分析</h2><p>这个主要是配合之前报告使用的，这里就不多赘述了。<br>先爬地址，再爬取地址里的分区，最后整合。csv存储。</p>
 <h4 id="实验内容"><a href="#实验内容" class="headerlink" title="实验内容"></a>实验内容</h4><p>目标网站：Bilibili热门视频Top100</p>
 <p>目标网址：<br><a href="https://www.bilibili.com/ranking?" target="_blank" rel="noopener">https://www.bilibili.com/ranking?</a>（每过几天都会变的哦）</p>
-<pre><code>from lxml import etree
+<pre class="line-numbers language-py"><code class="language-py">from lxml import etree
 import time
 import jieba
 import numpy as np
@@ -469,7 +469,7 @@ class getUrl ():
 
     def getTxt(self):
         self.headers = {
-            &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69'        
         }
         try:
             result = requests.get(self.url,headers=self.headers,timeout=30)
@@ -477,13 +477,13 @@ class getUrl ():
             result.encoding = result.apparent_encoding
             return result.text
         except:
-            return &quot;&quot;    
+            return ""    
 
     def parsePage(self):
         res = self.getTxt()
         newhtml =etree.HTML(res,etree.HTMLParser())
 
-        result=newhtml.xpath(&#39;//*[@id=&quot;app&quot;]/div[1]/div/div[1]/div[2]/div[3]/ul/li/div[2]/div[1]/a//@href&#39;)
+        result=newhtml.xpath('//*[@id="app"]/div[1]/div/div[1]/div[2]/div[3]/ul/li/div[2]/div[1]/a//@href')
 
         return  result
 
@@ -494,7 +494,7 @@ class getAvNum():
 
     def getTxt(self):
         self.headers = {
-            &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69&#39;        
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69'        
         }
         try:
             result = requests.get(self.url,headers=self.headers,timeout=30)
@@ -502,12 +502,12 @@ class getAvNum():
             result.encoding = result.apparent_encoding
             return result.text
         except:
-            return &quot;&quot;
+            return ""
 
     def parsePage(self):
         res = self.getTxt()
         newhtml =etree.HTML(res,etree.HTMLParser())
-        rlist=newhtml.xpath(&#39;//*[@id=&quot;viewbox_report&quot;]/div[1]/span[1]/a[1]//text()&#39;)
+        rlist=newhtml.xpath('//*[@id="viewbox_report"]/div[1]/span[1]/a[1]//text()')
 
         return  rlist
 
@@ -515,18 +515,18 @@ class Bilibili():
 
     def __init__(self,oid):
         self.headers={
-        &#39;Host&#39;: &#39;api.bilibili.com&#39;,
-        &#39;Connection&#39;: &#39;keep-alive&#39;,
-        &#39;Cache-Control&#39;: &#39;max-age=0&#39;,
-        &#39;Upgrade-Insecure-Requests&#39;: &#39;1&#39;,
-        &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36&#39;,
-        &#39;Accept&#39;: &#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8&#39;,
-        &#39;Accept-Encoding&#39;: &#39;gzip, deflate, br&#39;,
-        &#39;Accept-Language&#39;: &#39;zh-CN,zh;q=0.9&#39;,
-        &#39;Cookie&#39;: &#39;finger=edc6ecda; LIVE_BUVID=AUTO1415378023816310; stardustvideo=1; CURRENT_FNVAL=8; buvid3=0D8F3D74-987D-442D-99CF-42BC9A967709149017infoc; rpdid=olwimklsiidoskmqwipww; fts=1537803390&#39;
+        'Host': 'api.bilibili.com',
+        'Connection': 'keep-alive',
+        'Cache-Control': 'max-age=0',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept-Language': 'zh-CN,zh;q=0.9',
+        'Cookie': 'finger=edc6ecda; LIVE_BUVID=AUTO1415378023816310; stardustvideo=1; CURRENT_FNVAL=8; buvid3=0D8F3D74-987D-442D-99CF-42BC9A967709149017infoc; rpdid=olwimklsiidoskmqwipww; fts=1537803390'
 
         }
-        self.url=&#39;https://api.bilibili.com/x/v1/dm/list.so?oid=&#39;+str(oid)
+        self.url='https://api.bilibili.com/x/v1/dm/list.so?oid='+str(oid)
         self.barrage_reault=self.get_page()
 
     def get_page(self):
@@ -534,11 +534,11 @@ class Bilibili():
             time.sleep(0.5)
             response=requests.get(self.url,headers=self.headers)
         except Exception as e:
-            print(&#39;获取xml内容失败,%s&#39; % e)
+            print('获取xml内容失败,%s' % e)
             return False
         else:
             if response.status_code == 200:
-                with open(&#39;bilibili.xml&#39;,&#39;wb&#39;) as f:
+                with open('bilibili.xml','wb') as f:
                     f.write(response.content)
                 return True
             else:
@@ -547,8 +547,8 @@ class Bilibili():
     def param_page(self):
         time.sleep(1)
         if  self.barrage_reault:
-            html=etree.parse(&#39;bilibili.xml&#39;,etree.HTMLParser())
-            results=html.xpath(&#39;//d//text()&#39;)
+            html=etree.parse('bilibili.xml',etree.HTMLParser())
+            results=html.xpath('//d//text()')
             return results
 
 def remove_double_barrage(resultlist):
@@ -566,39 +566,39 @@ def remove_double_barrage(resultlist):
 
 def make_wordCould(resultlist):
     double_barrages,results,barrages=remove_double_barrage(resultlist)
-    with open(&#39;barrages.txt&#39;,&#39;w&#39;, -1, &#39;utf-8&#39;, None, None) as f:
+    with open('barrages.txt','w', -1, 'utf-8', None, None) as f:
         for barrage in barrages:
             amount=double_barrages.count(barrage)
-            stt = barrage+&#39;:&#39;+str(amount+1)+&#39;\n&#39;
+            stt = barrage+':'+str(amount+1)+'\n'
             f.write(stt)
 
-    stop_words=[&#39;【&#39;,&#39;】&#39;,&#39;,&#39;,&#39;.&#39;,&#39;?&#39;,&#39;!&#39;,&#39;。&#39;]
+    stop_words=['【','】',',','.','?','!','。']
     words=[]
     if results:
         for result in results:
             for stop in stop_words:
-                result=&#39;&#39;.join(result.split(stop))
+                result=''.join(result.split(stop))
             words.append(result)
         # 列表拼接成字符串
-        words=&#39;&#39;.join(words)
+        words=''.join(words)
         words=jieba.cut(words)
-        words=&#39;&#39;.join(words)
-        luo=np.array(Image.open(&#39;洛天依.jpg&#39;))    
-        w=wc(font_path=&#39;‪C:/Windows/Fonts/SIMYOU.TTF&#39;,background_color=&#39;white&#39;,width=1600,height=1600,max_words=2000,mask=luo)
+        words=''.join(words)
+        luo=np.array(Image.open('洛天依.jpg'))    
+        w=wc(font_path='‪C:/Windows/Fonts/SIMYOU.TTF',background_color='white',width=1600,height=1600,max_words=2000,mask=luo)
         w.generate(words)
-        w.to_file(&#39;luo.jpg&#39;)
+        w.to_file('luo.jpg')
 
 def csvdata(data):
-    with open(&#39;top20.csv&#39;,&#39;w&#39;,encoding = &#39;utf-8&#39;,newline=&#39;&#39;)as csvfile:
-        fieldnames = [&#39;分类&#39;]
+    with open('top20.csv','w',encoding = 'utf-8',newline='')as csvfile:
+        fieldnames = ['分类']
         writer = csv.DictWriter(csvfile,fieldnames=fieldnames)
         writer.writeheader()
         for i in data:
-            writer.writerow({&#39;分类&#39;:i[0]})
-        print(&#39;ok&#39;)           
+            writer.writerow({'分类':i[0]})
+        print('ok')           
 
 def main():
-    url=&quot;https://www.bilibili.com/ranking?spm_id_from=333.851.b_7072696d61727950616765546162.3&quot;
+    url="https://www.bilibili.com/ranking?spm_id_from=333.851.b_7072696d61727950616765546162.3"
     urls = getUrl(url)
     strUrl = urls.parsePage()
     ress = []
@@ -608,9 +608,10 @@ def main():
         ress.append(oid)
     csvdata(ress)
 
-if __name__ == &#39;__main__&#39;:
+if __name__ == '__main__':
     main()
-</code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
             </div>
             <hr/>
 
@@ -846,25 +847,25 @@ if __name__ == &#39;__main__&#39;:
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/">
+                <a href="/2019/05/04/wang-luo-pa-chong-dou-ban-dian-ying-pai-xing-bang-shu-ju-zhua-qu-gao-ji/">
                     <div class="card-image">
                         
-                        <img src="https://img-blog.csdnimg.cn/20200518052704174.png" class="responsive-img" alt="基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）">
+                        <img src="https://img-blog.csdnimg.cn/2020041321124824.jpg" class="responsive-img" alt="豆瓣电影排行榜数据抓取（高级）——BS4">
                         
-                        <span class="card-title">基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）</span>
+                        <span class="card-title">豆瓣电影排行榜数据抓取（高级）——BS4</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析实验内容目标网站：Bilibili热门视频Top100
-目标网址：https://www.bilibili.com/ranking?（每过几天都会变的哦）
-任务要求实现
+                            网络爬虫——豆瓣电影排行榜数据抓取（高级）目标网址：豆瓣电影排行：https://movie.douban.com/top250?start=
+目标数据描述：排名、电影名称、导演、主演、评价人数等信息，将尽可能多的数据抓取保存任务明细：
+（
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2019-05-03
+                            <i class="far fa-clock fa-fw icon-date"></i>2019-05-04
                         </span>
                         <span class="publish-author">
                             
@@ -881,8 +882,8 @@ if __name__ == &#39;__main__&#39;:
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/xpath/">
-                        <span class="chip bg-color">xpath</span>
+                    <a href="/tags/BS4/">
+                        <span class="chip bg-color">BS4</span>
                     </a>
                     
                 </div>
@@ -896,20 +897,20 @@ if __name__ == &#39;__main__&#39;:
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/05/03/wang-luo-pa-chong-dou-ban-dian-ying-pai-xing-bang-shu-ju-zhua-qu-chu-ji/">
+                <a href="/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/">
                     <div class="card-image">
                         
-                        <img src="https://img-blog.csdnimg.cn/20200413210616682.jpg" class="responsive-img" alt="豆瓣电影排行榜数据抓取（初级）——BS4">
+                        <img src="https://img-blog.csdnimg.cn/20200518052704174.png" class="responsive-img" alt="基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）">
                         
-                        <span class="card-title">豆瓣电影排行榜数据抓取（初级）——BS4</span>
+                        <span class="card-title">基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            网络爬虫——豆瓣电影排行榜数据抓取（初级）目标网址：豆瓣电影排行：https://movie.douban.com/top250?start=
-目标数据描述：（1）排名（2）电影名称任务明细：
-（1）使用requests库实现该网站网页源代
+                            网络爬虫——基于Bilibili热门视频Top100弹幕的数据爬取与分析实验内容目标网站：Bilibili热门视频Top100
+目标网址：https://www.bilibili.com/ranking?（每过几天都会变的哦）
+任务要求实现
                         
                     </div>
                     <div class="publish-info">
@@ -931,8 +932,8 @@ if __name__ == &#39;__main__&#39;:
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/BS4/">
-                        <span class="chip bg-color">BS4</span>
+                    <a href="/tags/xpath/">
+                        <span class="chip bg-color">xpath</span>
                     </a>
                     
                 </div>
