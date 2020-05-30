@@ -269,7 +269,7 @@ mark {
 }
 
 .bg-color {
-    background-image: linear-gradient(to right,  #FF9999 0%, #ff6666 100%);
+    background-image: linear-gradient(to right,  #E1FFFF 0%, #AFEEEE 100%);
 }
 
 .text-color {
@@ -285,7 +285,7 @@ mark {
     position: fixed;
     bottom: 0;
     z-index: 300;
-    background: linear-gradient(to right, #FF9999 0%, #ff6666 100%);
+    background: linear-gradient(to right, #E1FFFF 0%, #AFEEEE 100%);
     opacity: 0.8;
 }
 
@@ -1313,7 +1313,7 @@ thead {
 
 .chip-container .chip-active {
     color: #FFF !important;
-    background: linear-gradient(to bottom right, #FF9999 0%, #ff6666 100%) !important;
+    background: linear-gradient(to bottom right, #E1FFFF 0%, #AFEEEE 100%) !important;
     box-shadow: 2px 5px 10px #aaa !important;
 }
 
@@ -1332,7 +1332,7 @@ thead {
 
 .chip-container .chip:hover {
     color: #fff;
-    background: linear-gradient(to right,  #FF9999 0%, #ff6666 100%) !important;
+    background: linear-gradient(to right,  #E1FFFF 0%, #AFEEEE 100%) !important;
 }
 
 .chip .tag-length {
@@ -1818,10 +1818,10 @@ thead {
     background-color: #fff;
     border: 1px solid #eee;
 }
-
+ 
 .other-skills .chip:hover {
     color: #fff;
-    background: linear-gradient(to right,  #FF9999 0%, #ff6666 100%);
+    background: linear-gradient(to right,  #E1FFFF 0%, #AFEEEE 100%);
     border: 1px solid #4cbf30;
     box-shadow: 0 5px 5px rgba(0, 0, 0, .25)
 }
@@ -1918,7 +1918,7 @@ footer .copy-right {
 }
 
 .top-scroll .btn-floating {
-    background: linear-gradient(to bottom right, #FF9999 0%, #ff6666 100%);
+    background: linear-gradient(to bottom right, #E1FFFF 0%, #AFEEEE 100%);
     width: 48px;
     height: 48px;
 }
@@ -2171,3 +2171,4 @@ footer .copy-right {
     width: 8px;
     height: 15px;
 }
+           
