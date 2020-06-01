@@ -247,11 +247,11 @@
   </entry>
   
   <entry>
-    <title>基于Bilibili热门视频Top100最热分区爬取与分析</title>
-    <link href="http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-zui-re-fen-qu-pa-qu-yu-fen-xi/"/>
-    <id>http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-zui-re-fen-qu-pa-qu-yu-fen-xi/</id>
+    <title>基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）</title>
+    <link href="http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/"/>
+    <id>http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/</id>
     <published>2019-05-03T05:47:40.000Z</published>
-    <updated>2020-05-27T07:43:57.645Z</updated>
+    <updated>2020-05-27T07:48:54.811Z</updated>
     
     <summary type="html">
     
@@ -267,11 +267,11 @@
   </entry>
   
   <entry>
-    <title>基于Bilibili热门视频Top100弹幕的数据爬取与分析（源代码）</title>
-    <link href="http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/"/>
-    <id>http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-dan-mu-de-shu-ju-pa-qu-yu-fen-xi-yuan-dai-ma/</id>
+    <title>基于Bilibili热门视频Top100最热分区爬取与分析</title>
+    <link href="http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-zui-re-fen-qu-pa-qu-yu-fen-xi/"/>
+    <id>http://ailous.top/2019/05/03/ji-yu-bilibili-re-men-shi-pin-top100-zui-re-fen-qu-pa-qu-yu-fen-xi/</id>
     <published>2019-05-03T05:47:40.000Z</published>
-    <updated>2020-05-27T07:48:54.811Z</updated>
+    <updated>2020-05-27T07:43:57.645Z</updated>
     
     <summary type="html">
     
@@ -369,6 +369,32 @@
   </entry>
   
   <entry>
+    <title>python——基本操作（类型+语句）</title>
+    <link href="http://ailous.top/2018/12/09/python-ji-ben-cao-zuo-lei-xing-yu-ju/"/>
+    <id>http://ailous.top/2018/12/09/python-ji-ben-cao-zuo-lei-xing-yu-ju/</id>
+    <published>2018-12-09T05:47:40.000Z</published>
+    <updated>2020-06-01T00:58:29.146Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;目录&quot;&gt;&lt;a href=&quot;#目录&quot; class=&quot;headerlink&quot; title=&quot;目录&quot;&gt;&lt;/a&gt;目录&lt;/h2&gt;&lt;ul&gt;&lt;br&gt;  &lt;li&gt;基础类型及其他&lt;/li&gt;&lt;br&gt;  &lt;li&gt;字符串操作  &lt;/li&gt;&lt;br&gt; 
+        
+      
+    
+    </summary>
+    
+      <category term="python" scheme="http://ailous.top/categories/python/"/>
+    
+    
+      <category term="基本操作" scheme="http://ailous.top/tags/%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/"/>
+    
+  </entry>
+  
+  <entry>
     <title>人工智能——mnist（手写识别）</title>
     <link href="http://ailous.top/2018/12/09/ren-gong-zhi-neng-mnist-shou-xie-shi-bie/"/>
     <id>http://ailous.top/2018/12/09/ren-gong-zhi-neng-mnist-shou-xie-shi-bie/</id>
@@ -397,11 +423,11 @@
   </entry>
   
   <entry>
-    <title>python——基本操作（类型+语句）</title>
-    <link href="http://ailous.top/2018/12/09/python-ji-ben-cao-zuo-lei-xing-yu-ju/"/>
-    <id>http://ailous.top/2018/12/09/python-ji-ben-cao-zuo-lei-xing-yu-ju/</id>
+    <title>嵌入式—LM3S1138介绍</title>
+    <link href="http://ailous.top/2018/12/09/qian-ru-shi-lm3s1138-jie-shao/"/>
+    <id>http://ailous.top/2018/12/09/qian-ru-shi-lm3s1138-jie-shao/</id>
     <published>2018-12-09T05:47:40.000Z</published>
-    <updated>2020-06-01T00:58:29.146Z</updated>
+    <updated>2020-05-27T07:31:17.598Z</updated>
     
     <summary type="html">
     
@@ -409,35 +435,7 @@
       
         
         
-          &lt;h2 id=&quot;目录&quot;&gt;&lt;a href=&quot;#目录&quot; class=&quot;headerlink&quot; title=&quot;目录&quot;&gt;&lt;/a&gt;目录&lt;/h2&gt;&lt;ul&gt;&lt;br&gt;  &lt;li&gt;基础类型及其他&lt;/li&gt;&lt;br&gt;  &lt;li&gt;字符串操作  &lt;/li&gt;&lt;br&gt; 
-        
-      
-    
-    </summary>
-    
-      <category term="python" scheme="http://ailous.top/categories/python/"/>
-    
-    
-      <category term="基本操作" scheme="http://ailous.top/tags/%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>嵌入式——1138纯净版代码（PWM）</title>
-    <link href="http://ailous.top/2018/12/09/qian-ru-shi-1138-chun-jing-ban-dai-ma-pwm/"/>
-    <id>http://ailous.top/2018/12/09/qian-ru-shi-1138-chun-jing-ban-dai-ma-pwm/</id>
-    <published>2018-12-09T05:47:40.000Z</published>
-    <updated>2020-05-27T07:38:05.460Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;这些是我自己常用的代码，比官方的要简洁些，主要是自用，还有相关模块，使用代码。&lt;/p&gt;
-&lt;p&gt;具体文件可以去我github上下载。&lt;/p&gt;
-&lt;h4 id=&quot;pwm简介&quot;&gt;&lt;a href=&quot;#pwm简介&quot; class=&quot;headerlink&quot;
+          &lt;h1 id=&quot;嵌入式—LM3S1138介绍&quot;&gt;&lt;a href=&quot;#嵌入式—LM3S1138介绍&quot; class=&quot;headerlink&quot;
         
       
     
@@ -447,8 +445,6 @@
     
     
       <category term="1138" scheme="http://ailous.top/tags/1138/"/>
-    
-      <category term="PWM" scheme="http://ailous.top/tags/PWM/"/>
     
   </entry>
   
